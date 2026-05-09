@@ -29,6 +29,8 @@ namespace CarSales
             app.MapControllers();
 
             app.Run();
+
+
         }
     }
 }

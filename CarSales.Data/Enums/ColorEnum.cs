@@ -1,0 +1,39 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Text;
+
+namespace CarSales.Data.Enums
+{
+    public enum ColorEnum
+    {
+        Black,
+        Beige,
+        Blue,
+        Bronze,
+        Brown,
+        Burgundy,
+        Charcoal,
+        Copper,
+        Cream,
+        DarkBlue,
+        DarkGreen,
+        Gold,
+        Gray,
+        Green,
+        Ivory,
+        LightBlue,
+        LightGreen,
+        LimeGreen,
+        Maroon,
+        NavyBlue,
+        Orange,
+        Pink,
+        Purple,
+        Red,
+        Silver,
+        Teal,
+        Turquoise,
+        White,
+        Yellow
+    }
+}

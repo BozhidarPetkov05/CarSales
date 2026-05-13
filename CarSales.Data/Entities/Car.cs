@@ -25,8 +25,8 @@ namespace CarSales.Data.Entities
 
         //ако има проблем с цената - от тук е
         [Required(ErrorMessage =CarErrorMessages.PriceRequired)]
-        [Range((double)CarConstraints.MinPriceValue, (double)CarConstraints.MaxPriceValue, ErrorMessage = CarErrorMessages.PriceRange)]
-        public required decimal Price { get; set; }
+        [Range(CarConstraints.MinPriceValue, CarConstraints.MaxPriceValue, ErrorMessage = CarErrorMessages.PriceRange)]
+        public required double Price { get; set; }
 
         [Required(ErrorMessage = CarErrorMessages.FuelRequired)]
         public FuelEnum Fuel { get; set; }
@@ -49,5 +49,7 @@ namespace CarSales.Data.Entities
         public string? Description { get; set; }
         public virtual User User { get; set; }
         public Guid UserId { get; set; }
+        public ICollection<Favourite> Favourites{ get; set; } = new List<Favourite>();
+        public ICollection<Photo> Photos{ get; set; }= new List<Photo>();
     }
 }

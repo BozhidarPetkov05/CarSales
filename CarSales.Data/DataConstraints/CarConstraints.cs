@@ -13,8 +13,8 @@ namespace CarSales.Data.DataConstraints
         public const int MaxYearValue = 2026;
 
         //Price
-        public const decimal MinPriceValue = 1.0m;
-        public const decimal MaxPriceValue = 50_000_000m;
+        public const double MinPriceValue = 1;
+        public const double MaxPriceValue = 50_000_000;
 
         //Power
         public const int PowerMinValue = 1;

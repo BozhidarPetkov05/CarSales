@@ -1,6 +1,7 @@
 ﻿using CarSales.Data.DataConstraints;
 using CarSales.Data.Entities;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -13,9 +14,18 @@ namespace CarSales.Data.Persistance
         public DbSet<Favourite> Favourites { get; set; }
         public DbSet<Photo> Photos { get; set; }
         public DbSet<User> Users { get; set; }
-        public CarSalesDbContext(DbContextOptions<CarSalesDbContext> options) : base(options)
+
+        protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
-            
+            optionsBuilder
+                .UseLazyLoadingProxies()
+                .UseSqlServer(
+                    @"Server=localhost\sqlexpress;
+                    Database=CarSalesDb;
+                    User Id=carsale;
+                    Password=carsale;
+                    TrustServerCertificate=True;"
+                );
         }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
@@ -24,7 +34,9 @@ namespace CarSales.Data.Persistance
             modelBuilder.Entity<User>()
                 .HasData(new User
                 {
-                    Id = Guid.NewGuid(),
+                    Id = Guid.Parse("d0b4e918-06b0-4e53-b10d-31331a02c1e5"),
+                    CreatedAt = new DateTime(2026, 5, 13),
+                    LastChange = new DateTime(2026, 5, 13),
                     Username = "admin",
                     Password = "admin",
                     FirstName = "Admin",

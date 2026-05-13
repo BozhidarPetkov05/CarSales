@@ -1,6 +1,5 @@
 
 using CarSales.Data.Persistance;
-using Microsoft.EntityFrameworkCore;
 
 namespace CarSales
 {
@@ -9,10 +8,6 @@ namespace CarSales
         public static void Main(string[] args)
         {
             var builder = WebApplication.CreateBuilder(args);
-
-            var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
-            builder.Services
-                .AddDbContext<CarSalesDbContext>(options => options.UseLazyLoadingProxies().UseSqlServer(connectionString));
 
             builder.Services.AddControllers();
             builder.Services.AddOpenApi();

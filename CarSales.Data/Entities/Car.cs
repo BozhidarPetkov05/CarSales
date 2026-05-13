@@ -52,7 +52,7 @@ namespace CarSales.Data.Entities
         
         [ForeignKey(nameof(User))]
         public Guid UserId { get; set; }
-        public ICollection<Favourite> Favourites{ get; set; } = new List<Favourite>();
-        public ICollection<Photo> Photos{ get; set; }= new List<Photo>();
+        public virtual ICollection<Favourite> Favourites{ get; set; } = new List<Favourite>();
+        public virtual ICollection<Photo> Photos{ get; set; }= new List<Photo>();
     }
 }

@@ -1,4 +1,7 @@
 
+using CarSales.Data.Persistance;
+using Microsoft.EntityFrameworkCore;
+
 namespace CarSales
 {
     public class Program
@@ -7,19 +10,21 @@ namespace CarSales
         {
             var builder = WebApplication.CreateBuilder(args);
 
-            // Add services to the container.
+            var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
+            builder.Services
+                .AddDbContext<CarSalesDbContext>(options => options.UseSqlServer(connectionString));
 
             builder.Services.AddControllers();
-            // Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
             builder.Services.AddOpenApi();
 
             var app = builder.Build();
 
-            // Configure the HTTP request pipeline.
             if (app.Environment.IsDevelopment())
             {
                 app.MapOpenApi();
             }
+
+
 
             app.UseHttpsRedirection();
 

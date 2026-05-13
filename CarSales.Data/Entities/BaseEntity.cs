@@ -9,8 +9,8 @@ namespace CarSales.Data.Entities
     {
         [Key]
         public Guid Id { get; set; }
-        public required DateTime CreatedAt { get; set; } = DateTime.UtcNow;
-        public required DateTime LastChange { get; set; } = DateTime.UtcNow;
-        public required bool IsActive { get; set; }
+        public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
+        public DateTime LastChange { get; set; } = DateTime.UtcNow;
+        public bool IsActive { get; set; } = true;
     }
 }

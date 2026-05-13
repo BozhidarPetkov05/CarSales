@@ -4,6 +4,7 @@ using CarSales.Data.ErrorMessages;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Drawing;
 using System.Text;
 
@@ -48,6 +49,8 @@ namespace CarSales.Data.Entities
         [MaxLength(CarConstraints.DescriptionMaxLength, ErrorMessage = CarErrorMessages.DescriptionMaxLength)]
         public string? Description { get; set; }
         public virtual User User { get; set; }
+        
+        [ForeignKey(nameof(User))]
         public Guid UserId { get; set; }
         public ICollection<Favourite> Favourites{ get; set; } = new List<Favourite>();
         public ICollection<Photo> Photos{ get; set; }= new List<Photo>();

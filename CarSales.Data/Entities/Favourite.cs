@@ -10,7 +10,7 @@ namespace CarSales.Data.Entities
         public Guid CarId { get; set; }
         public virtual User User { get; set; }
         public Guid UserId { get; set; }
-        public DateTime AddedAt { get; set; } = DateTime.UtcNow;
+        public required DateTime AddedAt { get; set; }
         public decimal LastPrice { get; set; }
         public bool IsPriceChanged { get; set; }
         public bool IsHigherPrice { get; set; }

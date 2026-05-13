@@ -12,7 +12,7 @@ namespace CarSales
 
             var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
             builder.Services
-                .AddDbContext<CarSalesDbContext>(options => options.UseSqlServer(connectionString));
+                .AddDbContext<CarSalesDbContext>(options => options.UseLazyLoadingProxies().UseSqlServer(connectionString));
 
             builder.Services.AddControllers();
             builder.Services.AddOpenApi();

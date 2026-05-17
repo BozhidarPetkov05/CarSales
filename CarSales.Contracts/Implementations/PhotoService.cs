@@ -7,9 +7,9 @@ using System.Text;
 
 namespace CarSales.Contracts.Implementations
 {
-    public class UserService : BaseService<User>
+    public class PhotoService : BaseService<Photo>
     {
-        public UserService(IRepository<User> repository, CarSalesDbContext context) : base(repository, context)
+        public PhotoService(IRepository<Photo> repository, CarSalesDbContext context) : base(repository, context)
         {
         }
     }

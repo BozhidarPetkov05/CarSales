@@ -5,7 +5,7 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace CarSales.Contracts.Implementations
+namespace CarSales.Services
 {
     public class UserService : BaseService<User>
     {

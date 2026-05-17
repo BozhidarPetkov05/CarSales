@@ -18,6 +18,8 @@
 
   <ItemGroup>
     <ProjectReference Include="..\CarSales.Data\CarSales.Data.csproj" />
+    <ProjectReference Include="..\CarSales.Repository\CarSales.Repository.csproj" />
+    <ProjectReference Include="..\CarSales.Services\CarSales.Services.csproj" />
   </ItemGroup>
 
 </Project>

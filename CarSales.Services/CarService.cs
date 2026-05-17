@@ -1,14 +1,15 @@
 ﻿using CarSales.Data.Entities;
 using CarSales.Data.Persistance;
+using CarSales.Repository.Interfaces;
 using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace CarSales.Contracts.Implementations
+namespace CarSales.Services
 {
     public class CarService : BaseService<Car>
     {
-        public CarService(Repository.Interfaces.IRepository<Car> repository, CarSalesDbContext context) : base(repository, context)
+        public CarService(IRepository<Car> repository, CarSalesDbContext context) : base(repository, context)
         {
         }
     }

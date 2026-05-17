@@ -1,4 +1,4 @@
-﻿using CarSales.Contracts.Interfaces;
+﻿using CarSales.Contracts;
 using CarSales.Data.Entities;
 using CarSales.Data.Persistance;
 using CarSales.Repository.Interfaces;
@@ -6,7 +6,7 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace CarSales.Contracts.Implementations
+namespace CarSales.Services
 {
     public class BaseService<T> : IBaseService<T> where T : BaseEntity
     {
@@ -18,10 +18,10 @@ namespace CarSales.Contracts.Implementations
             _context = context;
         }
         public async Task<T?> GetByIdAsync(Guid id)
-        {
+        { 
             return await _repository.GetByIdAsync(id);
         }
-        public async Task<IEnumerable<T>> GetAll()
+        public async Task<IEnumerable<T>> GetAllAsync()
         {
             return await _repository.GetAllAsync();
         }

@@ -1,5 +1,8 @@
-
 using CarSales.Data.Persistance;
+using CarSales.Repository;
+using CarSales.Repository.Interfaces;
+using CarSales.Services;
+using Microsoft.AspNetCore.Cors.Infrastructure;
 using Microsoft.EntityFrameworkCore;
 
 namespace CarSales
@@ -10,8 +13,17 @@ namespace CarSales
         {
             var builder = WebApplication.CreateBuilder(args);
 
+            //Database
             builder.Services.AddDbContext<CarSalesDbContext>(options =>
                 options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
+
+            //Repository
+            builder.Services.AddScoped(typeof(IRepository<>), typeof(Repository<>));
+
+            //Services
+            builder.Services.AddScoped<CarService>();
+            builder.Services.AddScoped<UserService>();
+            builder.Services.AddScoped<PhotoService>();
 
             builder.Services.AddControllers();
             builder.Services.AddOpenApi();

@@ -3,7 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace CarSales.Contracts
+namespace CarSales.Contracts.Interfaces
 {
     public interface IBaseService<T>
     {

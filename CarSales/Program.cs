@@ -4,8 +4,11 @@ using CarSales.Data.Persistance;
 using CarSales.Repository;
 using CarSales.Repository.Interfaces;
 using CarSales.Services;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Cors.Infrastructure;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.IdentityModel.Tokens;
+using System.Text;
 
 namespace CarSales
 {
@@ -18,18 +21,34 @@ namespace CarSales
             //Database
             builder.Services.AddDbContext<CarSalesDbContext>(options =>
                 options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
-
-            //Repository
-            builder.Services.AddScoped(typeof(IRepository<>), typeof(Repository<>));
-
             //Services
             builder.Services.AddScoped<CarService>();
             builder.Services.AddScoped<UserService>();
             builder.Services.AddScoped<PhotoService>();
 
+            //Repository
+            builder.Services.AddScoped(typeof(IRepository<>), typeof(Repository<>));
+
+
             //Jwt
             builder.Services.Configure<JwtSettings>(builder.Configuration.GetSection("Jwt"));
             builder.Services.AddSingleton<ITokenService, TokenService>();
+
+            var jwtSettings = builder.Configuration.GetSection("Jwt").Get<JwtSettings>();
+
+            builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+                .AddJwtBearer(options =>
+                options.TokenValidationParameters = new TokenValidationParameters
+                {
+                    ValidateIssuer = true,
+                    ValidateAudience = true,
+                    ValidateLifetime = true,
+                    ValidateIssuerSigningKey = true,
+                    ValidIssuer = jwtSettings.Issuer,
+                    ValidAudience = jwtSettings.Audience,
+                    IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(jwtSettings.Secret))
+                }
+                );
 
 
             builder.Services.AddControllers();
@@ -44,6 +63,7 @@ namespace CarSales
 
             app.UseHttpsRedirection();
 
+            app.UseAuthentication();
             app.UseAuthorization();
 
 

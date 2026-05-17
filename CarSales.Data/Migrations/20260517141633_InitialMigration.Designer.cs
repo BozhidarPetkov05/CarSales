@@ -12,7 +12,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace CarSales.Data.Migrations
 {
     [DbContext(typeof(CarSalesDbContext))]
-    [Migration("20260513140630_InitialMigration")]
+    [Migration("20260517141633_InitialMigration")]
     partial class InitialMigration
     {
         /// <inheritdoc />
@@ -21,9 +21,6 @@ namespace CarSales.Data.Migrations
 #pragma warning disable 612, 618
             modelBuilder
                 .HasAnnotation("ProductVersion", "10.0.8")
-                .HasAnnotation("Proxies:ChangeTracking", false)
-                .HasAnnotation("Proxies:CheckEquality", false)
-                .HasAnnotation("Proxies:LazyLoading", true)
                 .HasAnnotation("Relational:MaxIdentifierLength", 128);
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
@@ -103,8 +100,8 @@ namespace CarSales.Data.Migrations
                     b.Property<bool>("IsPriceChanged")
                         .HasColumnType("bit");
 
-                    b.Property<decimal>("LastPrice")
-                        .HasColumnType("decimal(18,2)");
+                    b.Property<double>("LastPrice")
+                        .HasColumnType("float");
 
                     b.HasKey("UserId", "CarId");
 

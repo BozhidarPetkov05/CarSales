@@ -15,17 +15,9 @@ namespace CarSales.Data.Persistance
         public DbSet<Photo> Photos { get; set; }
         public DbSet<User> Users { get; set; }
 
-        protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+        public CarSalesDbContext(DbContextOptions<CarSalesDbContext> options) : base(options)
         {
-            optionsBuilder
-                .UseLazyLoadingProxies()
-                .UseSqlServer(
-                    @"Server=localhost\sqlexpress;
-                    Database=CarSalesDb;
-                    User Id=carsale;
-                    Password=carsale;
-                    TrustServerCertificate=True;"
-                );
+            
         }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)

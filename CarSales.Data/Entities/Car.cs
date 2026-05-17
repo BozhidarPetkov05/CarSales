@@ -48,11 +48,11 @@ namespace CarSales.Data.Entities
 
         [MaxLength(CarConstraints.DescriptionMaxLength, ErrorMessage = CarErrorMessages.DescriptionMaxLength)]
         public string? Description { get; set; }
-        public virtual User User { get; set; }
+        public User User { get; set; }
         
         [ForeignKey(nameof(User))]
         public Guid UserId { get; set; }
-        public virtual ICollection<Favourite> Favourites{ get; set; } = new List<Favourite>();
-        public virtual ICollection<Photo> Photos{ get; set; }= new List<Photo>();
+        public ICollection<Favourite> Favourites{ get; set; } = new List<Favourite>();
+        public ICollection<Photo> Photos{ get; set; }= new List<Photo>();
     }
 }

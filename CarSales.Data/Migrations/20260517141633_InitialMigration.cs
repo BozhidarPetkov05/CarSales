@@ -69,7 +69,7 @@ namespace CarSales.Data.Migrations
                     CarId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     UserId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     AddedAt = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    LastPrice = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
+                    LastPrice = table.Column<double>(type: "float", nullable: false),
                     IsPriceChanged = table.Column<bool>(type: "bit", nullable: false),
                     IsHigherPrice = table.Column<bool>(type: "bit", nullable: false)
                 },

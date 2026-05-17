@@ -1,0 +1,16 @@
+D:\SE\2nd Course 2nd Semester\Distributed Apps\Project\CarSales\CarSales.Repository\bin\Debug\net10.0\CarSales.Repository.deps.json
+D:\SE\2nd Course 2nd Semester\Distributed Apps\Project\CarSales\CarSales.Repository\bin\Debug\net10.0\CarSales.Repository.dll
+D:\SE\2nd Course 2nd Semester\Distributed Apps\Project\CarSales\CarSales.Repository\bin\Debug\net10.0\CarSales.Repository.pdb
+D:\SE\2nd Course 2nd Semester\Distributed Apps\Project\CarSales\CarSales.Repository\bin\Debug\net10.0\CarSales.Data.dll
+D:\SE\2nd Course 2nd Semester\Distributed Apps\Project\CarSales\CarSales.Repository\bin\Debug\net10.0\CarSales.Data.pdb
+D:\SE\2nd Course 2nd Semester\Distributed Apps\Project\CarSales\CarSales.Repository\obj\Debug\net10.0\CarSales.Repository.csproj.AssemblyReference.cache
+D:\SE\2nd Course 2nd Semester\Distributed Apps\Project\CarSales\CarSales.Repository\obj\Debug\net10.0\CarSales.Repository.GeneratedMSBuildEditorConfig.editorconfig
+D:\SE\2nd Course 2nd Semester\Distributed Apps\Project\CarSales\CarSales.Repository\obj\Debug\net10.0\CarSales.Repository.AssemblyInfoInputs.cache
+D:\SE\2nd Course 2nd Semester\Distributed Apps\Project\CarSales\CarSales.Repository\obj\Debug\net10.0\CarSales.Repository.AssemblyInfo.cs
+D:\SE\2nd Course 2nd Semester\Distributed Apps\Project\CarSales\CarSales.Repository\obj\Debug\net10.0\CarSales.Repository.csproj.CoreCompileInputs.cache
+D:\SE\2nd Course 2nd Semester\Distributed Apps\Project\CarSales\CarSales.Repository\obj\Debug\net10.0\CarSales.Repository.sourcelink.json
+D:\SE\2nd Course 2nd Semester\Distributed Apps\Project\CarSales\CarSales.Repository\obj\Debug\net10.0\CarSales.BFACE37D.Up2Date
+D:\SE\2nd Course 2nd Semester\Distributed Apps\Project\CarSales\CarSales.Repository\obj\Debug\net10.0\CarSales.Repository.dll
+D:\SE\2nd Course 2nd Semester\Distributed Apps\Project\CarSales\CarSales.Repository\obj\Debug\net10.0\refint\CarSales.Repository.dll
+D:\SE\2nd Course 2nd Semester\Distributed Apps\Project\CarSales\CarSales.Repository\obj\Debug\net10.0\CarSales.Repository.pdb
+D:\SE\2nd Course 2nd Semester\Distributed Apps\Project\CarSales\CarSales.Repository\obj\Debug\net10.0\ref\CarSales.Repository.dll

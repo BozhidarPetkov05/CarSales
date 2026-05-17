@@ -1,4 +1,4 @@
-﻿using CarSales.Contracts;
+﻿using CarSales.Contracts.Interfaces;
 using CarSales.Data.Entities;
 using CarSales.Data.Persistance;
 using CarSales.Repository.Interfaces;

@@ -1,3 +1,5 @@
+using CarSales.Contracts.Interfaces;
+using CarSales.Contracts.Settings;
 using CarSales.Data.Persistance;
 using CarSales.Repository;
 using CarSales.Repository.Interfaces;
@@ -25,6 +27,11 @@ namespace CarSales
             builder.Services.AddScoped<UserService>();
             builder.Services.AddScoped<PhotoService>();
 
+            //Jwt
+            builder.Services.Configure<JwtSettings>(builder.Configuration.GetSection("Jwt"));
+            builder.Services.AddSingleton<ITokenService, TokenService>();
+
+
             builder.Services.AddControllers();
             builder.Services.AddOpenApi();
 
@@ -34,8 +41,6 @@ namespace CarSales
             {
                 app.MapOpenApi();
             }
-
-
 
             app.UseHttpsRedirection();
 

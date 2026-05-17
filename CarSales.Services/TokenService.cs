@@ -46,5 +46,4 @@ namespace CarSales.Services
         }
     }
 
-    public class 
 }

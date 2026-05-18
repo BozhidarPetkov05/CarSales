@@ -1,4 +1,6 @@
-﻿using CarSales.Contracts.DTOs.Request;
+﻿using Azure.Core;
+using CarSales.Contracts.DTOs.Request;
+using CarSales.Contracts.DTOs.Request.User;
 using CarSales.Contracts.DTOs.Response;
 using CarSales.Contracts.DTOs.Response.User;
 using CarSales.Contracts.Interfaces;
@@ -163,32 +165,55 @@ namespace CarSales.Services
             return MapToUpdatedUserResponse(user);
         }
 
-        public async Task<PageResponse<UserListResponse>> GetAllUsersPagedAsync(int page, int pageSize)
+        public async Task<UserPageResponse> GetAllUsersPagedAsync(UserPageRequest request)
         {
-            page = Math.Max(page, 1);
-            pageSize = Math.Clamp(pageSize, 1, 30);
+            Console.WriteLine(request.IsActive);
+            var page = Math.Max(request.Page, 1);
+            var pageSize = Math.Clamp(request.PageSize, 1, 50);
 
             var query = _repository.GetAllAsQueryable();
 
+            if (!string.IsNullOrWhiteSpace(request.Username))
+            {
+                query = query.Where(u => u.Username.Contains(request.Username));
+            }
+
+            if (request.IsActive.HasValue)
+            {
+                query = query.Where(u => u.IsActive == request.IsActive.Value);
+            }
+
+            query = request.IsDescending
+                ? query.OrderByDescending(u => u.CreatedAt)
+                : query.OrderBy(u => u.CreatedAt);
+
             var totalCount = await query.CountAsync();
 
-            var items = await query.Skip((page - 1) * pageSize).Take(pageSize).Select(u => new UserListResponse
-            {
-                Id = u.Id,
-                Username = u.Username,
-                FirstName = u.FirstName,
-                LastName = u.LastName,
-                IsAdmin = u.IsAdmin,
-                CreatedAt = u.CreatedAt,
-                LastChanged = u.LastChange
-            }).ToListAsync();
+            var items = await query
+                .Skip((page - 1) * pageSize)
+                .Take(pageSize)
+                .Select(u => new UserListResponse
+                {
+                    Id = u.Id,
+                    Username = u.Username,
+                    FirstName = u.FirstName,
+                    LastName = u.LastName,
+                    IsAdmin = u.IsAdmin,
+                    CreatedAt = u.CreatedAt,
+                    LastChanged = u.LastChange,
+                    IsActive = u.IsActive
+                })
+                .ToListAsync();
 
-            return new PageResponse<UserListResponse>
+            return new UserPageResponse
             {
                 Items = items,
                 TotalCount = totalCount,
                 Page = page,
-                PageSize = pageSize
+                PageSize = pageSize,
+                IsDescending = request.IsDescending,
+                Username = request.Username,
+                IsActive = request.IsActive
             };
         }
     }

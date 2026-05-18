@@ -1,4 +1,5 @@
 ﻿using CarSales.Contracts.DTOs.Request;
+using CarSales.Contracts.DTOs.Request.User;
 using CarSales.Contracts.DTOs.Response.User;
 using CarSales.Contracts.Interfaces;
 using CarSales.Data.Entities;
@@ -22,7 +23,7 @@ namespace CarSales.Controllers
 
         [Authorize]
         [HttpGet]
-        public async Task<IActionResult> Get([FromQuery] PageRequest request)
+        public async Task<IActionResult> Get([FromQuery] UserPageRequest request)
         {
             if (!User.HasClaim("isAdmin", "True"))
             {
@@ -33,7 +34,7 @@ namespace CarSales.Controllers
 
             //List<UserListResponse> response = _userService.MapToListResponse(users);
 
-            var response = await _userService.GetAllUsersPagedAsync(request.Page, request.PageSize);
+            var response = await _userService.GetAllUsersPagedAsync(request);
 
             return Ok(response);
         }

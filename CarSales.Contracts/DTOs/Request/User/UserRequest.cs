@@ -5,7 +5,7 @@ using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Text;
 
-namespace CarSales.Contracts.DTOs.Request
+namespace CarSales.Contracts.DTOs.Request.User
 {
     public class UserRequest
     {

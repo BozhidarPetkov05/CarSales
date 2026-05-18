@@ -11,15 +11,15 @@ namespace CarSales.Repository
 {
     public class Repository<T> : IRepository<T> where T : BaseEntity
     {
-        private readonly CarSalesDbContext _context;
-        private readonly DbSet<T> _items;
+        protected readonly CarSalesDbContext _context;
+        protected readonly DbSet<T> _items;
 
         public Repository(CarSalesDbContext context)
         {
             _context = context;
             _items = _context.Set<T>();
         }
-        public async Task<T?> GetByIdAsync(Guid id)
+        public virtual async Task<T?> GetByIdAsync(Guid id)
         {
             return await _items.FindAsync(id);
         }

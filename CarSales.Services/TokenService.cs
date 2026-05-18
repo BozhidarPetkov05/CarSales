@@ -1,4 +1,5 @@
-﻿using CarSales.Contracts.Interfaces;
+﻿using CarSales.Contracts.DTOs.Response;
+using CarSales.Contracts.Interfaces;
 using CarSales.Contracts.Settings;
 using CarSales.Data.Entities;
 using Microsoft.Extensions.Options;

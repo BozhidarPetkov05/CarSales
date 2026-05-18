@@ -1,4 +1,5 @@
-﻿using CarSales.Data.Entities;
+﻿using CarSales.Contracts.DTOs.Response;
+using CarSales.Data.Entities;
 using System;
 using System.Collections.Generic;
 using System.Text;

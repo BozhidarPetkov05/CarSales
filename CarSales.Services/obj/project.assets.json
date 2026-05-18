@@ -1800,7 +1800,8 @@
   },
   "projectFileDependencyGroups": {
     "net10.0": [
-      "CarSales.Contracts >= 1.0.0"
+      "CarSales.Contracts >= 1.0.0",
+      "CarSales.Repository >= 1.0.0"
     ]
   },
   "packageFolders": {
@@ -1838,6 +1839,9 @@
           "projectReferences": {
             "D:\\SE\\2nd Course 2nd Semester\\Distributed Apps\\Project\\CarSales\\CarSales.Contracts\\CarSales.Contracts.csproj": {
               "projectPath": "D:\\SE\\2nd Course 2nd Semester\\Distributed Apps\\Project\\CarSales\\CarSales.Contracts\\CarSales.Contracts.csproj"
+            },
+            "D:\\SE\\2nd Course 2nd Semester\\Distributed Apps\\Project\\CarSales\\CarSales.Repository\\CarSales.Repository.csproj": {
+              "projectPath": "D:\\SE\\2nd Course 2nd Semester\\Distributed Apps\\Project\\CarSales\\CarSales.Repository\\CarSales.Repository.csproj"
             }
           }
         }

@@ -7,10 +7,8 @@ using System.Text;
 
 namespace CarSales.Services
 {
-    public class PhotoService : BaseService<Photo>
+    public class PhotoService
     {
-        public PhotoService(IRepository<Photo> repository, CarSalesDbContext context) : base(repository, context)
-        {
-        }
+        
     }
 }

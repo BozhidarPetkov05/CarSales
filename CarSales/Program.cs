@@ -1,7 +1,9 @@
 using CarSales.Contracts.Interfaces;
 using CarSales.Contracts.Settings;
+using CarSales.Data.Entities;
 using CarSales.Data.Persistance;
 using CarSales.Repository;
+using CarSales.Repository.Implementations;
 using CarSales.Repository.Interfaces;
 using CarSales.Services;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
@@ -9,6 +11,7 @@ using Microsoft.AspNetCore.Cors.Infrastructure;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
+using System.Text.Json.Serialization;
 
 namespace CarSales
 {
@@ -23,12 +26,12 @@ namespace CarSales
                 options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
             //Services
             builder.Services.AddScoped<CarService>();
-            builder.Services.AddScoped<UserService>();
+            builder.Services.AddScoped<IUserService, UserService>();
             builder.Services.AddScoped<PhotoService>();
 
             //Repository
             builder.Services.AddScoped(typeof(IRepository<>), typeof(Repository<>));
-
+            builder.Services.AddScoped<IUserRepository, UserRepository>();
 
             //Jwt
             builder.Services.Configure<JwtSettings>(builder.Configuration.GetSection("Jwt"));
@@ -50,8 +53,13 @@ namespace CarSales
                 }
                 );
 
-
-            builder.Services.AddControllers();
+            //Temporary implementation
+            builder.Services.AddControllers()
+                .AddJsonOptions(x =>
+                {
+                    x.JsonSerializerOptions.ReferenceHandler =
+                        ReferenceHandler.IgnoreCycles;
+                });
             builder.Services.AddOpenApi();
 
             var app = builder.Build();

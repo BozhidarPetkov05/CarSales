@@ -1091,6 +1091,9 @@
             "projectReferences": {
               "D:\\SE\\2nd Course 2nd Semester\\Distributed Apps\\Project\\CarSales\\CarSales.Contracts\\CarSales.Contracts.csproj": {
                 "projectPath": "D:\\SE\\2nd Course 2nd Semester\\Distributed Apps\\Project\\CarSales\\CarSales.Contracts\\CarSales.Contracts.csproj"
+              },
+              "D:\\SE\\2nd Course 2nd Semester\\Distributed Apps\\Project\\CarSales\\CarSales.Repository\\CarSales.Repository.csproj": {
+                "projectPath": "D:\\SE\\2nd Course 2nd Semester\\Distributed Apps\\Project\\CarSales\\CarSales.Repository\\CarSales.Repository.csproj"
               }
             }
           }

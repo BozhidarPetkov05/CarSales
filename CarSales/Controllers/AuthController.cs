@@ -10,10 +10,10 @@ namespace CarSales.Controllers
     [ApiController]
     public class AuthController : ControllerBase
     {
-        private readonly UserService _userService;
+        private readonly IUserService _userService;
         private readonly ITokenService _tokenService;
 
-        public AuthController(UserService userService, ITokenService tokenService)
+        public AuthController(IUserService userService, ITokenService tokenService)
         {
             _userService = userService;
             _tokenService = tokenService;

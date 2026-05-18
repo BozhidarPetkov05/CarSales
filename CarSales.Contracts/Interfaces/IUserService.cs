@@ -1,4 +1,5 @@
 ﻿using CarSales.Contracts.DTOs.Request;
+using CarSales.Contracts.DTOs.Response;
 using CarSales.Contracts.DTOs.Response.User;
 using CarSales.Data.Entities;
 using System;
@@ -22,5 +23,7 @@ namespace CarSales.Contracts.Interfaces
         UpdatedUserResponse MapToUpdatedUserResponse(User user);
 
         Task<UpdatedUserResponse> DeactivateUser(User user);
+
+        Task<PageResponse<UserListResponse>> GetAllUsersPagedAsync(int page, int pageSize);
     }
 }

@@ -22,16 +22,18 @@ namespace CarSales.Controllers
 
         [Authorize]
         [HttpGet]
-        public async Task<IActionResult> Get()
+        public async Task<IActionResult> Get([FromQuery] PageRequest request)
         {
             if (!User.HasClaim("isAdmin", "True"))
             {
-                return Unauthorized();
+                return Forbid();
             }
 
-            IEnumerable<User> users = await _userService.GetAllAsync();
+            //IEnumerable<User> users = await _userService.GetAllAsync();
 
-            List<UserListResponse> response = _userService.MapToListResponse(users);
+            //List<UserListResponse> response = _userService.MapToListResponse(users);
+
+            var response = await _userService.GetAllUsersPagedAsync(request.Page, request.PageSize);
 
             return Ok(response);
         }
@@ -45,7 +47,7 @@ namespace CarSales.Controllers
 
             if (!User.HasClaim("isAdmin", "True") && Guid.Parse(loggedUserId) != id)
             {
-                return Unauthorized();
+                return Forbid();
             }
 
             User? user = await _userService.GetByIdAsync(id);
@@ -81,7 +83,7 @@ namespace CarSales.Controllers
 
             if (!User.HasClaim("isAdmin", "True") && Guid.Parse(loggedUserId) != id)
             {
-                return Unauthorized();
+                return Forbid();
             }
 
             User? user = await _userService.GetByIdAsync(id);
@@ -117,7 +119,7 @@ namespace CarSales.Controllers
 
             if (!User.HasClaim("isAdmin", "True") && Guid.Parse(loggedUserId) != id)
             {
-                return Unauthorized();
+                return Forbid();
             }
 
             User? user = await _userService.GetByIdAsync(id);

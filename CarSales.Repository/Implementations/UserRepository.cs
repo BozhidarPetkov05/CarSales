@@ -14,9 +14,19 @@ namespace CarSales.Repository.Implementations
         {
         }
 
+        public IQueryable<User> GetAllAsQueryable()
+        {
+            return _items;
+        }
+
         public override async Task<User?> GetByIdAsync(Guid id)
         {
             return await _items.Include(u => u.Cars).ThenInclude(c => c.Photos).FirstOrDefaultAsync(u => u.Id == id);
+        }
+
+        public async Task<bool> UsernameExists(string username)
+        {
+            return await _items.AnyAsync(u => u.Username == username && u.IsActive);
         }
     }
 }

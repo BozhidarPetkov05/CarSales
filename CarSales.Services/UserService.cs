@@ -98,17 +98,7 @@ namespace CarSales.Services
 
         public async Task<bool> UsernameExists(string username)
         {
-            var users = await GetAllAsync();
-
-            foreach (var user in users)
-            {
-                if (user.Username == username && user.IsActive)
-                {
-                    return true;
-                }
-            }
-
-            return false;
+            return await _repository.UsernameExists(username);
         }
 
         public User CreateUser(UserRequest model)
@@ -168,8 +158,38 @@ namespace CarSales.Services
         public async Task<UpdatedUserResponse> DeactivateUser(User user)
         {
             user.IsActive = false;
+            user.LastChange = DateTime.UtcNow;
             await UpdateAsync(user);
             return MapToUpdatedUserResponse(user);
+        }
+
+        public async Task<PageResponse<UserListResponse>> GetAllUsersPagedAsync(int page, int pageSize)
+        {
+            page = Math.Max(page, 1);
+            pageSize = Math.Clamp(pageSize, 1, 30);
+
+            var query = _repository.GetAllAsQueryable();
+
+            var totalCount = await query.CountAsync();
+
+            var items = await query.Skip((page - 1) * pageSize).Take(pageSize).Select(u => new UserListResponse
+            {
+                Id = u.Id,
+                Username = u.Username,
+                FirstName = u.FirstName,
+                LastName = u.LastName,
+                IsAdmin = u.IsAdmin,
+                CreatedAt = u.CreatedAt,
+                LastChanged = u.LastChange
+            }).ToListAsync();
+
+            return new PageResponse<UserListResponse>
+            {
+                Items = items,
+                TotalCount = totalCount,
+                Page = page,
+                PageSize = pageSize
+            };
         }
     }
 }

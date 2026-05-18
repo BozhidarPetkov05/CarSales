@@ -1,9 +1,12 @@
-﻿using CarSales.Contracts.DTOs.Response;
+﻿using CarSales.Contracts.DTOs.Request;
+using CarSales.Contracts.DTOs.Response;
+using CarSales.Contracts.DTOs.Response.User;
 using CarSales.Contracts.Interfaces;
 using CarSales.Data.Entities;
 using CarSales.Data.Persistance;
 using CarSales.Repository.Implementations;
 using CarSales.Repository.Interfaces;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -58,12 +61,11 @@ namespace CarSales.Services
             {
                 Id = u.Id,
                 Username = u.Username,
-                Password = u.Password,
                 FirstName = u.FirstName,
                 LastName = u.LastName,
                 IsAdmin = u.IsAdmin,
                 CreatedAt = u.CreatedAt,
-
+                LastChanged = u.LastChange
             }).ToList();
         }
 
@@ -73,12 +75,12 @@ namespace CarSales.Services
             {
                 Id = user.Id,
                 Username = user.Username,
-                Password = user.Password,
                 FirstName = user.FirstName,
                 LastName = user.LastName,
                 Age = user.Age,
                 IsAdmin = user.IsAdmin,
                 CreatedAt = user.CreatedAt,
+                LastChanged = user.LastChange,
                 Cars = user.Cars.Select(c => new CarListResponse
                 {
                     Id = c.Id,
@@ -92,6 +94,82 @@ namespace CarSales.Services
                         .FirstOrDefault(p => p.IsMain)?.ImagePath
                 }).ToList()
             };
+        }
+
+        public async Task<bool> UsernameExists(string username)
+        {
+            var users = await GetAllAsync();
+
+            foreach (var user in users)
+            {
+                if (user.Username == username && user.IsActive)
+                {
+                    return true;
+                }
+            }
+
+            return false;
+        }
+
+        public User CreateUser(UserRequest model)
+        {
+            DateTime creationTime = DateTime.UtcNow;
+            return new User 
+            { 
+                Id = Guid.NewGuid(),
+                CreatedAt = creationTime,
+                LastChange = creationTime,
+                Username = model.Username,
+                Password = model.Password,
+                FirstName = model.FirstName,
+                LastName = model.LastName,
+                Age = model.Age,
+                IsAdmin = false
+            };
+        }
+        public User UpdateUser(UserRequest model, User user)
+        {
+            user.Username = model.Username;
+            user.Password = model.Password;
+            user.FirstName = model.FirstName;
+            user.LastName = model.LastName;
+
+            if (model.Age is not null)
+            {
+                user.Age = model.Age;
+            }
+            if (model.IsAdmin.HasValue)
+            {
+                user.IsAdmin = model.IsAdmin.Value;
+            }
+
+            user.LastChange = DateTime.UtcNow;
+
+            return user;
+        }
+
+        public UpdatedUserResponse MapToUpdatedUserResponse(User user)
+        {
+            return new UpdatedUserResponse
+            {
+                Id = user.Id,
+                Username = user.Username,
+                Password = user.Password,
+                FirstName = user.FirstName,
+                LastName = user.LastName,
+                Age = user.Age,
+                IsAdmin = user.IsAdmin,
+                CreatedAt = user.CreatedAt,
+                LastChanged = user.LastChange,
+                IsActive = user.IsActive
+            };
+        }
+
+        public async Task<UpdatedUserResponse> DeactivateUser(User user)
+        {
+            user.IsActive = false;
+            await UpdateAsync(user);
+            return MapToUpdatedUserResponse(user);
         }
     }
 }

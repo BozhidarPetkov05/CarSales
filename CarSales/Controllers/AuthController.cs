@@ -30,7 +30,11 @@ namespace CarSales.Controllers
             var user = (await _userService.GetAllAsync()).FirstOrDefault(u => u.Username == model.Username && u.Password == model.Password);
             if (user is null)
             {
-                return Unauthorized();
+                return BadRequest();
+            }
+            if (!user.IsActive)
+            {
+                return BadRequest();
             }
 
             var token = _tokenService.CreateToken(user);

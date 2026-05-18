@@ -1,4 +1,5 @@
-﻿using CarSales.Contracts.DTOs.Response;
+﻿using CarSales.Contracts.DTOs.Request;
+using CarSales.Contracts.DTOs.Response.User;
 using CarSales.Contracts.Interfaces;
 using CarSales.Data.Entities;
 using CarSales.Services;
@@ -35,7 +36,6 @@ namespace CarSales.Controllers
             return Ok(response);
         }
 
-        //TODO: Show user cars
         [Authorize]
         [HttpGet]
         [Route("{id}")]
@@ -43,17 +43,12 @@ namespace CarSales.Controllers
         {
             var loggedUserId = User.FindFirstValue("loggedUserId");
 
-            if (!Guid.TryParse(loggedUserId, out Guid validId))
-            {
-                return BadRequest();
-            }
-
-            if (!User.HasClaim("isAdmin", "True") && validId != id)
+            if (!User.HasClaim("isAdmin", "True") && Guid.Parse(loggedUserId) != id)
             {
                 return Unauthorized();
             }
 
-            User? user = await _userService.GetByIdAsync(validId);
+            User? user = await _userService.GetByIdAsync(id);
             if (user is null)
             {
                 return NotFound();
@@ -62,6 +57,78 @@ namespace CarSales.Controllers
             UserDetailedResponse response = _userService.MapToDetailedResponse(user);
 
             return Ok(response);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> Post([FromBody] UserRequest model)
+        {
+            if (await _userService.UsernameExists(model.Username))
+            {
+                return BadRequest();
+            }
+
+            User user = _userService.CreateUser(model);
+            await _userService.AddAsync(user);
+            return Created();
+        }
+
+        [Authorize]
+        [HttpPut]
+        [Route("{id}")]
+        public async Task<IActionResult> Put([FromBody] UserRequest model, [FromRoute] Guid id)
+        {
+            var loggedUserId = User.FindFirstValue("loggedUserId");
+
+            if (!User.HasClaim("isAdmin", "True") && Guid.Parse(loggedUserId) != id)
+            {
+                return Unauthorized();
+            }
+
+            User? user = await _userService.GetByIdAsync(id);
+            if (user is null)
+            {
+                return NotFound();
+            }
+
+            if (user.Username != model.Username && await _userService.UsernameExists(model.Username))
+            {
+                return BadRequest();
+            }
+
+            if (!User.HasClaim("isAdmin", "True"))
+            {
+                model.IsAdmin = false;
+            }
+
+            User updatedUser = _userService.UpdateUser(model, user);
+            await _userService.UpdateAsync(updatedUser);
+
+            UpdatedUserResponse response = _userService.MapToUpdatedUserResponse(updatedUser);
+
+            return Ok(response);
+        }
+
+        [Authorize]
+        [HttpDelete]
+        [Route("{id}")]
+        public async Task<IActionResult> Delete([FromRoute] Guid id)
+        {
+            var loggedUserId = User.FindFirstValue("loggedUserId");
+
+            if (!User.HasClaim("isAdmin", "True") && Guid.Parse(loggedUserId) != id)
+            {
+                return Unauthorized();
+            }
+
+            User? user = await _userService.GetByIdAsync(id);
+            if (user is null)
+            {
+                return NotFound();
+            }
+
+            UpdatedUserResponse deactivated = await _userService.DeactivateUser(user);
+
+            return Ok(deactivated);
         }
     }
 }

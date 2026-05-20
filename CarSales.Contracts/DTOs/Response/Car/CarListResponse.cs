@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace CarSales.Contracts.DTOs.Response
+namespace CarSales.Contracts.DTOs.Response.Car
 {
     public class CarListResponse
     {

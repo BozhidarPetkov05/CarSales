@@ -2,6 +2,7 @@
 using CarSales.Contracts.DTOs.Request;
 using CarSales.Contracts.DTOs.Request.User;
 using CarSales.Contracts.DTOs.Response;
+using CarSales.Contracts.DTOs.Response.Car;
 using CarSales.Contracts.DTOs.Response.User;
 using CarSales.Contracts.Interfaces;
 using CarSales.Data.Entities;
@@ -167,7 +168,6 @@ namespace CarSales.Services
 
         public async Task<UserPageResponse> GetAllUsersPagedAsync(UserPageRequest request)
         {
-            Console.WriteLine(request.IsActive);
             var page = Math.Max(request.Page, 1);
             var pageSize = Math.Clamp(request.PageSize, 1, 50);
 

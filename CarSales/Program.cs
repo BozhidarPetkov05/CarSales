@@ -25,13 +25,14 @@ namespace CarSales
             builder.Services.AddDbContext<CarSalesDbContext>(options =>
                 options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
             //Services
-            builder.Services.AddScoped<CarService>();
+            builder.Services.AddScoped<ICarService, CarService>();
             builder.Services.AddScoped<IUserService, UserService>();
             builder.Services.AddScoped<PhotoService>();
 
             //Repository
             builder.Services.AddScoped(typeof(IRepository<>), typeof(Repository<>));
             builder.Services.AddScoped<IUserRepository, UserRepository>();
+            builder.Services.AddScoped<ICarRepository, CarRepository>();
 
             //Jwt
             builder.Services.Configure<JwtSettings>(builder.Configuration.GetSection("Jwt"));
@@ -54,12 +55,7 @@ namespace CarSales
                 );
 
             //Temporary implementation
-            builder.Services.AddControllers()
-                .AddJsonOptions(x =>
-                {
-                    x.JsonSerializerOptions.ReferenceHandler =
-                        ReferenceHandler.IgnoreCycles;
-                });
+            builder.Services.AddControllers();
             builder.Services.AddOpenApi();
 
             var app = builder.Build();

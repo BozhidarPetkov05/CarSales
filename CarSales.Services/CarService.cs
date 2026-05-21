@@ -137,5 +137,48 @@ namespace CarSales.Services
                 PriceMax = request.PriceMax,
             };
         }
+
+        public CarDetailedResponse MapToDetailedResponse(Car car)
+        {
+            return new CarDetailedResponse
+            {
+                Id = car.Id,
+                Brand = car.Brand.ToString(),
+                Model = car.Model,
+                Year = car.Year,
+                Price = car.Price,
+                Fuel = car.Fuel.ToString(),
+                Transmission = car.Transmission.ToString(),
+                Color = car.Color.ToString(),
+                Power = car.Power,
+                EngineVolume = car.EngineVolume,
+                Description = car.Description,
+                CreatedAt = car.CreatedAt,
+                LastChanged = car.LastChange,
+                PhotoUrls = car.Photos.Select(p => p.ImagePath).ToList()
+            };
+        }
+
+        public Car CreateCar(CarRequest request, Guid id)
+        {
+            DateTime creationTime = DateTime.UtcNow;
+            return new Car
+            {
+                Id = Guid.NewGuid(),
+                CreatedAt = creationTime,
+                LastChange = creationTime,
+                Brand = request.Brand,
+                Model = request.Model,
+                Year = request.Year,
+                Price = request.Price,
+                Fuel = request.Fuel,
+                Transmission = request.Transmission,
+                Color = request.Color,
+                Power = request.Power,
+                EngineVolume = request.EngineVolume,
+                Description = request.Description,
+                UserId = id,
+            };
+        }
     }
 }

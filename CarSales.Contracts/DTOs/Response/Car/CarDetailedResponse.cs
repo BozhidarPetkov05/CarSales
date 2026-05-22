@@ -21,5 +21,6 @@ namespace CarSales.Contracts.DTOs.Response.Car
 
         public DateTime CreatedAt { get; set; }
         public DateTime LastChanged { get; set; }
+        public bool IsActive { get; set; }
     }
 }

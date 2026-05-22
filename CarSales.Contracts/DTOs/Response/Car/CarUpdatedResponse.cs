@@ -4,7 +4,7 @@ using System.Text;
 
 namespace CarSales.Contracts.DTOs.Response.Car
 {
-    public class CarListResponse
+    public class CarUpdatedResponse
     {
         public Guid Id { get; set; }
         public required string Brand { get; set; }
@@ -12,9 +12,9 @@ namespace CarSales.Contracts.DTOs.Response.Car
         public int Year { get; set; }
         public double Price { get; set; }
         public required string Fuel { get; set; }
+        public string Desription { get; set; }
         public DateTime CreatedAt { get; set; }
-        public string? MainPhotoUrl { get; set; }
+        public DateTime LastChanged { get; set; }
         public bool IsActive { get; set; }
-
     }
 }

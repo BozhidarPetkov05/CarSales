@@ -60,11 +60,12 @@ namespace CarSales.Services
                 Price = c.Price,
                 Fuel = c.Fuel.ToString(),
                 CreatedAt = c.CreatedAt,
-                MainPhotoUrl = c.Photos.FirstOrDefault(p => p.IsMain).ImagePath
+                MainPhotoUrl = c.Photos.FirstOrDefault(p => p.IsMain).ImagePath,
+                IsActive = c.IsActive
             }).ToList();
         }
         
-        public async Task<CarPageResponse> GetAllCarsPagedAsync(CarPageRequest request)
+        public async Task<CarPageResponse> GetAllCarsPagedAsync(CarPageRequest request, bool isAdmin)
         {
             var page = Math.Max(request.Page, 1);
             var pageSize = Math.Clamp(request.PageSize, 1, 50);
@@ -99,6 +100,10 @@ namespace CarSales.Services
             if (!string.IsNullOrWhiteSpace(request.PriceMax.ToString()))
             {
                 query = query.Where(c => c.Price <= request.PriceMax);
+            }
+            if (!isAdmin)
+            {
+                query = query.Where(c => c.IsActive == true);
             }
 
             query = request.IsDescending
@@ -155,7 +160,8 @@ namespace CarSales.Services
                 Description = car.Description,
                 CreatedAt = car.CreatedAt,
                 LastChanged = car.LastChange,
-                PhotoUrls = car.Photos.Select(p => p.ImagePath).ToList()
+                PhotoUrls = car.Photos.Select(p => p.ImagePath).ToList(),
+                IsActive = car.IsActive,
             };
         }
 
@@ -179,6 +185,48 @@ namespace CarSales.Services
                 Description = request.Description,
                 UserId = id,
             };
+        }
+
+        public Car UpdateCar(CarRequest model, Car car)
+        {
+            car.Brand = model.Brand;
+            car.Model = model.Model;
+            car.Year = model.Year;
+            car.Price = model.Price;
+            car.Fuel = model.Fuel;
+            car.Transmission = model.Transmission;
+            car.Color = model.Color;
+            car.Power = model.Power;
+            car.EngineVolume = model.EngineVolume;
+            car.Description = model.Description;
+            car.LastChange = DateTime.UtcNow;
+
+            return car;
+        }
+
+        public CarUpdatedResponse MapToCarUpdatedResponse(Car car)
+        {
+            return new CarUpdatedResponse
+            {
+                Id = car.Id,
+                Brand = car.Brand.ToString(),
+                Model = car.Model,
+                Year = car.Year,
+                Price = car.Price,
+                Fuel = car.Fuel.ToString(),
+                CreatedAt = car.CreatedAt,
+                LastChanged = car.LastChange,
+                Desription = car.Description,
+                IsActive = car.IsActive,
+            };
+        }
+
+        public async Task<CarUpdatedResponse> DeactivateCar(Car car)
+        {
+            car.IsActive = false;
+            car.LastChange = DateTime.UtcNow;
+            await UpdateAsync(car);
+            return MapToCarUpdatedResponse(car);
         }
     }
 }

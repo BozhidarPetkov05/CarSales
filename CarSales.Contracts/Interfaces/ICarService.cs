@@ -15,8 +15,11 @@ namespace CarSales.Contracts.Interfaces
         Task UpdateAsync(Car item);
         Task DeleteAsync(Car item);
         Car CreateCar(CarRequest request, Guid id);
+        Car UpdateCar(CarRequest model, Car car);
+        Task<CarUpdatedResponse> DeactivateCar(Car car);
         List<CarListResponse> MapToListResponse(IEnumerable<Car> cars);
         CarDetailedResponse MapToDetailedResponse(Car car);
-        Task<CarPageResponse> GetAllCarsPagedAsync(CarPageRequest request);
+        Task<CarPageResponse> GetAllCarsPagedAsync(CarPageRequest request, bool isAdmin);
+        CarUpdatedResponse MapToCarUpdatedResponse(Car car);
     }
 }

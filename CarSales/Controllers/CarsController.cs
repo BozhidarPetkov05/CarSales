@@ -23,7 +23,8 @@ namespace CarSales.Controllers
         [HttpGet]
         public async Task<IActionResult> Get([FromQuery] CarPageRequest request)
         {
-            var response = await _carService.GetAllCarsPagedAsync(request);
+            bool isAdmin = User.HasClaim("isAdmin", "True");
+            var response = await _carService.GetAllCarsPagedAsync(request, isAdmin);
             return Ok(response);
         }
 
@@ -34,6 +35,11 @@ namespace CarSales.Controllers
         {
             Car? car = await _carService.GetByIdAsync(id);
             if (car is null)
+            {
+                return NotFound();
+            }
+
+            if (!car.IsActive && !User.HasClaim("isAdmin", "True"))
             {
                 return NotFound();
             }
@@ -54,12 +60,57 @@ namespace CarSales.Controllers
         }
 
         [Authorize]
-        [HttpDelete]
+        [HttpPut]
         [Route("{id}")]
         public async Task<IActionResult> Put([FromBody] CarRequest request, [FromRoute] Guid id)
         {
             Car? car = await _carService.GetByIdAsync(id);
-            return Ok();
+            if (car is null)
+            {
+                return NotFound();
+            }
+
+            if (!car.IsActive && !User.HasClaim("isAdmin", "True"))
+            {
+                return NotFound();
+            }
+
+            Guid loggedUserId = Guid.Parse(User.FindFirstValue("loggedUserId"));
+            if (!User.HasClaim("isAdmin", "True") && loggedUserId != car.UserId)
+            {
+                return Forbid();
+            }
+
+            Car updatedCar = _carService.UpdateCar(request, car);
+            await _carService.UpdateAsync(updatedCar);
+            CarUpdatedResponse response = _carService.MapToCarUpdatedResponse(updatedCar);
+            return Ok(response);
+        }
+
+        [Authorize]
+        [HttpDelete]
+        [Route("{id}")]
+        public async Task<IActionResult> Delete([FromRoute] Guid id)
+        {
+            Car? car = await _carService.GetByIdAsync(id);
+            if (car is null)
+            {
+                return NotFound();
+            }
+
+            Guid loggedUserId = Guid.Parse(User.FindFirstValue("loggedUserId"));
+            if (!User.HasClaim("isAdmin", "True") && loggedUserId != car.UserId)
+            {
+                return Forbid();
+            }
+
+            if (!car.IsActive)
+            {
+                return NotFound();
+            }
+
+            CarUpdatedResponse response = await _carService.DeactivateCar(car);
+            return Ok(response);
         }
     }
 }

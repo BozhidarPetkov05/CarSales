@@ -81,7 +81,7 @@ namespace CarSales.Controllers
                 return Forbid();
             }
 
-            Car updatedCar = _carService.UpdateCar(request, car);
+            Car updatedCar = await _carService.UpdateCar(request, car);
             await _carService.UpdateAsync(updatedCar);
             CarUpdatedResponse response = _carService.MapToCarUpdatedResponse(updatedCar);
             return Ok(response);

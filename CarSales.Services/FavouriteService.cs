@@ -48,7 +48,7 @@ namespace CarSales.Services
                 Fuel = f.Car.Fuel.ToString(),
                 CreatedAt = f.Car.CreatedAt,
                 UpdatedAt = f.Car.LastChange,
-                MainPhotoUrl = f.Car.Photos.FirstOrDefault(p => p.IsMain).ImagePath,
+                MainPhotoUrl = f.Car.Photos.FirstOrDefault(p => p.IsMain)?.ImagePath,
                 AddedAt = f.Car.CreatedAt,
                 LastPrice = f.LastPrice,
                 IsPriceChanged = f.IsPriceChanged,

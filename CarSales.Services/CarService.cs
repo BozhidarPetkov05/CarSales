@@ -39,18 +39,6 @@ namespace CarSales.Services
         }
         public async Task UpdateAsync(Car item)
         {
-            Car? car = await _context.Set<Car>().FirstOrDefaultAsync(c => c.Id == item.Id);
-            var favouritesToUpdate = _context.Set<Favourite>().Where(f => f.CarId == item.Id);
-            foreach (var favourite in favouritesToUpdate)
-            {
-                favourite.LastPrice = car.Price;
-                favourite.IsPriceChanged = car.Price != item.Price ? true : false;
-                if (favourite.IsPriceChanged)
-                {
-                    favourite.IsHigherPrice = item.Price > car.Price ? true : false;
-                }
-            }
-            _context.UpdateRange(favouritesToUpdate);
             _repository.Update(item);
             await _context.SaveChangesAsync();
         }
@@ -199,8 +187,22 @@ namespace CarSales.Services
             };
         }
 
-        public Car UpdateCar(CarRequest model, Car car)
+        public async Task<Car> UpdateCar(CarRequest model, Car car)
         {
+            var favouritesToUpdate = _context.Set<Favourite>().Where(f => f.CarId == car.Id);
+            foreach (var favourite in favouritesToUpdate)
+            {
+                var oldPrice = car.Price;
+                var newPrice = model.Price;
+
+                favourite.IsPriceChanged = oldPrice != newPrice;
+                favourite.IsHigherPrice = oldPrice != newPrice && newPrice > oldPrice;
+
+                favourite.LastPrice = newPrice;
+            }
+            _context.UpdateRange(favouritesToUpdate);
+            await _context.SaveChangesAsync();
+
             car.Brand = model.Brand;
             car.Model = model.Model;
             car.Year = model.Year;

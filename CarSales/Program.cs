@@ -1,17 +1,15 @@
 using CarSales.Contracts.Interfaces;
 using CarSales.Contracts.Settings;
-using CarSales.Data.Entities;
 using CarSales.Data.Persistance;
 using CarSales.Repository;
 using CarSales.Repository.Implementations;
 using CarSales.Repository.Interfaces;
 using CarSales.Services;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
-using Microsoft.AspNetCore.Cors.Infrastructure;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
+using Microsoft.OpenApi;
 using System.Text;
-using System.Text.Json.Serialization;
 
 namespace CarSales
 {
@@ -60,7 +58,39 @@ namespace CarSales
             builder.Services.AddControllers();
             builder.Services.AddOpenApi();
 
+            builder.Services.AddEndpointsApiExplorer();
+            builder.Services.AddSwaggerGen(c =>
+            {
+                c.SwaggerDoc("v1", new OpenApiInfo
+                {
+                    Title = "Car Sales",
+                    Version = "v1"
+                });
+                c.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
+                {
+                    Name = "Authorization",
+                    Type = SecuritySchemeType.ApiKey,
+                    Scheme = "Bearer",
+                    BearerFormat = "JWT",
+                    In = ParameterLocation.Header,
+                    Description = "Enter JWT Token here"
+                });
+                c.AddSecurityRequirement(document => new OpenApiSecurityRequirement
+                {
+                    {
+                        new OpenApiSecuritySchemeReference("Bearer", document),
+                        new List<string>()
+                    }
+                });
+
+
+
+            });
+
             var app = builder.Build();
+
+            app.UseSwagger();
+            app.UseSwaggerUI();
 
             if (app.Environment.IsDevelopment())
             {

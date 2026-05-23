@@ -23,16 +23,18 @@ namespace CarSales
 
             //Database
             builder.Services.AddDbContext<CarSalesDbContext>(options =>
-                options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
+                options.UseLazyLoadingProxies().UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
             //Services
             builder.Services.AddScoped<ICarService, CarService>();
             builder.Services.AddScoped<IUserService, UserService>();
+            builder.Services.AddScoped<IFavouriteService, FavouriteService>();
             builder.Services.AddScoped<PhotoService>();
 
             //Repository
             builder.Services.AddScoped(typeof(IRepository<>), typeof(Repository<>));
             builder.Services.AddScoped<IUserRepository, UserRepository>();
             builder.Services.AddScoped<ICarRepository, CarRepository>();
+            builder.Services.AddScoped<IFavouriteRepository, FavouriteRepository>();
 
             //Jwt
             builder.Services.Configure<JwtSettings>(builder.Configuration.GetSection("Jwt"));

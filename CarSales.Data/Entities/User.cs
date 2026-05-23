@@ -34,7 +34,7 @@ namespace CarSales.Data.Entities
         [Range(UserConstraints.MinAgeValue, UserConstraints.MaxAgeValue, ErrorMessage = UserErrorMessages.AgeRange)]
         public int? Age { get; set; }
         public bool IsAdmin { get; set; } = false;
-        public ICollection<Car> Cars { get; set; } = new List<Car>();
-        public ICollection<Favourite> Favourites { get; set; } = new List<Favourite>();
+        public virtual ICollection<Car> Cars { get; set; } = new List<Car>();
+        public virtual ICollection<Favourite> Favourites { get; set; } = new List<Favourite>();
     }
 }

@@ -19,7 +19,7 @@ namespace CarSales.Controllers
         public UsersController(IUserService userService)
         {
             _userService = userService;
-        }
+        } 
 
         [Authorize]
         [HttpGet]

@@ -18,6 +18,6 @@ namespace CarSales.Contracts.Interfaces
         bool CarExists(Guid carId);
         bool CarIsInFavourites(Guid carId, Guid userId);
 
-        FavouritesPageResponse GetPageResponse(Guid carId, Guid userId);
+        //FavouritesPageResponse GetPageResponse(Guid carId, Guid userId);
     }
 }

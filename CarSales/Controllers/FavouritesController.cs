@@ -46,7 +46,8 @@ namespace CarSales.Controllers
 
         [Authorize]
         [HttpDelete]
-        public async Task<IActionResult> Delete([FromQuery] Guid carId)
+        [Route("{carId}")]
+        public async Task<IActionResult> Delete([FromRoute] Guid carId)
         {
             Guid loggedUserId = Guid.Parse(User.FindFirstValue("loggedUserId"));
             if (!_favouriteService.CarIsInFavourites(carId, loggedUserId))

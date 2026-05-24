@@ -19,6 +19,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\CarSales.Contracts\CarSales.Contracts.csproj" />
     <ProjectReference Include="..\CarSales.Data\CarSales.Data.csproj" />
     <ProjectReference Include="..\CarSales.Repository\CarSales.Repository.csproj" />
     <ProjectReference Include="..\CarSales.Services\CarSales.Services.csproj" />

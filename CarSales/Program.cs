@@ -26,13 +26,14 @@ namespace CarSales
             builder.Services.AddScoped<ICarService, CarService>();
             builder.Services.AddScoped<IUserService, UserService>();
             builder.Services.AddScoped<IFavouriteService, FavouriteService>();
-            builder.Services.AddScoped<PhotoService>();
+            builder.Services.AddScoped<IPhotoService, PhotoService>();
 
             //Repository
             builder.Services.AddScoped(typeof(IRepository<>), typeof(Repository<>));
             builder.Services.AddScoped<IUserRepository, UserRepository>();
             builder.Services.AddScoped<ICarRepository, CarRepository>();
             builder.Services.AddScoped<IFavouriteRepository, FavouriteRepository>();
+            builder.Services.AddScoped<IPhotoRepository, PhotoRepository>();
 
             //Jwt
             builder.Services.Configure<JwtSettings>(builder.Configuration.GetSection("Jwt"));

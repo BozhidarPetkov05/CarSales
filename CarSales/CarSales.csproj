@@ -25,4 +25,8 @@
     <ProjectReference Include="..\CarSales.Services\CarSales.Services.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="wwwroot\uploads\" />
+  </ItemGroup>
+
 </Project>

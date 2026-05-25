@@ -2,6 +2,5 @@
 {
     public class UserListResponse : BaseUserResponse
     {
-        public bool IsActive { get; set; }
     }
 }

@@ -38,11 +38,6 @@ namespace CarSales.Controllers
                 return NotFound();
             }
 
-            if (!car.IsActive && !User.HasClaim("isAdmin", "True"))
-            {
-                return NotFound();
-            }
-
             CarDetailedResponse response = _carService.MapToDetailedResponse(car);
 
             return Ok(response);
@@ -65,11 +60,6 @@ namespace CarSales.Controllers
         {
             Car? car = await _carService.GetByIdAsync(id);
             if (car is null)
-            {
-                return NotFound();
-            }
-
-            if (!car.IsActive && !User.HasClaim("isAdmin", "True"))
             {
                 return NotFound();
             }
@@ -103,12 +93,8 @@ namespace CarSales.Controllers
                 return Forbid();
             }
 
-            if (!car.IsActive)
-            {
-                return NotFound();
-            }
-
-            CarUpdatedResponse response = await _carService.DeactivateCar(car);
+            CarUpdatedResponse response = _carService.MapToCarUpdatedResponse(car);
+            await _carService.DeleteAsync(car);
             return Ok(response);
         }
     }

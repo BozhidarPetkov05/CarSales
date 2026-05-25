@@ -11,6 +11,5 @@
         public string Desription { get; set; }
         public DateTime CreatedAt { get; set; }
         public DateTime LastChanged { get; set; }
-        public bool IsActive { get; set; }
     }
 }

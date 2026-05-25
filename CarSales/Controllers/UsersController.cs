@@ -27,10 +27,6 @@ namespace CarSales.Controllers
                 return Forbid();
             }
 
-            //IEnumerable<User> users = await _userService.GetAllAsync();
-
-            //List<UserListResponse> response = _userService.MapToListResponse(users);
-
             var response = await _userService.GetAllUsersPagedAsync(request);
 
             return Ok(response);
@@ -126,8 +122,8 @@ namespace CarSales.Controllers
                 return NotFound();
             }
 
-            UpdatedUserResponse deactivated = await _userService.DeactivateUser(user);
-
+            UpdatedUserResponse deactivated = _userService.MapToUpdatedUserResponse(user);
+            await _userService.DeleteAsync(user);
             return Ok(deactivated);
         }
     }

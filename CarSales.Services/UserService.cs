@@ -147,18 +147,8 @@ namespace CarSales.Services
                 IsAdmin = user.IsAdmin,
                 CreatedAt = user.CreatedAt,
                 LastChanged = user.LastChange,
-                IsActive = user.IsActive
             };
         }
-
-        public async Task<UpdatedUserResponse> DeactivateUser(User user)
-        {
-            user.IsActive = false;
-            user.LastChange = DateTime.UtcNow;
-            await UpdateAsync(user);
-            return MapToUpdatedUserResponse(user);
-        }
-
         public async Task<UserPageResponse> GetAllUsersPagedAsync(UserPageRequest request)
         {
             var page = Math.Max(request.Page, 1);
@@ -171,9 +161,9 @@ namespace CarSales.Services
                 query = query.Where(u => u.Username.Contains(request.Username));
             }
 
-            if (request.IsActive.HasValue)
+            if (request.IsAdmin.HasValue)
             {
-                query = query.Where(u => u.IsActive == request.IsActive.Value);
+                query = query.Where(u => u.IsAdmin == request.IsAdmin.Value);
             }
 
             query = request.IsDescending
@@ -194,7 +184,6 @@ namespace CarSales.Services
                     IsAdmin = u.IsAdmin,
                     CreatedAt = u.CreatedAt,
                     LastChanged = u.LastChange,
-                    IsActive = u.IsActive
                 })
                 .ToListAsync();
 
@@ -206,7 +195,6 @@ namespace CarSales.Services
                 PageSize = pageSize,
                 IsDescending = request.IsDescending,
                 Username = request.Username,
-                IsActive = request.IsActive
             };
         }
     }

@@ -58,7 +58,6 @@ namespace CarSales.Services
                 Fuel = c.Fuel.ToString(),
                 CreatedAt = c.CreatedAt,
                 MainPhotoUrl = c.Photos.FirstOrDefault(p => p.IsMain).ImagePath,
-                IsActive = c.IsActive
             }).ToList();
         }
         
@@ -97,10 +96,6 @@ namespace CarSales.Services
             if (!string.IsNullOrWhiteSpace(request.PriceMax.ToString()))
             {
                 query = query.Where(c => c.Price <= request.PriceMax);
-            }
-            if (!isAdmin)
-            {
-                query = query.Where(c => c.IsActive == true);
             }
 
             query = request.IsDescending
@@ -158,7 +153,6 @@ namespace CarSales.Services
                 CreatedAt = car.CreatedAt,
                 LastChanged = car.LastChange,
                 PhotoUrls = car.Photos.Select(p => p.ImagePath).ToList(),
-                IsActive = car.IsActive,
             };
         }
 
@@ -228,16 +222,7 @@ namespace CarSales.Services
                 CreatedAt = car.CreatedAt,
                 LastChanged = car.LastChange,
                 Desription = car.Description,
-                IsActive = car.IsActive,
             };
-        }
-
-        public async Task<CarUpdatedResponse> DeactivateCar(Car car)
-        {
-            car.IsActive = false;
-            car.LastChange = DateTime.UtcNow;
-            await UpdateAsync(car);
-            return MapToCarUpdatedResponse(car);
         }
     }
 }

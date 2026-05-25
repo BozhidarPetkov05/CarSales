@@ -30,10 +30,6 @@ namespace CarSales.Controllers
             {
                 return BadRequest();
             }
-            if (!user.IsActive)
-            {
-                return BadRequest();
-            }
 
             var token = _tokenService.CreateToken(user);
             return Ok(new {token});

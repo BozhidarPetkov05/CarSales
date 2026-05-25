@@ -23,7 +23,7 @@ namespace CarSales.Repository.Implementations
 
         public async Task<bool> UsernameExists(string username)
         {
-            return await _items.AnyAsync(u => u.Username == username && u.IsActive);
+            return await _items.AnyAsync(u => u.Username == username);
         }
     }
 }

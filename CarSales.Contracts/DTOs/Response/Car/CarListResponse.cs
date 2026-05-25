@@ -10,7 +10,6 @@
         public required string Fuel { get; set; }
         public DateTime CreatedAt { get; set; }
         public string? MainPhotoUrl { get; set; }
-        public bool IsActive { get; set; }
 
     }
 }

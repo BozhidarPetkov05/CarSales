@@ -18,8 +18,6 @@ namespace CarSales.Contracts.Interfaces
         User UpdateUser(UserRequest model, User user);
         UpdatedUserResponse MapToUpdatedUserResponse(User user);
 
-        Task<UpdatedUserResponse> DeactivateUser(User user);
-
         Task<UserPageResponse> GetAllUsersPagedAsync(UserPageRequest request);
     }
 }

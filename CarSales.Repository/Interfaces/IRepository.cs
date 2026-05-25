@@ -1,8 +1,4 @@
 ﻿using CarSales.Data.Entities;
-using System;
-using System.Collections.Generic;
-using System.Linq.Expressions;
-using System.Text;
 
 namespace CarSales.Repository.Interfaces
 {

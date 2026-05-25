@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace CarSales.Contracts.Settings
+﻿namespace CarSales.Contracts.Settings
 {
     public class JwtSettings
     {

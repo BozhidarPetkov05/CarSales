@@ -1,8 +1,4 @@
-﻿using CarSales.Contracts.DTOs.Response;
-using CarSales.Data.Entities;
-using System;
-using System.Collections.Generic;
-using System.Text;
+﻿using CarSales.Data.Entities;
 
 namespace CarSales.Contracts.Interfaces
 {

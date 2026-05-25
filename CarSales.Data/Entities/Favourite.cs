@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace CarSales.Data.Entities
+﻿namespace CarSales.Data.Entities
 {
     public class Favourite
     {

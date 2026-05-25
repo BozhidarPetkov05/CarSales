@@ -1,12 +1,8 @@
 ﻿using CarSales.Data.DataConstraints;
 using CarSales.Data.Enums;
 using CarSales.Data.ErrorMessages;
-using System;
-using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
-using System.Drawing;
-using System.Text;
 
 namespace CarSales.Data.Entities
 {

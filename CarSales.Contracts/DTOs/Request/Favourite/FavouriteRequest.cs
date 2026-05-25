@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace CarSales.Contracts.DTOs.Request.Favourite
+﻿namespace CarSales.Contracts.DTOs.Request.Favourite
 {
     public class FavouriteRequest
     {

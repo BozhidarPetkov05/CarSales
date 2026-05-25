@@ -1,9 +1,6 @@
-﻿using CarSales.Contracts.DTOs.Request.Favourite;
-using CarSales.Contracts.DTOs.Response.Favourites;
-using CarSales.Contracts.Interfaces;
+﻿using CarSales.Contracts.Interfaces;
 using CarSales.Data.Entities;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System.Security.Claims;
 

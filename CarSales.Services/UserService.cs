@@ -1,18 +1,11 @@
-﻿using Azure.Core;
-using CarSales.Contracts.DTOs.Request;
-using CarSales.Contracts.DTOs.Request.User;
-using CarSales.Contracts.DTOs.Response;
+﻿using CarSales.Contracts.DTOs.Request.User;
 using CarSales.Contracts.DTOs.Response.Car;
 using CarSales.Contracts.DTOs.Response.User;
 using CarSales.Contracts.Interfaces;
 using CarSales.Data.Entities;
 using CarSales.Data.Persistance;
-using CarSales.Repository.Implementations;
 using CarSales.Repository.Interfaces;
 using Microsoft.EntityFrameworkCore;
-using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace CarSales.Services
 {

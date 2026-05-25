@@ -1,12 +1,8 @@
-﻿using Azure.Core;
-using CarSales.Contracts.DTOs.Response.Favourites;
+﻿using CarSales.Contracts.DTOs.Response.Favourites;
 using CarSales.Contracts.Interfaces;
 using CarSales.Data.Entities;
 using CarSales.Data.Persistance;
 using CarSales.Repository.Interfaces;
-using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace CarSales.Services
 {

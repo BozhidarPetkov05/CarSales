@@ -1,9 +1,4 @@
-﻿using CarSales.Contracts.DTOs.Request;
-using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace CarSales.Contracts.DTOs.Request.Car
+﻿namespace CarSales.Contracts.DTOs.Request.Car
 {
     public class CarPageRequest : PageRequest
     {

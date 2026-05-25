@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace CarSales.Contracts.DTOs.Response
+﻿namespace CarSales.Contracts.DTOs.Response
 {
     public class PageResponse<T>
     {

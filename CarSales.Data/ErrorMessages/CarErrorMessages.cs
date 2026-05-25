@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace CarSales.Data.ErrorMessages
+﻿namespace CarSales.Data.ErrorMessages
 {
     public static class CarErrorMessages
     {

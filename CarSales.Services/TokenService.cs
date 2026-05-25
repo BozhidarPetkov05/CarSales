@@ -1,11 +1,8 @@
-﻿using CarSales.Contracts.DTOs.Response;
-using CarSales.Contracts.Interfaces;
+﻿using CarSales.Contracts.Interfaces;
 using CarSales.Contracts.Settings;
 using CarSales.Data.Entities;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
-using System;
-using System.Collections.Generic;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;

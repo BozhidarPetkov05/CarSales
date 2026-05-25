@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace CarSales.Contracts.DTOs.Request.User
+﻿namespace CarSales.Contracts.DTOs.Request.User
 {
     public class UserPageRequest : PageRequest
     {

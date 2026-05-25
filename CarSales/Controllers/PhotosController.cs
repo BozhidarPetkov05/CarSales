@@ -1,8 +1,6 @@
 ﻿using CarSales.Contracts.DTOs.Request;
 using CarSales.Contracts.Interfaces;
 using CarSales.Data.Entities;
-using CarSales.Services;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
 namespace CarSales.Controllers

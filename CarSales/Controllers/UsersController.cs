@@ -1,11 +1,8 @@
-﻿using CarSales.Contracts.DTOs.Request;
-using CarSales.Contracts.DTOs.Request.User;
+﻿using CarSales.Contracts.DTOs.Request.User;
 using CarSales.Contracts.DTOs.Response.User;
 using CarSales.Contracts.Interfaces;
 using CarSales.Data.Entities;
-using CarSales.Services;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System.Security.Claims;
 

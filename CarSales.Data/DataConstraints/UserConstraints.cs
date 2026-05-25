@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace CarSales.Data.DataConstraints
+﻿namespace CarSales.Data.DataConstraints
 {
     public static class UserConstraints
     {

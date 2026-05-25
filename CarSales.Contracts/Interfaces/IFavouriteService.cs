@@ -1,8 +1,5 @@
 ﻿using CarSales.Contracts.DTOs.Response.Favourites;
 using CarSales.Data.Entities;
-using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace CarSales.Contracts.Interfaces
 {

@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace CarSales.Data.DataConstraints
+﻿namespace CarSales.Data.DataConstraints
 {
     public static class CarConstraints
     {

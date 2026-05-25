@@ -3,7 +3,6 @@ using CarSales.Contracts.DTOs.Response.Car;
 using CarSales.Contracts.Interfaces;
 using CarSales.Data.Entities;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System.Security.Claims;
 

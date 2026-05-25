@@ -2,9 +2,6 @@
 using CarSales.Data.Persistance;
 using CarSales.Repository.Interfaces;
 using Microsoft.EntityFrameworkCore;
-using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace CarSales.Repository.Implementations
 {

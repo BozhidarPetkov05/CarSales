@@ -1,7 +1,4 @@
 ﻿using CarSales.Contracts.DTOs.Response.Car;
-using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace CarSales.Contracts.DTOs.Response.User
 {

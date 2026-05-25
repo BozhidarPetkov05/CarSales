@@ -41,13 +41,13 @@ namespace CarSales.Data.Persistance
                 .HasOne(f => f.User)
                 .WithMany(f => f.Favourites)
                 .HasForeignKey(f => f.UserId)
-                .OnDelete(DeleteBehavior.Restrict);
+                .OnDelete(DeleteBehavior.Cascade);
 
             modelBuilder.Entity<Favourite>()
                 .HasOne(f => f.Car)
                 .WithMany(f => f.Favourites)
                 .HasForeignKey(f => f.CarId)
-                .OnDelete(DeleteBehavior.Restrict);
+                .OnDelete(DeleteBehavior.Cascade);
             #endregion
         }
     }

@@ -7,6 +7,7 @@ using CarSales.Repository.Implementations;
 using CarSales.Repository.Interfaces;
 using CarSales.Services;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi;
@@ -61,6 +62,11 @@ namespace CarSales
             builder.Services.AddExceptionHandler<GlobalExceptionHandler>();
             builder.Services.AddProblemDetails();
 
+            builder.Services.Configure<ApiBehaviorOptions>(options =>
+            {
+                options.SuppressModelStateInvalidFilter = true;
+            });
+
             builder.Services.AddOpenApi();
 
             builder.Services.AddEndpointsApiExplorer();
@@ -92,7 +98,19 @@ namespace CarSales
 
             });
 
+            builder.Services.AddCors(options =>
+            {
+                options.AddPolicy("AllowReactApp",
+                    policy =>
+                    {
+                        policy.AllowAnyOrigin()
+                              .AllowAnyHeader()
+                              .AllowAnyMethod();
+                    });
+            });
+
             var app = builder.Build();
+            app.UseExceptionHandler();
 
             app.UseStaticFiles();
 
@@ -104,8 +122,11 @@ namespace CarSales
                 app.MapOpenApi();
             }
 
+            app.UseRouting();
+
+            app.UseCors("AllowReactApp");
+
             app.UseHttpsRedirection();
-            app.UseExceptionHandler();
             app.UseAuthentication();
             app.UseAuthorization();
 

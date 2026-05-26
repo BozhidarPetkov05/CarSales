@@ -1,111 +1,248 @@
-:root {
-  --text: #6b6375;
-  --text-h: #08060d;
-  --bg: #fff;
-  --border: #e5e4e7;
-  --code-bg: #f4f3ec;
-  --accent: #aa3bff;
-  --accent-bg: rgba(170, 59, 255, 0.1);
-  --accent-border: rgba(170, 59, 255, 0.5);
-  --social-bg: rgba(244, 243, 236, 0.5);
-  --shadow:
-    rgba(0, 0, 0, 0.1) 0 10px 15px -3px, rgba(0, 0, 0, 0.05) 0 4px 6px -2px;
-
-  --sans: system-ui, 'Segoe UI', Roboto, sans-serif;
-  --heading: system-ui, 'Segoe UI', Roboto, sans-serif;
-  --mono: ui-monospace, Consolas, monospace;
-
-  font: 18px/145% var(--sans);
-  letter-spacing: 0.18px;
-  color-scheme: light dark;
-  color: var(--text);
-  background: var(--bg);
-  font-synthesis: none;
-  text-rendering: optimizeLegibility;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-
-  @media (max-width: 1024px) {
-    font-size: 16px;
-  }
+/* Базови настройки на екрана */
+html, body {
+    margin: 0;
+    padding: 0;
+    width: 100%;
+    height: 100%;
+    background-color: #f4f6f9; /* Светло сивкав фон на страницата */
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    box-sizing: border-box;
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --text: #9ca3af;
-    --text-h: #f3f4f6;
-    --bg: #16171d;
-    --border: #2e303a;
-    --code-bg: #1f2028;
-    --accent: #c084fc;
-    --accent-bg: rgba(192, 132, 252, 0.15);
-    --accent-border: rgba(192, 132, 252, 0.5);
-    --social-bg: rgba(47, 48, 58, 0.5);
-    --shadow:
-      rgba(0, 0, 0, 0.4) 0 10px 15px -3px, rgba(0, 0, 0, 0.25) 0 4px 6px -2px;
-  }
-
-  #social .button-icon {
-    filter: invert(1) brightness(2);
-  }
+/* Общ контейнер за центриране */
+.app-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    min-height: 100vh;
+    box-sizing: border-box;
+    padding: 20px;
 }
 
-body {
-  margin: 0;
+/* Бялата кутия (Картата) */
+.auth-card {
+    background: #ffffff;
+    padding: 40px;
+    border-radius: 10px;
+    border: 1px solid #e2e8f0; /* Тънка сива рамка около картата */
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05), 0 2px 4px -1px rgba(0, 0, 0, 0.03);
+    width: 100%;
+    max-width: 480px; /* Точният балансиран размер */
+    box-sizing: border-box;
 }
 
-#root {
-  width: 1126px;
-  max-width: 100%;
-  margin: 0 auto;
-  text-align: center;
-  border-inline: 1px solid var(--border);
-  min-height: 100svh;
-  display: flex;
-  flex-direction: column;
-  box-sizing: border-box;
+    /* Заглавието "Car Sales Management System" */
+    .auth-card h2 {
+        color: #1e293b;
+        text-align: center;
+        margin-top: 0;
+        margin-bottom: 30px;
+        font-size: 1.5rem;
+        font-weight: 600;
+    }
+
+/* Контейнер за всяко поле */
+.form-group {
+    margin-bottom: 20px;
+    display: flex;
+    flex-direction: column;
 }
 
-h1,
-h2 {
-  font-family: var(--heading);
-  font-weight: 500;
-  color: var(--text-h);
+/* Ред с две полета (за Username/Password и имена) */
+.form-row {
+    display: flex;
+    gap: 16px;
 }
 
-h1 {
-  font-size: 56px;
-  letter-spacing: -1.68px;
-  margin: 32px 0;
-  @media (max-width: 1024px) {
-    font-size: 36px;
-    margin: 20px 0;
-  }
-}
-h2 {
-  font-size: 24px;
-  line-height: 118%;
-  letter-spacing: -0.24px;
-  margin: 0 0 8px;
-  @media (max-width: 1024px) {
-    font-size: 20px;
-  }
-}
-p {
-  margin: 0;
+    .form-row .form-group {
+        flex: 1;
+    }
+
+/* Етикети (текстът над инпутите) */
+.form-group label {
+    color: #475569;
+    font-size: 0.9rem;
+    margin-bottom: 8px;
+    font-weight: 500;
+    text-align: left;
 }
 
-code,
-.counter {
-  font-family: var(--mono);
-  display: inline-flex;
-  border-radius: 4px;
-  color: var(--text-h);
+/* Самите инпути - заоблени със сивкав фон */
+.form-group input {
+    padding: 12px 14px;
+    border: 1px solid #cbd5e1;
+    border-radius: 6px;
+    background-color: #f1f5f9; /* Сивкав фон вътре в полето */
+    font-size: 0.95rem;
+    color: #334155;
+    outline: none;
+    box-sizing: border-box;
+    width: 100%;
+    transition: all 0.2s;
 }
 
-code {
-  font-size: 15px;
-  line-height: 135%;
-  padding: 4px 8px;
-  background: var(--code-bg);
+    /* Когато се кликне в инпута */
+    .form-group input:focus {
+        border-color: #2563eb;
+        background-color: #ffffff;
+        box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
+    }
+
+/* Красивият син бутон */
+.btn-submit {
+    width: 100%;
+    padding: 14px;
+    background-color: #2563eb; /* Красивото наситено синьо */
+    color: #ffffff;
+    border: none;
+    border-radius: 6px;
+    font-size: 1rem;
+    font-weight: 500;
+    cursor: pointer;
+    margin-top: 10px;
+    transition: background-color 0.2s;
+}
+
+    .btn-submit:hover {
+        background-color: #1d4ed8;
+    }
+
+/* Текстът за превключване най-отдолу */
+.switch-text {
+    text-align: center;
+    margin-top: 25px;
+    margin-bottom: 0;
+    color: #64748b;
+    font-size: 0.9rem;
+}
+
+    .switch-text span {
+        color: #1d4ed8;
+        font-weight: 600;
+        cursor: pointer;
+        margin-left: 4px;
+    }
+
+        .switch-text span:hover {
+            text-decoration: underline;
+        }
+
+/* Съобщения за грешки от бекенда */
+.error-message {
+    color: #dc2626;
+    background-color: #fef2f2;
+    border: 1px solid #fecaca;
+    padding: 12px;
+    border-radius: 6px;
+    font-size: 0.85rem;
+    margin-bottom: 20px;
+    text-align: center;
+}
+
+/* Стил за списъка с коли */
+.car-container {
+    width: 100%;
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 40px 20px;
+    font-family: inherit;
+}
+
+.car-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 30px;
+    border-bottom: 2px solid #e2e8f0;
+    padding-bottom: 15px;
+}
+
+    .car-header h2 {
+        margin: 0;
+        color: #1e293b;
+        font-size: 1.75rem;
+    }
+
+/* Червеният бутон за изход */
+.btn-logout {
+    padding: 10px 20px;
+    cursor: pointer;
+    background-color: #ef4444;
+    color: white;
+    border: none;
+    border-radius: 6px;
+    font-weight: 600;
+    transition: background-color 0.2s;
+}
+
+    .btn-logout:hover {
+        background-color: #dc2626;
+    }
+
+/* Мрежата за колите */
+.car-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 25px;
+}
+
+/* Карта за единична кола */
+.car-card {
+    border: 1px solid #e2e8f0;
+    border-radius: 10px;
+    overflow: hidden;
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
+    background: #fff;
+    transition: transform 0.2s, box-shadow 0.2s;
+}
+
+    .car-card:hover {
+        transform: translateY(-4px);
+        box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+    }
+
+.car-image-wrapper img {
+    width: 100%;
+    height: 200px;
+    object-fit: cover;
+}
+
+.car-details {
+    padding: 20px;
+    text-align: left;
+}
+
+    .car-details h3 {
+        margin: 0 0 10px 0;
+        color: #1e293b;
+        font-size: 1.25rem;
+    }
+
+    .car-details p {
+        margin: 6px 0;
+        color: #64748b;
+        font-size: 0.95rem;
+    }
+
+.car-price {
+    font-size: 1.35rem;
+    color: #10b981 !important;
+    font-weight: 700;
+    margin: 12px 0 6px 0 !important;
+}
+
+.car-details small {
+    color: #94a3b8;
+    font-size: 0.8rem;
+}
+
+.loading-text, .no-cars {
+    text-align: center;
+    padding: 40px;
+    color: #64748b;
+    font-size: 1.1rem;
 }

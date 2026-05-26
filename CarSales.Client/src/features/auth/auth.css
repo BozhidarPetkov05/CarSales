@@ -1,0 +1,122 @@
+.auth-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    background-color: #f4f6f9;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    padding: 20px;
+    box-sizing: border-box;
+}
+
+.auth-box {
+    background: #ffffff;
+    padding: 30px 35px;
+    border-radius: 8px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+    border: none;
+    width: 100%;
+    max-width: 460px;
+    box-sizing: border-box;
+}
+
+.auth-header {
+    text-align: center;
+    margin-bottom: 25px;
+}
+
+    .auth-header h2 {
+        margin: 0;
+        color: #1e293b;
+        font-size: 1.35rem;
+        font-weight: 600;
+        letter-spacing: -0.5px;
+    }
+
+.form-row {
+    display: flex;
+    gap: 12px;
+}
+
+    .form-row .form-group {
+        flex: 1;
+    }
+
+.form-group {
+    text-align: left;
+    margin-bottom: 12px;
+}
+
+    .form-group label {
+        display: block;
+        margin-bottom: 4px;
+        color: #475569;
+        font-size: 0.85rem;
+        font-weight: 500;
+    }
+
+    .form-group input {
+        width: 100%;
+        padding: 9px 12px;
+        border: 1px solid #cbd5e1;
+        border-radius: 6px;
+        box-sizing: border-box;
+        font-size: 0.95rem;
+        color: #1e293b;
+        background-color: #f8fafc;
+        transition: border-color 0.15s ease, background-color 0.15s ease;
+    }
+
+        .form-group input:focus {
+            border-color: #3b82f6;
+            background-color: #ffffff;
+            outline: none;
+            box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+        }
+
+.btn-submit {
+    width: 100%;
+    padding: 11px;
+    background-color: #1d4ed8;
+    color: #ffffff;
+    border: none;
+    border-radius: 6px;
+    font-size: 0.95rem;
+    font-weight: 500;
+    cursor: pointer;
+    margin-top: 8px;
+    transition: background-color 0.15s ease;
+}
+
+    .btn-submit:hover {
+        background-color: #1e40af;
+    }
+
+.switch-text {
+    margin-top: 18px;
+    font-size: 0.9rem;
+    color: #64748b;
+    text-align: center;
+}
+
+    .switch-text span {
+        color: #2563eb;
+        cursor: pointer;
+        font-weight: 500;
+        text-decoration: none;
+    }
+
+        .switch-text span:hover {
+            text-decoration: underline;
+        }
+
+.error-message {
+    color: #b91c1c;
+    background-color: #fef2f2;
+    border: 1px solid #fee2e2;
+    padding: 8px;
+    border-radius: 6px;
+    font-size: 0.9rem;
+    margin-bottom: 12px;
+    text-align: center;
+}

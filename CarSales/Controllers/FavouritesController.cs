@@ -1,5 +1,6 @@
 ﻿using CarSales.Contracts.Interfaces;
 using CarSales.Data.Entities;
+using CarSales.Exceptions;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Security.Claims;
@@ -32,7 +33,7 @@ namespace CarSales.Controllers
             Guid loggedUserId = Guid.Parse(User.FindFirstValue("loggedUserId"));
             if (!_favouriteService.CarExists(carId))
             {
-                return BadRequest();
+                throw new BadRequestException("The car you tried to add is invalid!");
             }
 
             Favourite favourite = _favouriteService.CreateFavourite(loggedUserId, carId);
@@ -49,7 +50,7 @@ namespace CarSales.Controllers
             Guid loggedUserId = Guid.Parse(User.FindFirstValue("loggedUserId"));
             if (!_favouriteService.CarIsInFavourites(carId, loggedUserId))
             {
-                return BadRequest();
+                throw new BadRequestException("The car you remove to add is invalid!");
             }
 
             Favourite favourite = await  _favouriteService.GetByIdsAsync(loggedUserId, carId);

@@ -2,6 +2,7 @@
 using CarSales.Contracts.DTOs.Response.User;
 using CarSales.Contracts.Interfaces;
 using CarSales.Data.Entities;
+using CarSales.Exceptions;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Security.Claims;
@@ -24,7 +25,7 @@ namespace CarSales.Controllers
         {
             if (!User.HasClaim("isAdmin", "True"))
             {
-                return Forbid();
+                throw new ForbidException("You do not have access to this operation!");
             }
 
             var response = await _userService.GetAllUsersPagedAsync(request);
@@ -41,13 +42,13 @@ namespace CarSales.Controllers
 
             if (!User.HasClaim("isAdmin", "True") && Guid.Parse(loggedUserId) != id)
             {
-                return Forbid();
+                throw new ForbidException("You do not have access to this operation!");
             }
 
             User? user = await _userService.GetByIdAsync(id);
             if (user is null)
             {
-                return NotFound();
+                throw new NotFoundException("The user was not found!");
             }
 
             UserDetailedResponse response = _userService.MapToDetailedResponse(user);
@@ -60,7 +61,7 @@ namespace CarSales.Controllers
         {
             if (await _userService.UsernameExists(model.Username))
             {
-                return BadRequest();
+                throw new BadRequestException("User with this username already exists!");
             }
 
             User user = _userService.CreateUser(model);
@@ -77,18 +78,18 @@ namespace CarSales.Controllers
 
             if (!User.HasClaim("isAdmin", "True") && Guid.Parse(loggedUserId) != id)
             {
-                return Forbid();
+                throw new ForbidException("You cannot update users other than you!");
             }
 
             User? user = await _userService.GetByIdAsync(id);
             if (user is null)
             {
-                return NotFound();
+                throw new NotFoundException("This user was not found!");
             }
 
             if (user.Username != model.Username && await _userService.UsernameExists(model.Username))
             {
-                return BadRequest();
+                throw new BadRequestException("User with this username already exists!");
             }
 
             if (!User.HasClaim("isAdmin", "True"))
@@ -113,13 +114,13 @@ namespace CarSales.Controllers
 
             if (!User.HasClaim("isAdmin", "True") && Guid.Parse(loggedUserId) != id)
             {
-                return Forbid();
+                throw new ForbidException("You cannot delete users other than you!");
             }
 
             User? user = await _userService.GetByIdAsync(id);
             if (user is null)
             {
-                return NotFound();
+                throw new NotFoundException("This user was not found!");
             }
 
             UpdatedUserResponse deactivated = _userService.MapToUpdatedUserResponse(user);

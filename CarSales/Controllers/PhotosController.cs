@@ -1,6 +1,7 @@
 ﻿using CarSales.Contracts.DTOs.Request;
 using CarSales.Contracts.Interfaces;
 using CarSales.Data.Entities;
+using CarSales.Exceptions;
 using Microsoft.AspNetCore.Mvc;
 
 namespace CarSales.Controllers
@@ -50,7 +51,7 @@ namespace CarSales.Controllers
                 }
                 else
                 {
-                    return BadRequest(new { message = "No file provided.", success = false });
+                    throw new BadRequestException("No file provided!");
                 }
             }
             catch (Exception ex)

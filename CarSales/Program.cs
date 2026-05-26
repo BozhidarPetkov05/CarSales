@@ -1,6 +1,7 @@
 using CarSales.Contracts.Interfaces;
 using CarSales.Contracts.Settings;
 using CarSales.Data.Persistance;
+using CarSales.Handlers;
 using CarSales.Repository;
 using CarSales.Repository.Implementations;
 using CarSales.Repository.Interfaces;
@@ -31,7 +32,7 @@ namespace CarSales
             //Repository
             builder.Services.AddScoped(typeof(IRepository<>), typeof(Repository<>));
             builder.Services.AddScoped<IUserRepository, UserRepository>();
-            builder.Services.AddScoped<ICarRepository, CarRepository>();
+            builder.Services.AddScoped<ICarRepository, CarRepository>();  
             builder.Services.AddScoped<IFavouriteRepository, FavouriteRepository>();
             builder.Services.AddScoped<IPhotoRepository, PhotoRepository>();
 
@@ -55,8 +56,11 @@ namespace CarSales
                 }
                 );
 
-            //Temporary implementation
             builder.Services.AddControllers();
+
+            builder.Services.AddExceptionHandler<GlobalExceptionHandler>();
+            builder.Services.AddProblemDetails();
+
             builder.Services.AddOpenApi();
 
             builder.Services.AddEndpointsApiExplorer();
@@ -101,7 +105,7 @@ namespace CarSales
             }
 
             app.UseHttpsRedirection();
-
+            app.UseExceptionHandler();
             app.UseAuthentication();
             app.UseAuthorization();
 

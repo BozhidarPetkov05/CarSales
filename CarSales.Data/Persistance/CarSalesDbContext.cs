@@ -48,6 +48,8 @@ namespace CarSales.Data.Persistance
                 .WithMany(f => f.Favourites)
                 .HasForeignKey(f => f.CarId)
                 .OnDelete(DeleteBehavior.Cascade);
+
+            
             #endregion
         }
     }

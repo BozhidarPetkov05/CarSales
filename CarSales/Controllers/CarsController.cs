@@ -2,6 +2,7 @@
 using CarSales.Contracts.DTOs.Response.Car;
 using CarSales.Contracts.Interfaces;
 using CarSales.Data.Entities;
+using CarSales.Exceptions;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Security.Claims;
@@ -35,7 +36,7 @@ namespace CarSales.Controllers
             Car? car = await _carService.GetByIdAsync(id);
             if (car is null)
             {
-                return NotFound();
+                throw new NotFoundException("The car was not found!");
             }
 
             CarDetailedResponse response = _carService.MapToDetailedResponse(car);
@@ -61,13 +62,13 @@ namespace CarSales.Controllers
             Car? car = await _carService.GetByIdAsync(id);
             if (car is null)
             {
-                return NotFound();
+                throw new NotFoundException("The car was not found!");
             }
 
             Guid loggedUserId = Guid.Parse(User.FindFirstValue("loggedUserId"));
             if (!User.HasClaim("isAdmin", "True") && loggedUserId != car.UserId)
             {
-                return Forbid();
+                throw new ForbidException("You cannot update cars other than yours!");
             }
 
             Car updatedCar = await _carService.UpdateCar(request, car);
@@ -84,13 +85,13 @@ namespace CarSales.Controllers
             Car? car = await _carService.GetByIdAsync(id);
             if (car is null)
             {
-                return NotFound();
+                throw new NotFoundException("The car was not found!");
             }
 
             Guid loggedUserId = Guid.Parse(User.FindFirstValue("loggedUserId"));
             if (!User.HasClaim("isAdmin", "True") && loggedUserId != car.UserId)
             {
-                return Forbid();
+                throw new ForbidException("You cannot delete cars other than yours!");
             }
 
             CarUpdatedResponse response = _carService.MapToCarUpdatedResponse(car);

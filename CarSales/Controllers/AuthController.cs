@@ -1,5 +1,6 @@
 ﻿using CarSales.Contracts.DTOs.Request;
 using CarSales.Contracts.Interfaces;
+using CarSales.Exceptions;
 using Microsoft.AspNetCore.Mvc;
 
 namespace CarSales.Controllers
@@ -28,7 +29,7 @@ namespace CarSales.Controllers
             var user = (await _userService.GetAllAsync()).FirstOrDefault(u => u.Username == model.Username && u.Password == model.Password);
             if (user is null)
             {
-                return BadRequest();
+                throw new BadRequestException("Username or password is invalid!");
             }
 
             var token = _tokenService.CreateToken(user);

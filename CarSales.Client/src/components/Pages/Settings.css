@@ -257,6 +257,7 @@
     font-weight: normal;
 }
 
+/* ── INPUT ИКОНИ И ПОЛЕТА СЪС СВЕТЪЛ ТЕКСТ ── */
 .input-with-icon {
     position: relative;
     display: flex;
@@ -277,13 +278,37 @@
         border: 1px solid #dcdde1;
         border-radius: 5px;
         outline: none;
-        transition: border 0.2s;
+        transition: border 0.2s, color 0.2s;
+        /* КОРИГИРАНО: Текстът става по-светъл и мек сив */
+        color: #64748b;
+        background-color: #ffffff;
     }
 
         .input-with-icon input:focus {
             border-color: #3498db;
+            color: #475569; /* Леко потъмняване при фокус за по-добра четимост */
         }
 
+        /* ── СВЕТЪЛ ПЛАЙСХОЛДЪР (PLACEHOLDER) ТЕКСТ ЗА ВСИЧКИ БРАУЗЪРИ ── */
+        .input-with-icon input::placeholder {
+            color: #cbd5e1;
+            opacity: 1;
+        }
+
+        .input-with-icon input::-moz-placeholder {
+            color: #cbd5e1;
+            opacity: 1;
+        }
+
+        .input-with-icon input:-ms-input-placeholder {
+            color: #cbd5e1;
+        }
+
+        .input-with-icon input::-ms-input-placeholder {
+            color: #cbd5e1;
+        }
+
+/* Статуси и съобщения */
 .modal-status-error, .modal-status-success {
     padding: 10px 14px;
     border-radius: 5px;
@@ -304,6 +329,7 @@
     color: #1abc9c;
 }
 
+/* Бутони в модала */
 .modal-buttons {
     display: flex;
     justify-content: flex-end;

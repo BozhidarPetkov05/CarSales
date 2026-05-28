@@ -1,0 +1,164 @@
+@import url('https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;600;700;800&display=swap');
+
+:root {
+    --topbar-bg: #061a3a; /* Тъмносин цвят по темата */
+    --sidebar-bg: #f3f4f6; /* Светло сив фин фон за менюто */
+    --sidebar-hover: #e5e7eb; /* Малко по-тъмно сиво при посочване */
+    --sidebar-active: #dbeafe; /* Деликатно синьо за активния бутон */
+    --active-text: #1d4ed8; /* Тъмносин текст за активния маркер */
+    --content-bg: #f8fafc; /* Мек, светъл деликатен общ фон */
+    --text-main: #1e293b; /* Основен цвят на шрифта */
+    --text-muted: #64748b; /* Сив цвят за икони и детайли */
+}
+
+/* Глобални настройки за Dashboard-а */
+.dashboard-wrapper {
+    display: flex;
+    width: 100vw;
+    height: 100vh;
+    overflow: hidden;
+    font-family: 'Open Sans', sans-serif;
+    background-color: var(--content-bg);
+}
+
+/* ── TOP BAR (ГОРЕН ПАНЕЛ) ── */
+.top-bar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 65px;
+    background-color: var(--topbar-bg);
+    display: flex;
+    align-items: center;
+    padding: 0 35px;
+    z-index: 100;
+    box-sizing: border-box;
+}
+
+.brand {
+    font-size: 24px;
+    font-weight: 800;
+    color: #ffffff;
+    letter-spacing: -0.5px;
+}
+
+/* ── SIDEBAR (СТРАНИЧНО МЕНЮ) ── */
+.sidebar {
+    width: 260px;
+    background-color: var(--sidebar-bg);
+    height: calc(100vh - 65px);
+    position: fixed;
+    top: 65px;
+    left: 0;
+    padding: 20px 12px;
+    z-index: 90;
+    box-sizing: border-box;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between; /* Избутва footer-а най-долу */
+    border-right: 1px solid #e5e7eb;
+}
+
+.sidebar-menu {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+.menu-item {
+    padding: 12px 18px;
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    cursor: pointer;
+    border-radius: 8px;
+    color: #4b5563;
+    font-weight: 600;
+    font-size: 15px;
+    transition: all 0.15s ease-in-out;
+}
+
+    .menu-item i {
+        font-size: 16px;
+        width: 22px;
+        color: var(--text-muted);
+    }
+
+    .menu-item:hover {
+        background-color: var(--sidebar-hover);
+        color: var(--text-main);
+    }
+
+    /* Активно състояние - деликатен селектор */
+    .menu-item.active {
+        background-color: var(--sidebar-active);
+        color: var(--active-text);
+    }
+
+        .menu-item.active i {
+            color: var(--active-text);
+        }
+
+/* LOG OUT БУТОН (НАЙ-ДОЛУ В СИДЕБАРА) */
+.sidebar-footer {
+    padding: 14px 18px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    border-top: 1px solid #e5e7eb;
+    color: #4b5563;
+    font-weight: 600;
+    font-size: 15px;
+    cursor: pointer;
+    border-radius: 8px;
+    transition: all 0.15s ease-in-out;
+}
+
+    .sidebar-footer i {
+        font-size: 16px;
+        color: #ef4444; /* Дискретно червена икона за изход */
+    }
+
+    .sidebar-footer:hover {
+        background-color: #fee2e2;
+        color: #b91c1c;
+    }
+
+/* ── МЕЙН КОНТЕНТ (РАБОТНА ПЛОЩ) ── */
+.main-content {
+    margin-top: 65px;
+    margin-left: 260px;
+    width: calc(100vw - 260px);
+    height: calc(100vh - 65px);
+    background-color: var(--content-bg);
+    padding: 50px 60px;
+    overflow-y: auto;
+    box-sizing: border-box;
+}
+
+/* Настройки за изчистения текст в центъра */
+.page-container {
+    animation: pageFadeIn 0.2s ease-out;
+}
+
+    .page-container h1 {
+        font-size: 44px;
+        font-weight: 700;
+        color: #2c3e50;
+        margin: 0;
+        text-align: center;
+        margin-top: 40px; /* Спуска текста леко надолу, точно като на снимката */
+    }
+
+@keyframes pageFadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(4px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}

@@ -1,7 +1,8 @@
 import React, { useState } from 'react';
 import Sidebar from './Sidebar';
 import TopBar from './TopBar';
-import Settings from '../Pages/Settings'; // <--- ДОБАВИ ТОЗИ ИМПОРТ
+import Settings from '../Pages/Settings';
+import Users from '../Pages/Users'; // <--- 1. ДОБАВИ ТОЗИ ИМПОРТ
 import './Dashboard.css';
 
 const Dashboard = () => {
@@ -22,13 +23,9 @@ const Dashboard = () => {
                     </div>
                 );
             case 'users':
-                return (
-                    <div className="page-container">
-                        <h1 style={{ textAlign: 'center', marginTop: '40px' }}>User Management (Admin Only)</h1>
-                    </div>
-                );
+                return <Users />; // <--- 2. ТУК ЗАРЕЖДАМЕ ИСТИНСКАТА СТРАНИЦА
             case 'settings':
-                return <Settings />; // <--- ТУК ЗАРЕЖДАМЕ ИСТИНСКАТА СТРАНИЦА
+                return <Settings />;
             default:
                 return <div className="page-container"><h1>Welcome</h1></div>;
         }

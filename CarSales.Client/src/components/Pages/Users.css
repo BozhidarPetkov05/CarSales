@@ -1,0 +1,281 @@
+.users-container {
+    max-width: 1200px;
+    margin: 0 auto;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+.users-main-title {
+    font-size: 2rem;
+    color: #2c3e50;
+    margin-top: 10px;
+    margin-bottom: 24px;
+    font-weight: 700;
+}
+
+/* ── ФИЛТЪР ПАНЕЛ (РАЗКРАСЕН И ПОДРАВНЕН) ── */
+.users-filter-bar {
+    background: #ffffff;
+    border-radius: 12px;
+    padding: 24px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
+    border: 1px solid #eef2f5;
+    margin-bottom: 25px;
+    display: flex;
+    align-items: flex-end; /* Перфектно подравняване на дъното на всички елементи */
+    gap: 20px;
+}
+
+.filter-group {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+    .filter-group.search-input {
+        flex: 2.5; /* Повече ширина за текстовото търсене */
+    }
+
+    .filter-group:not(.search-input) {
+        flex: 1;
+    }
+
+    .filter-group label {
+        font-size: 0.8rem;
+        font-weight: 700;
+        color: #475569;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+    }
+
+.input-icon-wrapper {
+    position: relative;
+    display: flex;
+    align-items: center;
+    width: 100%;
+}
+
+    .input-icon-wrapper i {
+        position: absolute;
+        left: 14px;
+        color: #94a3b8;
+        font-size: 1rem;
+        transition: color 0.2s ease;
+    }
+
+/* Унифициране на височината на всички елементи във формата */
+.users-filter-bar input,
+.users-filter-bar select,
+.btn-filter-search {
+    height: 44px;
+    box-sizing: border-box;
+    font-size: 0.95rem;
+    border-radius: 8px;
+    transition: all 0.2s ease;
+}
+
+.users-filter-bar input {
+    width: 100%;
+    padding: 0 14px 0 42px;
+    border: 1px solid #cbd5e1;
+    color: #334155;
+    background-color: #ffffff;
+    outline: none;
+}
+
+    /* Модерен ефект при кликване в търсачката */
+    .users-filter-bar input:focus {
+        border-color: #3498db;
+        box-shadow: 0 0 0 3px rgba(52, 152, 219, 0.15);
+        color: #1e293b;
+    }
+
+/* Промяна на цвета на лупата при фокус */
+.input-icon-wrapper:focus-within i {
+    color: #3498db;
+}
+
+.users-filter-bar select {
+    width: 100%;
+    padding: 0 12px;
+    border: 1px solid #cbd5e1;
+    background-color: #ffffff;
+    color: #334155;
+    outline: none;
+    cursor: pointer;
+}
+
+    .users-filter-bar select:focus {
+        border-color: #3498db;
+        box-shadow: 0 0 0 3px rgba(52, 152, 219, 0.15);
+    }
+
+.btn-filter-search {
+    background: #3498db;
+    color: white;
+    border: none;
+    padding: 0 24px;
+    font-weight: 600;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    flex-shrink: 0;
+}
+
+    .btn-filter-search:hover {
+        background: #2980b9;
+        transform: translateY(-1px);
+        box-shadow: 0 4px 12px rgba(52, 152, 219, 0.2);
+    }
+
+    .btn-filter-search:active {
+        transform: translateY(0);
+    }
+
+/* ── ТАБЛИЦА С ПОТРЕБИТЕЛИ ── */
+.users-table-wrapper {
+    background: #ffffff;
+    border-radius: 12px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
+    border: 1px solid #eef2f5;
+    overflow: hidden;
+    min-height: 250px;
+}
+
+.users-table {
+    width: 100%;
+    border-collapse: collapse;
+    text-align: left;
+    font-size: 0.95rem;
+}
+
+    .users-table th {
+        background: #f8fafc;
+        color: #475569;
+        font-weight: 600;
+        padding: 16px 20px;
+        border-bottom: 2px solid #edf2f7;
+        text-transform: uppercase;
+        font-size: 0.75rem;
+        letter-spacing: 0.5px;
+    }
+
+    .users-table td {
+        padding: 16px 20px;
+        border-bottom: 1px solid #f1f5f9;
+        color: #334155;
+        vertical-align: middle;
+    }
+
+    .users-table tbody tr:hover {
+        background-color: #f8fafc;
+    }
+
+.cell-username {
+    font-weight: 600;
+    color: #1e293b;
+}
+
+.cell-muted {
+    color: #64748b;
+    font-size: 0.85rem;
+}
+
+/* Роли бадж */
+.badge-role {
+    display: inline-block;
+    padding: 4px 10px;
+    border-radius: 12px;
+    font-size: 0.75rem;
+    font-weight: 700;
+    text-transform: uppercase;
+}
+
+    .badge-role.admin {
+        background: #fee2e2;
+        color: #ef4444;
+    }
+
+    .badge-role.user {
+        background: #f1f5f9;
+        color: #475569;
+    }
+
+/* Скрол/Статуси */
+.users-table-loading {
+    text-align: center;
+    padding: 80px 0;
+    color: #64748b;
+    font-weight: 500;
+}
+
+.users-empty-box {
+    text-align: center;
+    padding: 60px 20px;
+    color: #94a3b8;
+}
+
+    .users-empty-box i {
+        font-size: 2.5rem;
+        margin-bottom: 12px;
+    }
+
+    .users-empty-box p {
+        margin: 0;
+        font-size: 1rem;
+    }
+
+/* ── СТРАНИЦИРАНЕ (PAGINATION) ── */
+.pagination-footer {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 20px;
+    padding: 0 4px;
+}
+
+.pagination-info {
+    font-size: 0.9rem;
+    color: #64748b;
+}
+
+.pagination-buttons {
+    display: flex;
+    gap: 8px;
+}
+
+.btn-page {
+    background: #ffffff;
+    border: 1px solid #cbd5e1;
+    color: #475569;
+    padding: 8px 16px;
+    font-size: 0.85rem;
+    font-weight: 600;
+    border-radius: 6px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    transition: all 0.15s;
+}
+
+    .btn-page:hover:not(:disabled) {
+        border-color: #94a3b8;
+        background: #f8fafc;
+    }
+
+    .btn-page:disabled {
+        opacity: 0.5;
+        cursor: not-allowed;
+        background: #f1f5f9;
+    }
+
+.users-status-container.error-box {
+    background: #fde8e8;
+    color: #e74c3c;
+    padding: 20px;
+    border-radius: 8px;
+    margin: 20px 0;
+    font-weight: 500;
+}

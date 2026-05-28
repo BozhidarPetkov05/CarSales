@@ -57,6 +57,7 @@ namespace CarSales.Services
             {
                 Id = u.Id,
                 Username = u.Username,
+                Password = u.Password,
                 FirstName = u.FirstName,
                 LastName = u.LastName,
                 IsAdmin = u.IsAdmin,
@@ -71,6 +72,7 @@ namespace CarSales.Services
             {
                 Id = user.Id,
                 Username = user.Username,
+                Password = user.Password,
                 FirstName = user.FirstName,
                 LastName = user.LastName,
                 Age = user.Age,
@@ -179,6 +181,7 @@ namespace CarSales.Services
                 {
                     Id = u.Id,
                     Username = u.Username,
+                    Password = u.Password,
                     FirstName = u.FirstName,
                     LastName = u.LastName,
                     IsAdmin = u.IsAdmin,

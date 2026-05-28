@@ -26,6 +26,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Folder Include="CarSales.Contracts\Interfaces\" />
     <Folder Include="wwwroot\uploads\" />
   </ItemGroup>
 

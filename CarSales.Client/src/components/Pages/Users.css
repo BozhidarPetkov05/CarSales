@@ -279,3 +279,111 @@
     margin: 20px 0;
     font-weight: 500;
 }
+
+/* Прави редовете в таблицата да изглеждат интерактивни при посочване */
+.clickable-row {
+    cursor: pointer;
+    transition: background-color 0.15s ease;
+}
+
+    .clickable-row:hover {
+        background-color: #f1f5f9 !important; /* Леко подчертаване на целия ред */
+    }
+
+/* ── СТИЛИЗИРАНЕ НА МОДАЛА С ДЕТАЙЛИ ── */
+.user-details-modal-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 16px;
+    background: #f8fafc;
+    padding: 20px;
+    border-radius: 10px;
+    border: 1px solid #edf2f7;
+    margin-bottom: 24px;
+}
+
+.detail-field {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+    .detail-field.full-width {
+        grid-column: span 2;
+    }
+
+    .detail-field label {
+        font-size: 0.75rem;
+        font-weight: 700;
+        color: #94a3b8;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+    }
+
+    .detail-field p {
+        margin: 0;
+        font-size: 0.95rem;
+        color: #1e293b;
+        font-weight: 600;
+    }
+
+        .detail-field p.mono-text {
+            font-family: monospace;
+            color: #64748b;
+            font-size: 0.85rem;
+            word-break: break-all;
+        }
+
+        .detail-field p.highlight-text {
+            color: #3498db;
+        }
+
+/* Блок за бутоните в модала */
+.modal-user-actions {
+    display: flex;
+    justify-content: flex-end;
+    gap: 12px;
+    border-top: 1px solid #e2e8f0;
+    padding-top: 18px;
+}
+
+.btn-modal-action-admin, .btn-modal-action-delete {
+    padding: 12px 20px;
+    font-size: 0.9rem;
+    font-weight: 600;
+    border-radius: 8px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    transition: all 0.2s ease;
+    border: none;
+}
+
+/* Бутон за администраторски права */
+.btn-modal-action-admin {
+    background: #e0f2fe;
+    color: #0369a1;
+}
+
+    .btn-modal-action-admin:hover:not(:disabled) {
+        background: #0369a1;
+        color: white;
+    }
+
+/* Бутон за изтриване на акаунт */
+.btn-modal-action-delete {
+    background: #fee2e2;
+    color: #b91c1c;
+}
+
+    .btn-modal-action-delete:hover:not(:disabled) {
+        background: #b91c1c;
+        color: white;
+        box-shadow: 0 4px 12px rgba(185, 28, 28, 0.2);
+    }
+
+    .btn-modal-action-admin:disabled, .btn-modal-action-delete:disabled {
+        opacity: 0.5;
+        cursor: not-allowed;
+    }

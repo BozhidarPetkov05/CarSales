@@ -21,12 +21,17 @@ const Users = () => {
     const [isDescending, setIsDescending] = useState(true);
     const [currentPage, setCurrentPage] = useState(1);
 
-    // Стейтове за заключените филтри (използват се при реалната заявка)
+    // Стейтове за заключените филтри за заявката
     const [activeFilters, setActiveFilters] = useState({
         username: '',
         isAdmin: '',
         isDescending: true
     });
+
+    // Стейтове за модала
+    const [selectedUser, setSelectedUser] = useState(null);
+    const [modalActionLoading, setModalActionLoading] = useState(false);
+    const [modalError, setModalError] = useState(null);
 
     const fetchUsers = async (pageToFetch, filtersToUse) => {
         setLoading(true);
@@ -77,15 +82,12 @@ const Users = () => {
         }
     };
 
-    // Задейства се само при смяна на страницата
     useEffect(() => {
         fetchUsers(currentPage, activeFilters);
     }, [currentPage]);
 
-    // Задейства се ръчно при натискане на "Apply Filters"
     const handleApplyFilters = (e) => {
         e.preventDefault();
-
         const newFilters = {
             username: searchUsername,
             isAdmin: filterAdmin,
@@ -94,6 +96,82 @@ const Users = () => {
         setActiveFilters(newFilters);
         setCurrentPage(1);
         fetchUsers(1, newFilters);
+    };
+
+    const handleDeleteUser = async (userId) => {
+        if (!window.confirm(`Are you absolutely sure you want to permanently delete this user?`)) {
+            return;
+        }
+
+        setModalActionLoading(true);
+        setModalError(null);
+
+        try {
+            const token = localStorage.getItem('token');
+            const response = await fetch(`https://localhost:7125/api/users/${userId}`, {
+                method: 'DELETE',
+                headers: {
+                    'Authorization': `Bearer ${token}`,
+                    'Content-Type': 'application/json'
+                }
+            });
+
+            if (!response.ok) {
+                throw new Error('Failed to delete the user. Please try again.');
+            }
+
+            setSelectedUser(null);
+            fetchUsers(currentPage, activeFilters);
+        } catch (err) {
+            setModalError(err.message);
+        } finally {
+            setModalActionLoading(false);
+        }
+    };
+
+    // ── ИСТИНСКА PUT ЗАЯВКА ЗА ПРОМЯНА НА СТАТУСА (TOGGLE ADMIN ROLE) ──
+    const handleToggleAdminStatus = async (user) => {
+        setModalActionLoading(true);
+        setModalError(null);
+
+        // Обръщаме текущата стойност на isAdmin за изпращане
+        const updatedAdminStatus = !user.isAdmin;
+
+        // Подготвяме пълното JSON тяло според изискванията
+        const putRequestBody = {
+            username: user.username,
+            password: user.password || "", // Паролата идва от рекуеста, подаваме я скрито
+            firstName: user.firstName,
+            lastName: user.lastName,
+            age: user.age !== undefined ? user.age : null, // Подаваме го, ако съществува
+            isAdmin: updatedAdminStatus
+        };
+
+        try {
+            const token = localStorage.getItem('token');
+            const response = await fetch(`https://localhost:7125/api/users/${user.id}`, {
+                method: 'PUT',
+                headers: {
+                    'Authorization': `Bearer ${token}`,
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(putRequestBody)
+            });
+
+            if (!response.ok) {
+                throw new Error('Failed to update user status on the server.');
+            }
+
+            // Динамично обновяваме обекта в отворения модал, за да се види промяната веднага
+            setSelectedUser(prev => ({ ...prev, isAdmin: updatedAdminStatus }));
+
+            // Презареждаме списъка в таблицата отдолу, за да се синхронизират баджовете
+            fetchUsers(currentPage, activeFilters);
+        } catch (err) {
+            setModalError(err.message);
+        } finally {
+            setModalActionLoading(false);
+        }
     };
 
     if (error) return <div className="users-status-container error-box"><i className="fa-solid fa-triangle-exclamation"></i> Error: {error}</div>;
@@ -160,7 +238,12 @@ const Users = () => {
                         </thead>
                         <tbody>
                             {usersData.items.map((u) => (
-                                <tr key={u.id}>
+                                <tr
+                                    key={u.id}
+                                    className="clickable-row"
+                                    onClick={() => { setSelectedUser(u); setModalError(null); }}
+                                    title="Click to view full details"
+                                >
                                     <td className="cell-username">{u.username}</td>
                                     <td>{u.firstName} {u.lastName}</td>
                                     <td>
@@ -200,6 +283,85 @@ const Users = () => {
                     </button>
                 </div>
             </div>
+
+            {/* ── ДИНАМИЧЕН МОДAЛ С ИНФОРМАЦИЯ ЗА ПОТРЕБИТЕЛЯ ── */}
+            {selectedUser && (
+                <div className="modal-overlay" onClick={() => setSelectedUser(null)}>
+                    <div className="modal-content-box" onClick={(e) => e.stopPropagation()}>
+                        <div className="modal-header">
+                            <h2>User Detailed Information</h2>
+                            <button className="modal-close-x" onClick={() => setSelectedUser(null)}>&times;</button>
+                        </div>
+
+                        {modalError && (
+                            <div className="modal-status-error">
+                                <i className="fa-solid fa-circle-exclamation"></i> {modalError}
+                            </div>
+                        )}
+
+                        <div className="user-details-modal-grid">
+                            <div className="detail-field">
+                                <label>Database ID (GUID)</label>
+                                <p className="mono-text">{selectedUser.id}</p>
+                            </div>
+                            <div className="detail-field">
+                                <label>Username</label>
+                                <p className="highlight-text">{selectedUser.username}</p>
+                            </div>
+                            <div className="detail-field">
+                                <label>First Name</label>
+                                <p>{selectedUser.firstName}</p>
+                            </div>
+                            <div className="detail-field">
+                                <label>Last Name</label>
+                                <p>{selectedUser.lastName}</p>
+                            </div>
+                            <div className="detail-field">
+                                <label>Account Role</label>
+                                <p>
+                                    {selectedUser.isAdmin ? (
+                                        <span className="badge-role admin">Administrator</span>
+                                    ) : (
+                                        <span className="badge-role user">Regular User</span>
+                                    )}
+                                </p>
+                            </div>
+                            <div className="detail-field">
+                                <label>Registration Date (CreatedAt)</label>
+                                <p>{new Date(selectedUser.createdAt).toLocaleString('en-GB')} Local</p>
+                            </div>
+                            <div className="detail-field full-width">
+                                <label>Last Internal Modification (LastChanged)</label>
+                                <p className="cell-muted">{new Date(selectedUser.lastChanged).toLocaleString('en-GB', { timeZone: 'UTC' })} UTC</p>
+                            </div>
+                        </div>
+
+                        {/* Действия и бутони в модала */}
+                        <div className="modal-user-actions">
+                            <button
+                                className="btn-modal-action-admin"
+                                onClick={() => handleToggleAdminStatus(selectedUser)}
+                                disabled={modalActionLoading}
+                            >
+                                <i className="fa-solid fa-user-shield"></i>
+                                {selectedUser.isAdmin ? 'Demote to Regular User' : 'Promote to Admin'}
+                            </button>
+
+                            <button
+                                className="btn-modal-action-delete"
+                                onClick={() => handleDeleteUser(selectedUser.id)}
+                                disabled={modalActionLoading}
+                            >
+                                {modalActionLoading ? 'Processing...' : (
+                                    <>
+                                        <i className="fa-solid fa-user-minus"></i> Delete Account
+                                    </>
+                                )}
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            )}
         </div>
     );
 };

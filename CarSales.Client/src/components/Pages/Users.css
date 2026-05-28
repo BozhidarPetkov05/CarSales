@@ -12,7 +12,8 @@
     font-weight: 700;
 }
 
-/* ── ФИЛТЪР ПАНЕЛ (РАЗКРАСЕН И ПОДРАВНЕН) ── */
+/* ── ФИЛТЪР ПАНЕЛ ── */
+
 .users-filter-bar {
     background: #ffffff;
     border-radius: 12px;
@@ -21,7 +22,7 @@
     border: 1px solid #eef2f5;
     margin-bottom: 25px;
     display: flex;
-    align-items: flex-end; /* Перфектно подравняване на дъното на всички елементи */
+    align-items: flex-end;
     gap: 20px;
 }
 
@@ -32,7 +33,7 @@
 }
 
     .filter-group.search-input {
-        flex: 2.5; /* Повече ширина за текстовото търсене */
+        flex: 2.5;
     }
 
     .filter-group:not(.search-input) {
@@ -62,7 +63,8 @@
         transition: color 0.2s ease;
     }
 
-/* Унифициране на височината на всички елементи във формата */
+/* Inputs */
+
 .users-filter-bar input,
 .users-filter-bar select,
 .btn-filter-search {
@@ -82,14 +84,12 @@
     outline: none;
 }
 
-    /* Модерен ефект при кликване в търсачката */
     .users-filter-bar input:focus {
         border-color: #3498db;
         box-shadow: 0 0 0 3px rgba(52, 152, 219, 0.15);
         color: #1e293b;
     }
 
-/* Промяна на цвета на лупата при фокус */
 .input-icon-wrapper:focus-within i {
     color: #3498db;
 }
@@ -109,31 +109,34 @@
         box-shadow: 0 0 0 3px rgba(52, 152, 219, 0.15);
     }
 
+/* Filter Button */
+
 .btn-filter-search {
-    background: #3498db;
+    background: linear-gradient(135deg, #3498db, #2980b9);
     color: white;
     border: none;
     padding: 0 24px;
-    font-weight: 600;
+    font-weight: 700;
     cursor: pointer;
     display: flex;
     align-items: center;
     justify-content: center;
     gap: 10px;
     flex-shrink: 0;
+    box-shadow: 0 4px 12px rgba(52, 152, 219, 0.2);
 }
 
     .btn-filter-search:hover {
-        background: #2980b9;
-        transform: translateY(-1px);
-        box-shadow: 0 4px 12px rgba(52, 152, 219, 0.2);
+        transform: translateY(-2px);
+        box-shadow: 0 8px 18px rgba(52, 152, 219, 0.25);
     }
 
     .btn-filter-search:active {
-        transform: translateY(0);
+        transform: scale(0.98);
     }
 
-/* ── ТАБЛИЦА С ПОТРЕБИТЕЛИ ── */
+/* ── TABLE ── */
+
 .users-table-wrapper {
     background: #ffffff;
     border-radius: 12px;
@@ -182,7 +185,8 @@
     font-size: 0.85rem;
 }
 
-/* Роли бадж */
+/* ── BADGES ── */
+
 .badge-role {
     display: inline-block;
     padding: 4px 10px;
@@ -202,7 +206,8 @@
         color: #475569;
     }
 
-/* Скрол/Статуси */
+/* ── STATES ── */
+
 .users-table-loading {
     text-align: center;
     padding: 80px 0;
@@ -226,51 +231,6 @@
         font-size: 1rem;
     }
 
-/* ── СТРАНИЦИРАНЕ (PAGINATION) ── */
-.pagination-footer {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-top: 20px;
-    padding: 0 4px;
-}
-
-.pagination-info {
-    font-size: 0.9rem;
-    color: #64748b;
-}
-
-.pagination-buttons {
-    display: flex;
-    gap: 8px;
-}
-
-.btn-page {
-    background: #ffffff;
-    border: 1px solid #cbd5e1;
-    color: #475569;
-    padding: 8px 16px;
-    font-size: 0.85rem;
-    font-weight: 600;
-    border-radius: 6px;
-    cursor: pointer;
-    display: flex;
-    align-items: center;
-    gap: 6px;
-    transition: all 0.15s;
-}
-
-    .btn-page:hover:not(:disabled) {
-        border-color: #94a3b8;
-        background: #f8fafc;
-    }
-
-    .btn-page:disabled {
-        opacity: 0.5;
-        cursor: not-allowed;
-        background: #f1f5f9;
-    }
-
 .users-status-container.error-box {
     background: #fde8e8;
     color: #e74c3c;
@@ -280,17 +240,125 @@
     font-weight: 500;
 }
 
-/* Прави редовете в таблицата да изглеждат интерактивни при посочване */
+/* ── CLICKABLE ROW ── */
+
 .clickable-row {
     cursor: pointer;
     transition: background-color 0.15s ease;
 }
 
     .clickable-row:hover {
-        background-color: #f1f5f9 !important; /* Леко подчертаване на целия ред */
+        background-color: #f1f5f9 !important;
     }
 
-/* ── СТИЛИЗИРАНЕ НА МОДАЛА С ДЕТАЙЛИ ── */
+/* ── PAGINATION ── */
+
+.pagination-footer {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 24px;
+    padding: 18px 22px;
+    background: #ffffff;
+    border: 1px solid #eef2f5;
+    border-radius: 12px;
+    box-shadow: 0 4px 18px rgba(0, 0, 0, 0.04);
+    flex-wrap: wrap;
+    gap: 16px;
+}
+
+.pagination-info {
+    font-size: 0.92rem;
+    color: #64748b;
+    font-weight: 500;
+}
+
+    .pagination-info strong {
+        color: #1e293b;
+    }
+
+/* Page size */
+
+.pagination-page-size {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+    .pagination-page-size label {
+        font-size: 0.85rem;
+        font-weight: 600;
+        color: #475569;
+    }
+
+    .pagination-page-size select {
+        height: 40px;
+        padding: 0 14px;
+        border-radius: 8px;
+        border: 1px solid #cbd5e1;
+        background: #ffffff;
+        color: #334155;
+        font-size: 0.9rem;
+        font-weight: 600;
+        cursor: pointer;
+        transition: all 0.2s ease;
+        outline: none;
+    }
+
+        .pagination-page-size select:hover {
+            border-color: #94a3b8;
+        }
+
+        .pagination-page-size select:focus {
+            border-color: #3498db;
+            box-shadow: 0 0 0 3px rgba(52, 152, 219, 0.15);
+        }
+
+/* Pagination buttons */
+
+.pagination-buttons {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.btn-page {
+    min-width: 120px;
+    height: 42px;
+    border: none;
+    border-radius: 10px;
+    background: linear-gradient(135deg, #3498db, #2980b9);
+    color: white;
+    font-size: 0.9rem;
+    font-weight: 700;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    transition: all 0.22s ease;
+    box-shadow: 0 4px 12px rgba(52, 152, 219, 0.2);
+}
+
+    .btn-page:hover:not(:disabled) {
+        transform: translateY(-2px);
+        box-shadow: 0 8px 18px rgba(52, 152, 219, 0.28);
+    }
+
+    .btn-page:active:not(:disabled) {
+        transform: scale(0.97);
+    }
+
+    .btn-page:disabled {
+        background: #e2e8f0;
+        color: #94a3b8;
+        cursor: not-allowed;
+        box-shadow: none;
+        transform: none;
+    }
+
+/* ── MODAL ── */
+
 .user-details-modal-grid {
     display: grid;
     grid-template-columns: repeat(2, 1fr);
@@ -338,7 +406,8 @@
             color: #3498db;
         }
 
-/* Блок за бутоните в модала */
+/* Modal actions */
+
 .modal-user-actions {
     display: flex;
     justify-content: flex-end;
@@ -347,7 +416,8 @@
     padding-top: 18px;
 }
 
-.btn-modal-action-admin, .btn-modal-action-delete {
+.btn-modal-action-admin,
+.btn-modal-action-delete {
     padding: 12px 20px;
     font-size: 0.9rem;
     font-weight: 600;
@@ -360,7 +430,8 @@
     border: none;
 }
 
-/* Бутон за администраторски права */
+/* Admin button */
+
 .btn-modal-action-admin {
     background: #e0f2fe;
     color: #0369a1;
@@ -371,7 +442,8 @@
         color: white;
     }
 
-/* Бутон за изтриване на акаунт */
+/* Delete button */
+
 .btn-modal-action-delete {
     background: #fee2e2;
     color: #b91c1c;
@@ -383,7 +455,8 @@
         box-shadow: 0 4px 12px rgba(185, 28, 28, 0.2);
     }
 
-    .btn-modal-action-admin:disabled, .btn-modal-action-delete:disabled {
+    .btn-modal-action-admin:disabled,
+    .btn-modal-action-delete:disabled {
         opacity: 0.5;
         cursor: not-allowed;
     }

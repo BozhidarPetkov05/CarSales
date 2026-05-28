@@ -7,8 +7,8 @@ const Sidebar = ({ activePage, setActivePage }) => {
     const menuItems = [
         { id: 'cars', label: 'Cars', icon: 'fa-car' },
         { id: 'favourites', label: 'Favourites', icon: 'fa-heart' },
-        { id: 'users', label: 'Users', icon: 'fa-users-gear', adminOnly: true },
-        { id: 'settings', label: 'Settings', icon: 'fa-gears' },
+        { id: 'users', label: 'Users', icon: 'fa-users', adminOnly: true },
+        { id: 'settings', label: 'Settings', icon: 'fa-gear' },
     ];
 
     const handleLogout = () => {
@@ -35,9 +35,9 @@ const Sidebar = ({ activePage, setActivePage }) => {
                 })}
             </div>
 
-            <div className="sidebar-footer" onClick={handleLogout}>
+                <div className="sidebar-footer" onClick={handleLogout}>
                 <span>Log out</span>
-                <i className="fa-solid fa-right-from-bracket"></i>
+                <i className="fa-solid fa-sign-out-alt"></i>
             </div>
         </aside>
     );

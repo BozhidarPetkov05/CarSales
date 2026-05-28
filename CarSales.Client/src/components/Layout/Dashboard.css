@@ -14,11 +14,12 @@
 /* Глобални настройки за Dashboard-а */
 .dashboard-wrapper {
     display: flex;
-    width: 100vw;
-    height: 100vh;
+    width: 100%; /* use percent to avoid including scrollbar width */
+    min-height: 100vh; /* allow content to grow and avoid layout shift */
     overflow: hidden;
     font-family: 'Open Sans', sans-serif;
     background-color: var(--content-bg);
+    box-sizing: border-box;
 }
 
 /* ── TOP BAR (ГОРЕН ПАНЕЛ) ── */
@@ -129,7 +130,7 @@
 .main-content {
     margin-top: 65px;
     margin-left: 260px;
-    width: calc(100vw - 260px);
+    width: calc(100% - 260px); /* switch from vw to % so vertical scrollbar doesn't add extra width */
     height: calc(100vh - 65px);
     background-color: var(--content-bg);
     padding: 50px 60px;

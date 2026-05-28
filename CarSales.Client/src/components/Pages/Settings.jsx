@@ -234,10 +234,10 @@ const Settings = () => {
                 {/* Бутоните за действие */}
                 <div className="settings-actions">
                     <button className="btn-action-update" onClick={handleOpenModal}>
-                        <i className="fa-solid fa-user-pen"></i> Update Profile
+                        <i className="fa-solid fa-user-edit"></i> Update Profile
                     </button>
                     <button className="btn-action-delete" onClick={handleDelete}>
-                        <i className="fa-solid fa-trash-can"></i> Delete Account
+                        <i className="fa-solid fa-trash"></i> Delete Account
                     </button>
                 </div>
 
@@ -250,7 +250,7 @@ const Settings = () => {
                         </div>
                     ) : (
                         <div className="no-cars-box">
-                            <i className="fa-solid fa-car-tunnel"></i>
+                            <i className="fa-solid fa-car-side"></i>
                             <p>You currently have no listed cars.</p>
                             <span>Add your first car to get started.</span>
                         </div>

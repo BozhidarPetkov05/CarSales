@@ -61,7 +61,7 @@ const SignUp = ({ onRegisterSuccess, onNavigateToLogin }) => {
             currentErrors.lastName = 'Last name can contain letters and hyphens!';
         }
 
-        // Age (Опционално, но с валидация ако е въведено)
+        // Age
         if (formData.age !== '') {
             const ageNum = Number(formData.age);
             if (isNaN(ageNum) || ageNum < 1 || ageNum > 120) {
@@ -84,20 +84,15 @@ const SignUp = ({ onRegisterSuccess, onNavigateToLogin }) => {
 
         setIsLoading(true);
         try {
-            // Подготовка на данните (възрастта се праща като число или null)
             const payload = {
                 ...formData,
                 age: formData.age !== '' ? Number(formData.age) : null
             };
 
-            // 1. Пост заявка за регистрация (JSON)
             await register(payload);
 
-            // 2. Визуализиране на зеления съобщителен прозорец
             setSuccessMessage('User created successfully!');
 
-            // 3. Изчакване на малко време (2 секунди) и последващ Login
-            // Смени целия setTimeout блок с този:
             setTimeout(async () => {
                 try {
                     const authData = await login(formData.username, formData.password);
@@ -108,10 +103,9 @@ const SignUp = ({ onRegisterSuccess, onNavigateToLogin }) => {
                         }
                     }
                 } catch (authErr) {
-                    // ТОВА КОРЕГИРАМЕ:
                     setApiError('Account created, but automatic login failed. Please log in manually.');
-                    setIsLoading(false); // Спираме лоудинга, за да се отпусне интерфейсът
-                    onNavigateToLogin(); // Връща ни на логин екрана, за да пробваш ръчно
+                    setIsLoading(false);
+                    onNavigateToLogin();
                 }
             }, 2000);
 

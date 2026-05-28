@@ -12,14 +12,12 @@ const Login = ({ onLoginSuccess, onNavigateToSignUp }) => {
     const validateForm = () => {
         const currentErrors = {};
 
-        // Валидация за Потребителско име (Username)
         if (!username.trim()) {
             currentErrors.username = 'Username is required.';
         } else if (username.length < 4 || username.length > 20) {
             currentErrors.username = 'Username must be between 4 and 20 characters.';
         }
 
-        // Валидация за Парола (Password)
         if (!password) {
             currentErrors.password = 'Password is required.';
         } else if (password.length < 5 || password.length > 50) {
@@ -40,7 +38,6 @@ const Login = ({ onLoginSuccess, onNavigateToSignUp }) => {
 
         setIsLoading(true);
         try {
-            // Изпращане на POST request (x-www-form-urlencoded) към API-то
             const data = await login(username, password);
 
             if (data && data.token) {

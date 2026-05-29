@@ -1,3 +1,4 @@
+/* ── ГЛОВЕН КОНТЕЙНЕР И ТИПОГРАФИЯ ── */
 .cars-container {
     max-width: 1300px;
     margin: 0 auto;
@@ -34,13 +35,12 @@
     min-width: 140px;
 }
 
-    /* Намалена пропорция за BRAND и MODEL */
     .filter-group.search-input {
         flex: 1;
         min-width: 130px;
     }
 
-/* СТРИКТНО СМАЛЯВАНЕ НА ГОРИВО И ТРАНСМИСИЯ */
+/* Специфичен фикс за малките падащи менюта, за да не се разпъват */
 .filter-panel .filter-group.small-filter {
     flex: 0 0 110px !important;
     width: 110px !important;
@@ -66,7 +66,6 @@
     white-space: nowrap;
 }
 
-/* Контейнери за икони */
 .input-with-icon {
     position: relative;
     display: flex;
@@ -79,14 +78,11 @@
         left: 14px;
         color: #94a3b8;
         font-size: 1rem;
-        transition: color 0.2s ease;
         z-index: 2;
     }
 
-/* Базови размери */
 .filter-panel input[type="text"],
 .filter-panel select,
-.price-inputs input,
 .btn-apply-filters {
     height: 44px;
     box-sizing: border-box;
@@ -107,12 +103,7 @@
     .filter-panel input[type="text"]:focus {
         border-color: #3498db;
         box-shadow: 0 0 0 3px rgba(52, 152, 219, 0.15);
-        color: #1e293b;
     }
-
-.input-with-icon:focus-within i {
-    color: #3498db;
-}
 
 .filter-panel select {
     border: 1px solid #cbd5e1;
@@ -122,12 +113,7 @@
     cursor: pointer;
 }
 
-    .filter-panel select:focus {
-        border-color: #3498db;
-        box-shadow: 0 0 0 3px rgba(52, 152, 219, 0.15);
-    }
-
-/* Ценови диапазон (Широк) */
+/* ── ЗАКЛЮЧЕНИ КУТИИ ЗА ЦЕНА (ПРОТИВ БЪГОВЕ С ТЪМЕН РЕЖИМ) ── */
 .price-range-group {
     flex: 3;
     min-width: 240px;
@@ -144,10 +130,16 @@
         width: 100%;
         padding: 0 12px;
         border: 1px solid #cbd5e1;
-        background-color: #ffffff;
-        color: #334155;
+        border-radius: 8px;
+        height: 44px;
+        box-sizing: border-box;
         outline: none;
         text-align: center;
+        /* Твърдо форсиране на чисти цветове */
+        background-color: #ffffff !important;
+        color: #334155 !important;
+        font-size: 0.95rem;
+        transition: all 0.2s ease;
     }
 
         .price-inputs input:focus {
@@ -155,12 +147,26 @@
             box-shadow: 0 0 0 3px rgba(52, 152, 219, 0.15);
         }
 
+        /* Тотално подсигуряване на сивия placeholder текст */
+        .price-inputs input::placeholder {
+            color: #94a3b8 !important;
+            opacity: 1 !important;
+        }
+
+        .price-inputs input:-ms-input-placeholder {
+            color: #94a3b8 !important;
+        }
+
+        .price-inputs input::-ms-input-placeholder {
+            color: #94a3b8 !important;
+        }
+
     .price-inputs span {
         color: #64748b;
         font-weight: 600;
     }
 
-/* Бутон */
+/* Бутон за филтри */
 .btn-apply-filters {
     background: linear-gradient(135deg, #3498db, #2980b9);
     color: white;
@@ -172,17 +178,43 @@
     align-items: center;
     justify-content: center;
     gap: 10px;
-    flex-shrink: 0;
     box-shadow: 0 4px 12px rgba(52, 152, 219, 0.2);
 }
 
     .btn-apply-filters:hover {
         transform: translateY(-2px);
-        box-shadow: 0 8px 18px rgba(52, 152, 219, 0.25);
     }
 
-    .btn-apply-filters:active {
-        transform: scale(0.98);
+/* Стейтове за грешки и празна база */
+.error-box {
+    background-color: #fef2f2;
+    border: 1px solid #fee2e2;
+    color: #ef4444;
+    padding: 14px;
+    border-radius: 8px;
+    margin-bottom: 20px;
+    font-weight: 500;
+}
+
+.cars-loading {
+    text-align: center;
+    padding: 60px;
+    font-size: 1.1rem;
+    color: #64748b;
+}
+
+.cars-empty-box {
+    text-align: center;
+    padding: 60px;
+    background: #ffffff;
+    border-radius: 12px;
+    border: 1px solid #eef2f5;
+    color: #94a3b8;
+}
+
+    .cars-empty-box i {
+        font-size: 2.5rem;
+        margin-bottom: 12px;
     }
 
 /* ── GRID И КАРТИ ЗА КОЛИ ── */
@@ -202,6 +234,7 @@
     flex-direction: column;
     transition: transform 0.2s ease, box-shadow 0.2s ease;
     border: 1px solid #eef2f5;
+    cursor: pointer;
 }
 
     .car-card:hover {
@@ -229,13 +262,8 @@
     align-items: center;
     justify-content: center;
     color: #94a3b8;
-    font-size: 0.85rem;
     gap: 8px;
 }
-
-    .car-card-no-image i {
-        font-size: 1.8rem;
-    }
 
 .car-card-details {
     padding: 20px;
@@ -251,7 +279,6 @@
     font-weight: 600;
 }
 
-/* Долна част на картите */
 .car-card-bottom-section {
     margin-top: auto;
     display: flex;
@@ -276,17 +303,9 @@
     gap: 8px;
 }
 
-    .car-info-row i {
-        color: #64748b;
-        width: 16px;
-    }
-
 .car-card-created-at {
     font-size: 0.85rem;
     color: #64748b;
-    display: flex;
-    align-items: center;
-    gap: 6px;
 }
 
 .car-card-price {
@@ -294,10 +313,9 @@
     color: #16a34a;
     font-weight: 700;
     margin: 0;
-    white-space: nowrap;
 }
 
-/* ── ПАГИНАЦИЯ (ОБНОВЕНА С КОМПАКТЕН СЕЛЕКТОР ДОЛУ) ── */
+/* ── ПАГИНАЦИЯ ФУТЕР ── */
 .pagination-footer {
     display: flex;
     justify-content: space-between;
@@ -315,43 +333,27 @@
 .pagination-info {
     font-size: 0.92rem;
     color: #64748b;
-    font-weight: 500;
 }
 
-    .pagination-info strong {
-        color: #1e293b;
-    }
-
-/* Идентичен стил като при потребителското управление */
 .pagination-size-selector {
     display: flex;
     align-items: center;
     gap: 10px;
     font-size: 0.92rem;
     color: #64748b;
-    font-weight: 500;
 }
 
     .pagination-size-selector select {
         height: 36px;
         padding: 0 10px;
-        font-size: 0.9rem;
         border: 1px solid #cbd5e1;
         border-radius: 6px;
-        background-color: #ffffff;
-        color: #1e293b;
-        outline: none;
-        cursor: pointer;
         font-weight: 600;
+        cursor: pointer;
     }
-
-        .pagination-size-selector select:focus {
-            border-color: #3498db;
-        }
 
 .pagination-buttons {
     display: flex;
-    align-items: center;
     gap: 12px;
 }
 
@@ -362,58 +364,292 @@
     border-radius: 10px;
     background: linear-gradient(135deg, #3498db, #2980b9);
     color: white;
-    font-size: 0.9rem;
     font-weight: 700;
     cursor: pointer;
     display: flex;
     align-items: center;
     justify-content: center;
     gap: 8px;
-    transition: all 0.22s ease;
-    box-shadow: 0 4px 12px rgba(52, 152, 219, 0.2);
 }
-
-    .btn-page:hover:not(:disabled) {
-        transform: translateY(-2px);
-        box-shadow: 0 8px 18px rgba(52, 152, 219, 0.28);
-    }
-
-    .btn-page:active:not(:disabled) {
-        transform: scale(0.97);
-    }
 
     .btn-page:disabled {
         background: #e2e8f0;
         color: #94a3b8;
         cursor: not-allowed;
-        box-shadow: none;
-        transform: none;
     }
 
-.cars-loading {
+/* ── MODAL SYSTEM (БЕЗ ГЛОБАЛЕН СКРОЛБАР) ── */
+.modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background: rgba(15, 23, 42, 0.6);
+    backdrop-filter: blur(4px);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 9999;
+}
+
+.modal-content {
+    background: #ffffff;
+    width: 92%;
+    max-width: 1120px;
+    height: 620px;
+    border-radius: 16px;
+    box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+    position: relative;
+    overflow: hidden;
+}
+
+.modal-close-btn {
+    position: absolute;
+    top: 14px;
+    right: 20px;
+    background: #f1f5f9;
+    border: none;
+    font-size: 1.6rem;
+    color: #64748b;
+    cursor: pointer;
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 10;
+    transition: all 0.15s ease;
+}
+
+    .modal-close-btn:hover {
+        background: #e2e8f0;
+        color: #0f172a;
+    }
+
+.modal-body {
+    display: flex;
+    width: 100%;
+    height: 100%;
+}
+
+.modal-status {
+    padding: 100px;
     text-align: center;
     font-size: 1.1rem;
-    padding: 80px 0;
     color: #64748b;
-    font-weight: 500;
+    width: 100%;
 }
 
-.error-box {
-    background: #fde8e8;
-    color: #e74c3c;
-    padding: 20px;
-    border-radius: 8px;
-    margin: 20px 0;
-    font-weight: 500;
+/* ── ЛЯВА ЧАСТ: КАРУСЕЛ ── */
+.modal-gallery-section {
+    flex: 1.3;
+    background: #0f172a;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 100%;
 }
 
-.cars-empty-box {
-    text-align: center;
-    padding: 60px 20px;
-    color: #94a3b8;
+.carousel-container {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
 
-    .cars-empty-box i {
-        font-size: 2.5rem;
-        margin-bottom: 12px;
+.carousel-image {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+}
+
+.carousel-btn {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    background: rgba(255, 255, 255, 0.9);
+    border: none;
+    width: 42px;
+    height: 42px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
+    color: #1e293b;
+    transition: all 0.2s ease;
+}
+
+    .carousel-btn:hover {
+        background: #ffffff;
+        color: #3498db;
+        transform: translateY(-50%) scale(1.06);
     }
+
+    .carousel-btn.prev {
+        left: 20px;
+    }
+
+    .carousel-btn.next {
+        right: 20px;
+    }
+
+.carousel-dots {
+    position: absolute;
+    bottom: 20px;
+    display: flex;
+    gap: 8px;
+    background: rgba(15, 23, 42, 0.4);
+    padding: 6px 12px;
+    border-radius: 20px;
+}
+
+    .carousel-dots .dot {
+        width: 8px;
+        height: 8px;
+        border-radius: 50%;
+        background: rgba(255, 255, 255, 0.5);
+        cursor: pointer;
+    }
+
+        .carousel-dots .dot.active {
+            background: #3498db;
+        }
+
+/* ── ДЯСНА ЧАСТ: ИНФОРМАЦИЯ И СЪДЪРЖАНИЕ ── */
+.modal-info-section {
+    flex: 1;
+    padding: 35px;
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    box-sizing: border-box;
+}
+
+.modal-header-info h2 {
+    font-size: 1.8rem;
+    color: #1e293b;
+    margin: 0 0 4px 0;
+    font-weight: 700;
+}
+
+.modal-price-tag {
+    font-size: 1.45rem;
+    color: #16a34a;
+    font-weight: 600;
+    margin: 0 0 20px 0;
+}
+
+/* ── СТИЛИЗИРАНА И КОМПАКТНА ТАБЛИЦА СЪС СПЕЦИФИКАЦИИ ── */
+.specs-table-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 10px; /* Намален от 12px на 10px за по-прибрана мрежа */
+    margin-bottom: 18px; /* Намалено от 20px */
+}
+
+.spec-item {
+    background: #f8fafc;
+    padding: 8px 12px; /* Намален padding от 10px/14px за по-компактен вид */
+    border-radius: 8px;
+    display: flex;
+    flex-direction: column;
+    border: 1px solid #eef2f6;
+    justify-content: center;
+}
+
+.spec-label {
+    font-size: 0.72rem; /* Намален леко шрифт за етикета */
+    font-weight: 700;
+    color: #64748b;
+    text-transform: uppercase;
+    margin-bottom: 2px;
+}
+
+.spec-value {
+    font-size: 0.92rem; /* Компресиран размер на текста за стойностите */
+    color: #334155;
+    font-weight: 600;
+}
+
+/* ── ЛОКАЛЕН ТЪНЪК СКРОЛБАР ЗА ОПИСАНИЕТО ── */
+.modal-description-box {
+    border-top: 1px solid #f1f5f9;
+    padding-top: 14px;
+    margin-bottom: 12px;
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+    min-height: 0;
+}
+
+    .modal-description-box h3 {
+        font-size: 0.95rem;
+        color: #1e293b;
+        margin: 0 0 8px 0;
+        font-weight: 700;
+    }
+
+.modal-description-scroll-area {
+    overflow-y: auto;
+    padding-right: 10px;
+    flex-grow: 1;
+}
+
+    .modal-description-scroll-area::-webkit-scrollbar {
+        width: 6px;
+    }
+
+    .modal-description-scroll-area::-webkit-scrollbar-track {
+        background: #f1f5f9;
+        border-radius: 10px;
+    }
+
+    .modal-description-scroll-area::-webkit-scrollbar-thumb {
+        background: #cbd5e1;
+        border-radius: 10px;
+    }
+
+        .modal-description-scroll-area::-webkit-scrollbar-thumb:hover {
+            background: #94a3b8;
+        }
+
+    .modal-description-scroll-area p {
+        font-size: 0.92rem;
+        color: #475569;
+        line-height: 1.5;
+        margin: 0;
+        white-space: pre-line;
+    }
+
+/* Футер */
+.modal-dates-footer {
+    display: flex;
+    justify-content: space-between;
+    font-size: 0.8rem;
+    color: #94a3b8;
+    border-top: 1px solid #f1f5f9;
+    padding-top: 14px;
+}
+
+/* Адаптивност */
+@media (max-width: 850px) {
+    .modal-content {
+        height: auto;
+        max-height: 90vh;
+        overflow-y: auto;
+    }
+
+    .modal-body {
+        flex-direction: column;
+    }
+
+    .modal-gallery-section {
+        height: 300px;
+    }
+}

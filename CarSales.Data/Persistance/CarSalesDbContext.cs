@@ -1,5 +1,6 @@
 ﻿using CarSales.Data.Entities;
 using Microsoft.EntityFrameworkCore;
+using System.Linq;
 
 namespace CarSales.Data.Persistance
 {
@@ -32,6 +33,26 @@ namespace CarSales.Data.Persistance
                     IsAdmin = true,
                 });
             #endregion
+
+            // Ensure all relationships use cascade delete by default
+            // Be careful: SQL Server does not allow multiple cascade paths.
+            // Exclude the Favourite join entity from automatic cascade to avoid multiple cascade paths
+            var foreignKeys = modelBuilder.Model.GetEntityTypes()
+                .SelectMany(e => e.GetForeignKeys())
+                .ToList();
+
+            foreach (var fk in foreignKeys)
+            {
+                // If the FK belongs to the Favourite join table, keep Restrict to avoid multiple cascade paths
+                if (fk.DeclaringEntityType.ClrType == typeof(Favourite))
+                {
+                    fk.DeleteBehavior = DeleteBehavior.Restrict;
+                }
+                else
+                {
+                    fk.DeleteBehavior = DeleteBehavior.Cascade;
+                }
+            }
 
             #region Favourite
             modelBuilder.Entity<Favourite>()

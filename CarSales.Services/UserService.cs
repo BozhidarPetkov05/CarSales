@@ -47,7 +47,38 @@ namespace CarSales.Services
 
         public async Task DeleteAsync(User item)
         {
-            _repository.Delete(item);
+            // Load the user with related collections to remove dependent favourites that use Restrict
+            var user = await _context.Users
+                .Include(u => u.Favourites)
+                .Include(u => u.Cars)
+                    .ThenInclude(c => c.Favourites)
+                .FirstOrDefaultAsync(u => u.Id == item.Id);
+
+            if (user is null)
+            {
+                return;
+            }
+
+            // Remove favourites where this user is the owner (user -> favourites)
+            if (user.Favourites != null && user.Favourites.Any())
+            {
+                _context.Favourites.RemoveRange(user.Favourites);
+            }
+
+            // Remove favourites that point to cars owned by this user
+            if (user.Cars != null)
+            {
+                foreach (var car in user.Cars)
+                {
+                    if (car.Favourites != null && car.Favourites.Any())
+                    {
+                        _context.Favourites.RemoveRange(car.Favourites);
+                    }
+                }
+            }
+
+            // Now remove the user (this will cascade-delete Cars and Photos where configured)
+            _context.Users.Remove(user);
             await _context.SaveChangesAsync();
         }
 

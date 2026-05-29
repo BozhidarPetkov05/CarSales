@@ -4,6 +4,7 @@ using CarSales.Data.Persistance;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace CarSales.Data.Migrations
 {
     [DbContext(typeof(CarSalesDbContext))]
-    partial class CarSalesDbContextModelSnapshot : ModelSnapshot
+    [Migration("20260529172200_CascadeDeleteEnabled")]
+    partial class CascadeDeleteEnabled
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder

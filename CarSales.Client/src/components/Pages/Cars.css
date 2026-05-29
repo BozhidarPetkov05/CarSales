@@ -1,137 +1,191 @@
 .cars-container {
-    padding: 20px;
     max-width: 1300px;
     margin: 0 auto;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
 }
 
 .cars-main-title {
-    font-size: 1.8rem;
+    font-size: 2rem;
     color: #2c3e50;
-    margin-bottom: 20px;
-    font-weight: 600;
+    margin-top: 10px;
+    margin-bottom: 24px;
+    font-weight: 700;
 }
 
-/* ФИЛТЪР ПАНЕЛ СТИЛ */
+/* ── ФИЛТЪР ПАНЕЛ ── */
 .filter-panel {
-    background: #fff;
-    border-radius: 10px;
-    padding: 18px;
-    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
-    display: flex;
-    flex-wrap: wrap;
-    gap: 15px;
-    align-items: flex-end;
-    margin-bottom: 30px;
+    background: #ffffff;
+    border-radius: 12px;
+    padding: 24px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
     border: 1px solid #eef2f5;
+    margin-bottom: 25px;
+    display: flex;
+    align-items: flex-end;
+    gap: 20px;
+    flex-wrap: wrap;
 }
 
 .filter-group {
     display: flex;
     flex-direction: column;
-    gap: 6px;
+    gap: 8px;
     flex: 1;
-    min-width: 150px;
+    min-width: 140px;
 }
 
-    .filter-group label {
-        font-size: 0.75rem;
-        font-weight: 700;
-        color: #5a6a85;
-        text-transform: uppercase;
-        letter-spacing: 0.5px;
+    /* КОРЕКЦИЯ: Намаляваме пропорцията на BRAND и MODEL текстовите полета */
+    .filter-group.search-input {
+        flex: 1; /* Намалено от 1.8 на 1 */
+        min-width: 130px;
     }
 
-/* Икони вътре в полетата */
+/* СТРИКТНО СМАЛЯВАНЕ НА ГОРИВО И ТРАНСМИСИЯ */
+.filter-panel .filter-group.small-filter {
+    flex: 0 0 110px !important;
+    width: 110px !important;
+    min-width: 110px !important;
+    max-width: 110px !important;
+}
+
+    .filter-panel .filter-group.small-filter select {
+        width: 100% !important;
+        max-width: 100% !important;
+        padding: 0 8px;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+        overflow: hidden;
+    }
+
+.filter-group label {
+    font-size: 0.8rem;
+    font-weight: 700;
+    color: #475569;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    white-space: nowrap;
+}
+
+/* Контейнери за икони */
 .input-with-icon {
     position: relative;
     display: flex;
     align-items: center;
+    width: 100%;
 }
 
     .input-with-icon i {
         position: absolute;
-        left: 12px;
-        color: #a0aec0;
-        font-size: 0.9rem;
+        left: 14px;
+        color: #94a3b8;
+        font-size: 1rem;
+        transition: color 0.2s ease;
+        z-index: 2;
     }
 
+/* Базови размери */
 .filter-panel input[type="text"],
-.filter-panel select {
+.filter-panel select,
+.price-inputs input,
+.btn-apply-filters {
+    height: 44px;
+    box-sizing: border-box;
+    font-size: 0.95rem;
+    border-radius: 8px;
+    transition: all 0.2s ease;
+}
+
+.filter-panel input[type="text"] {
     width: 100%;
-    padding: 10px 12px 10px 35px;
+    padding: 0 14px 0 42px;
     border: 1px solid #cbd5e1;
-    border-radius: 6px;
-    font-size: 0.9rem;
     color: #334155;
+    background-color: #ffffff;
     outline: none;
-    background-color: #fff;
-    transition: border-color 0.2s;
+}
+
+    .filter-panel input[type="text"]:focus {
+        border-color: #3498db;
+        box-shadow: 0 0 0 3px rgba(52, 152, 219, 0.15);
+        color: #1e293b;
+    }
+
+.input-with-icon:focus-within i {
+    color: #3498db;
 }
 
 .filter-panel select {
-    padding-left: 12px;
+    border: 1px solid #cbd5e1;
+    background-color: #ffffff;
+    color: #334155;
+    outline: none;
     cursor: pointer;
 }
 
-    .filter-panel input:focus,
     .filter-panel select:focus {
-        border-color: #3182ce;
+        border-color: #3498db;
+        box-shadow: 0 0 0 3px rgba(52, 152, 219, 0.15);
     }
 
-/* Стил за ценовия диапазон (Светли кутийки) */
+/* КОРЕКЦИЯ: Правим ценовия диапазон значително по-широк */
 .price-range-group {
-    min-width: 200px;
+    flex: 3; /* Увеличено от 1.8 на 3, за да заеме повече място */
+    min-width: 240px; /* Увеличена минимална широчина от 180px на 240px */
 }
 
 .price-inputs {
     display: flex;
     align-items: center;
     gap: 8px;
+    width: 100%;
 }
 
     .price-inputs input {
         width: 100%;
-        padding: 10px 8px;
+        padding: 0 12px;
         border: 1px solid #cbd5e1;
-        border-radius: 6px;
-        font-size: 0.9rem;
+        background-color: #ffffff;
+        color: #334155;
         outline: none;
         text-align: center;
-        background-color: #fff; /* Изрично бял фон */
-        color: #334155; /* Изрично тъмен текст */
-        transition: border-color 0.2s;
     }
 
         .price-inputs input:focus {
-            border-color: #3182ce;
+            border-color: #3498db;
+            box-shadow: 0 0 0 3px rgba(52, 152, 219, 0.15);
         }
 
     .price-inputs span {
-        color: #718096;
+        color: #64748b;
+        font-weight: 600;
     }
 
-/* Бутонът Apply Filters */
+/* Бутон */
 .btn-apply-filters {
-    background-color: #2b6cb0;
-    color: #fff;
+    background: linear-gradient(135deg, #3498db, #2980b9);
+    color: white;
     border: none;
-    padding: 11px 20px;
-    border-radius: 6px;
-    font-size: 0.95rem;
-    font-weight: 600;
+    padding: 0 24px;
+    font-weight: 700;
     cursor: pointer;
     display: flex;
     align-items: center;
-    gap: 8px;
-    transition: background-color 0.2s;
-    height: 41px;
+    justify-content: center;
+    gap: 10px;
+    flex-shrink: 0;
+    box-shadow: 0 4px 12px rgba(52, 152, 219, 0.2);
 }
 
     .btn-apply-filters:hover {
-        background-color: #1a5696;
+        transform: translateY(-2px);
+        box-shadow: 0 8px 18px rgba(52, 152, 219, 0.25);
     }
 
-/* GRID И КАРТИ ЗА КОЛИ */
+    .btn-apply-filters:active {
+        transform: scale(0.98);
+    }
+
+/* ── GRID И КАРТИ ЗА КОЛИ ── */
 .cars-grid {
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
@@ -140,19 +194,19 @@
 }
 
 .car-card {
-    background: #fff;
-    border-radius: 8px;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.06);
+    background: #ffffff;
+    border-radius: 12px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
     overflow: hidden;
     display: flex;
     flex-direction: column;
-    transition: transform 0.2s, box-shadow 0.2s;
-    border: 1px solid #eef0f2;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+    border: 1px solid #eef2f5;
 }
 
     .car-card:hover {
         transform: translateY(-4px);
-        box-shadow: 0 6px 18px rgba(0, 0, 0, 0.1);
+        box-shadow: 0 8px 22px rgba(0, 0, 0, 0.08);
     }
 
 .car-card-image-wrapper {
@@ -184,27 +238,27 @@
     }
 
 .car-card-details {
-    padding: 15px;
+    padding: 20px;
     display: flex;
     flex-direction: column;
     flex-grow: 1;
 }
 
 .car-card-title {
-    font-size: 1.25rem;
+    font-size: 1.3rem;
     color: #1e293b;
     margin: 0 0 15px 0;
     font-weight: 600;
 }
 
-/* ДОЛНА ЧАСТ */
+/* Долна част на картите */
 .car-card-bottom-section {
     margin-top: auto;
     display: flex;
     justify-content: space-between;
     align-items: flex-end;
     border-top: 1px solid #f1f5f9;
-    padding-top: 12px;
+    padding-top: 14px;
 }
 
 .car-card-specs-left {
@@ -243,53 +297,96 @@
     white-space: nowrap;
 }
 
-/* PAGINATION */
+/* Пагинация */
 .pagination-footer {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    margin-top: 25px;
-    padding-top: 20px;
-    border-top: 1px solid #e2e8f0;
+    margin-top: 24px;
+    padding: 18px 22px;
+    background: #ffffff;
+    border: 1px solid #eef2f5;
+    border-radius: 12px;
+    box-shadow: 0 4px 18px rgba(0, 0, 0, 0.04);
+    flex-wrap: wrap;
+    gap: 16px;
 }
+
+.pagination-info {
+    font-size: 0.92rem;
+    color: #64748b;
+    font-weight: 500;
+}
+
+    .pagination-info strong {
+        color: #1e293b;
+    }
 
 .pagination-buttons {
     display: flex;
-    gap: 10px;
+    align-items: center;
+    gap: 12px;
 }
 
 .btn-page {
-    padding: 8px 16px;
-    border: 1px solid #cbd5e1;
-    background: #fff;
+    min-width: 120px;
+    height: 42px;
+    border: none;
+    border-radius: 10px;
+    background: linear-gradient(135deg, #3498db, #2980b9);
+    color: white;
+    font-size: 0.9rem;
+    font-weight: 700;
     cursor: pointer;
-    border-radius: 6px;
-    font-weight: 500;
-    color: #334155;
-    transition: background 0.2s;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    transition: all 0.22s ease;
+    box-shadow: 0 4px 12px rgba(52, 152, 219, 0.2);
 }
 
     .btn-page:hover:not(:disabled) {
-        background: #f1f5f9;
+        transform: translateY(-2px);
+        box-shadow: 0 8px 18px rgba(52, 152, 219, 0.28);
+    }
+
+    .btn-page:active:not(:disabled) {
+        transform: scale(0.97);
     }
 
     .btn-page:disabled {
-        opacity: 0.4;
+        background: #e2e8f0;
+        color: #94a3b8;
         cursor: not-allowed;
+        box-shadow: none;
+        transform: none;
     }
 
 .cars-loading {
     text-align: center;
     font-size: 1.1rem;
-    padding: 50px;
+    padding: 80px 0;
     color: #64748b;
+    font-weight: 500;
 }
 
 .error-box {
-    background-color: #fef2f2;
-    color: #991b1b;
-    padding: 12px;
-    border-radius: 6px;
-    border: 1px solid #fee2e2;
-    margin-bottom: 15px;
+    background: #fde8e8;
+    color: #e74c3c;
+    padding: 20px;
+    border-radius: 8px;
+    margin: 20px 0;
+    font-weight: 500;
 }
+
+.cars-empty-box {
+    text-align: center;
+    padding: 60px 20px;
+    color: #94a3b8;
+}
+
+    .cars-empty-box i {
+        font-size: 2.5rem;
+        margin-bottom: 12px;
+    }

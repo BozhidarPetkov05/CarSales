@@ -2,7 +2,6 @@ import React, { useState, useEffect } from 'react';
 import './Cars.css';
 
 const Cars = () => {
-    // Всички състояния за филтрите
     const [searchBrand, setSearchBrand] = useState('');
     const [searchModel, setSearchModel] = useState('');
     const [filterFuel, setFilterFuel] = useState('');
@@ -10,7 +9,6 @@ const Cars = () => {
     const [priceMin, setPriceMin] = useState('');
     const [priceMax, setPriceMax] = useState('');
 
-    // Стейт за изпратените филтри (актуалните филтри, които в момента са приложени)
     const [appliedFilters, setAppliedFilters] = useState({
         brand: '',
         model: '',
@@ -43,11 +41,9 @@ const Cars = () => {
             const token = localStorage.getItem('token');
             const queryParams = new URLSearchParams();
 
-            // Задължителни параметри за пагинация
             queryParams.append('page', filters.page);
             queryParams.append('pageSize', pageSize);
 
-            // Добавяме филтрите само ако имат избрана стойност
             if (filters.brand) queryParams.append('brand', filters.brand);
             if (filters.model) queryParams.append('model', filters.model);
             if (filters.fuel) queryParams.append('fuel', filters.fuel);
@@ -91,12 +87,10 @@ const Cars = () => {
         }
     };
 
-    // Изпълнява се първоначално и при всяка смяна на приложените филтри/страници
     useEffect(() => {
         fetchCars(appliedFilters);
     }, [appliedFilters]);
 
-    // Функция, която се задейства при натискане на "Apply Filters"
     const handleApplyFilters = (e) => {
         e.preventDefault();
         setAppliedFilters({
@@ -106,11 +100,10 @@ const Cars = () => {
             transmission: filterTransmission,
             priceMin: priceMin,
             priceMax: priceMax,
-            page: 1 // При нов филтър винаги връщаме на първа страница
+            page: 1
         });
     };
 
-    // Функция за смяна на страниците
     const handlePageChange = (newPage) => {
         setAppliedFilters(prev => ({
             ...prev,
@@ -118,7 +111,6 @@ const Cars = () => {
         }));
     };
 
-    // Форматиране на датата (ДД/ММ/ГГГГ)
     const formatDate = (dateString) => {
         if (!dateString) return 'Unknown';
         const date = new Date(dateString);
@@ -132,9 +124,8 @@ const Cars = () => {
         <div className="cars-container">
             <h1 className="cars-main-title">Vehicles Management Panel</h1>
 
-            {/* ФИЛТЪР ПАНЕЛ (Аналогичен на User Management) */}
             <form className="filter-panel" onSubmit={handleApplyFilters}>
-                <div className="filter-group">
+                <div className="filter-group search-input">
                     <label>BRAND</label>
                     <div className="input-with-icon">
                         <i className="fa-solid fa-magnifying-glass"></i>
@@ -147,7 +138,7 @@ const Cars = () => {
                     </div>
                 </div>
 
-                <div className="filter-group">
+                <div className="filter-group search-input">
                     <label>MODEL</label>
                     <div className="input-with-icon">
                         <i className="fa-solid fa-car-side"></i>
@@ -160,7 +151,8 @@ const Cars = () => {
                     </div>
                 </div>
 
-                <div className="filter-group">
+                {/* Провери дали тук имаш точно тези два класа: "filter-group small-filter" */}
+                <div className="filter-group small-filter">
                     <label>FUEL TYPE</label>
                     <select value={filterFuel} onChange={(e) => setFilterFuel(e.target.value)}>
                         <option value="">All Fuels</option>
@@ -174,7 +166,8 @@ const Cars = () => {
                     </select>
                 </div>
 
-                <div className="filter-group">
+                {/* Провери дали тук имаш точно тези два класа: "filter-group small-filter" */}
+                <div className="filter-group small-filter">
                     <label>TRANSMISSION</label>
                     <select value={filterTransmission} onChange={(e) => setFilterTransmission(e.target.value)}>
                         <option value="">All</option>
@@ -209,7 +202,7 @@ const Cars = () => {
                 </button>
             </form>
 
-            {/* СЪДЪРЖАНИЕ / РЕЗУЛТАТИ */}
+            {/* РЕЗУЛТАТИ */}
             {error && (
                 <div className="cars-status-container error-box">
                     <i className="fa-solid fa-triangle-exclamation"></i> Error: {error}

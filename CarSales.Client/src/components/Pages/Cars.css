@@ -34,9 +34,9 @@
     min-width: 140px;
 }
 
-    /* КОРЕКЦИЯ: Намаляваме пропорцията на BRAND и MODEL текстовите полета */
+    /* Намалена пропорция за BRAND и MODEL */
     .filter-group.search-input {
-        flex: 1; /* Намалено от 1.8 на 1 */
+        flex: 1;
         min-width: 130px;
     }
 
@@ -127,10 +127,10 @@
         box-shadow: 0 0 0 3px rgba(52, 152, 219, 0.15);
     }
 
-/* КОРЕКЦИЯ: Правим ценовия диапазон значително по-широк */
+/* Ценови диапазон (Широк) */
 .price-range-group {
-    flex: 3; /* Увеличено от 1.8 на 3, за да заеме повече място */
-    min-width: 240px; /* Увеличена минимална широчина от 180px на 240px */
+    flex: 3;
+    min-width: 240px;
 }
 
 .price-inputs {
@@ -297,7 +297,7 @@
     white-space: nowrap;
 }
 
-/* Пагинация */
+/* ── ПАГИНАЦИЯ (ОБНОВЕНА С КОМПАКТЕН СЕЛЕКТОР ДОЛУ) ── */
 .pagination-footer {
     display: flex;
     justify-content: space-between;
@@ -321,6 +321,33 @@
     .pagination-info strong {
         color: #1e293b;
     }
+
+/* Идентичен стил като при потребителското управление */
+.pagination-size-selector {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-size: 0.92rem;
+    color: #64748b;
+    font-weight: 500;
+}
+
+    .pagination-size-selector select {
+        height: 36px;
+        padding: 0 10px;
+        font-size: 0.9rem;
+        border: 1px solid #cbd5e1;
+        border-radius: 6px;
+        background-color: #ffffff;
+        color: #1e293b;
+        outline: none;
+        cursor: pointer;
+        font-weight: 600;
+    }
+
+        .pagination-size-selector select:focus {
+            border-color: #3498db;
+        }
 
 .pagination-buttons {
     display: flex;

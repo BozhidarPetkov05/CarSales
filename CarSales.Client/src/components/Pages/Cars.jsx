@@ -8,6 +8,7 @@ const Cars = () => {
     const [filterTransmission, setFilterTransmission] = useState('');
     const [priceMin, setPriceMin] = useState('');
     const [priceMax, setPriceMax] = useState('');
+    const [pageSize, setPageSize] = useState(8); // Динамичен размер на страницата
 
     const [appliedFilters, setAppliedFilters] = useState({
         brand: '',
@@ -16,7 +17,8 @@ const Cars = () => {
         transmission: '',
         priceMin: '',
         priceMax: '',
-        page: 1
+        page: 1,
+        pageSize: 8
     });
 
     const [carsData, setCarsData] = useState({
@@ -31,7 +33,6 @@ const Cars = () => {
 
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
-    const pageSize = 8;
 
     const fetchCars = async (filters) => {
         setLoading(true);
@@ -42,7 +43,7 @@ const Cars = () => {
             const queryParams = new URLSearchParams();
 
             queryParams.append('page', filters.page);
-            queryParams.append('pageSize', pageSize);
+            queryParams.append('pageSize', filters.pageSize);
 
             if (filters.brand) queryParams.append('brand', filters.brand);
             if (filters.model) queryParams.append('model', filters.model);
@@ -75,7 +76,7 @@ const Cars = () => {
                 items: data.items || [],
                 totalCount: data.totalCount || 0,
                 page: data.page || 1,
-                pageSize: data.pageSize || pageSize,
+                pageSize: data.pageSize || filters.pageSize,
                 totalPages: data.totalPages || 1,
                 hasNext: data.hasNext || false,
                 hasPrevious: data.hasPrevious || false
@@ -100,8 +101,20 @@ const Cars = () => {
             transmission: filterTransmission,
             priceMin: priceMin,
             priceMax: priceMax,
-            page: 1
+            page: 1,
+            pageSize: pageSize // Запазва текущия размер на страницата при филтриране
         });
+    };
+
+    // Промяна на броя елементи от долния футер
+    const handlePageSizeChange = (e) => {
+        const newSize = parseInt(e.target.value, 10);
+        setPageSize(newSize);
+        setAppliedFilters(prev => ({
+            ...prev,
+            page: 1, // Връща на първа страница
+            pageSize: newSize
+        }));
     };
 
     const handlePageChange = (newPage) => {
@@ -124,6 +137,7 @@ const Cars = () => {
         <div className="cars-container">
             <h1 className="cars-main-title">Vehicles Management Panel</h1>
 
+            {/* ГОРЕН ФИЛТЪР ПАНЕЛ (Изчистен, без SHOW селекта) */}
             <form className="filter-panel" onSubmit={handleApplyFilters}>
                 <div className="filter-group search-input">
                     <label>BRAND</label>
@@ -151,7 +165,6 @@ const Cars = () => {
                     </div>
                 </div>
 
-                {/* Провери дали тук имаш точно тези два класа: "filter-group small-filter" */}
                 <div className="filter-group small-filter">
                     <label>FUEL TYPE</label>
                     <select value={filterFuel} onChange={(e) => setFilterFuel(e.target.value)}>
@@ -166,7 +179,6 @@ const Cars = () => {
                     </select>
                 </div>
 
-                {/* Провери дали тук имаш точно тези два класа: "filter-group small-filter" */}
                 <div className="filter-group small-filter">
                     <label>TRANSMISSION</label>
                     <select value={filterTransmission} onChange={(e) => setFilterTransmission(e.target.value)}>
@@ -257,15 +269,27 @@ const Cars = () => {
                         ))}
                     </div>
 
-                    {/* PAGINATION */}
+                    {/* ДОЛЕН ФУТЕР ЗА СТРАНИЦИРАНЕ (Сега съдържа и Cars per page) */}
                     <div className="pagination-footer">
                         <span className="pagination-info">
                             Total: <strong>{carsData.totalCount}</strong> cars |
                             Page <strong>{carsData.page}</strong> of <strong>{carsData.totalPages}</strong>
                         </span>
 
+                        {/* НОВО НАМЕСТО: Избор на брой елементи, стилизиран еднакво като на Users панела */}
+                        <div className="pagination-size-selector">
+                            <span>Cars per page:</span>
+                            <select value={pageSize} onChange={handlePageSizeChange}>
+                                <option value={4}>4</option>
+                                <option value={8}>8</option>
+                                <option value={12}>12</option>
+                                <option value={20}>20</option>
+                            </select>
+                        </div>
+
                         <div className="pagination-buttons">
                             <button
+                                type="button"
                                 className="btn-page"
                                 disabled={!carsData.hasPrevious || loading}
                                 onClick={() => handlePageChange(appliedFilters.page - 1)}
@@ -274,6 +298,7 @@ const Cars = () => {
                             </button>
 
                             <button
+                                type="button"
                                 className="btn-page"
                                 disabled={!carsData.hasNext || loading}
                                 onClick={() => handlePageChange(appliedFilters.page + 1)}

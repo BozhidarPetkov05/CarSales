@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { getLoggedUserId } from '../../utils/jwtHelper'; // Нагласи точния път до файла ти
 import './Users.css';
 
 const Users = () => {
@@ -24,7 +25,7 @@ const Users = () => {
     const [currentPage, setCurrentPage] = useState(1);
     const [pageSize, setPageSize] = useState(8);
 
-    // Активни филтри
+    // Active filters
     const [activeFilters, setActiveFilters] = useState({
         username: '',
         isAdmin: '',
@@ -35,6 +36,9 @@ const Users = () => {
     const [selectedUser, setSelectedUser] = useState(null);
     const [modalActionLoading, setModalActionLoading] = useState(false);
     const [modalError, setModalError] = useState(null);
+
+    // Вземаме ID-то на текущо логнатия потребител чрез твоята функция
+    const currentUserId = getLoggedUserId();
 
     const fetchUsers = async (pageToFetch, filtersToUse) => {
         setLoading(true);
@@ -498,19 +502,21 @@ const Users = () => {
 
                         {/* ACTIONS */}
                         <div className="modal-user-actions">
-                            <button
-                                className="btn-modal-action-admin"
-                                onClick={() =>
-                                    handleToggleAdminStatus(selectedUser)
-                                }
-                                disabled={modalActionLoading}
-                            >
-                                <i className="fa-solid fa-user-shield"></i>
-
-                                {selectedUser.isAdmin
-                                    ? 'Demote to Regular User'
-                                    : 'Promote to Admin'}
-                            </button>
+                            {/* Скриване на бутона за роли, ако избраният потребител е текущо логнатият */}
+                            {selectedUser.id !== currentUserId && (
+                                <button
+                                    className="btn-modal-action-admin"
+                                    onClick={() =>
+                                        handleToggleAdminStatus(selectedUser)
+                                    }
+                                    disabled={modalActionLoading}
+                                >
+                                    <i className="fa-solid fa-user-shield"></i>
+                                    {selectedUser.isAdmin
+                                        ? 'Demote to Regular User'
+                                        : 'Promote to Admin'}
+                                </button>
+                            )}
 
                             <button
                                 className="btn-modal-action-delete"

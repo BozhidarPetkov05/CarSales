@@ -1,4 +1,6 @@
-/* ── ГЛОВЕН КОНТЕЙНЕР И ТИПОГРАФИЯ ── */
+/* ==========================================================================
+   1. ГЛАВЕН КОНТЕЙНЕР И ТИПОГРАФИЯ
+   ========================================================================== */
 .cars-container {
     max-width: 1300px;
     margin: 0 auto;
@@ -13,7 +15,9 @@
     font-weight: 700;
 }
 
-/* ── ФИЛТЪР ПАНЕЛ ── */
+/* ==========================================================================
+   2. ФИЛТЪР ПАНЕЛ (ГОРНА ЧАСТ)
+   ========================================================================== */
 .filter-panel {
     background: #ffffff;
     border-radius: 12px;
@@ -147,18 +151,9 @@
             box-shadow: 0 0 0 3px rgba(52, 152, 219, 0.15);
         }
 
-        /* Тотално подсигуряване на сивия placeholder текст */
         .price-inputs input::placeholder {
             color: #94a3b8 !important;
             opacity: 1 !important;
-        }
-
-        .price-inputs input:-ms-input-placeholder {
-            color: #94a3b8 !important;
-        }
-
-        .price-inputs input::-ms-input-placeholder {
-            color: #94a3b8 !important;
         }
 
     .price-inputs span {
@@ -166,7 +161,6 @@
         font-weight: 600;
     }
 
-/* Бутон за филтри */
 .btn-apply-filters {
     background: linear-gradient(135deg, #3498db, #2980b9);
     color: white;
@@ -185,39 +179,9 @@
         transform: translateY(-2px);
     }
 
-/* Стейтове за грешки и празна база */
-.error-box {
-    background-color: #fef2f2;
-    border: 1px solid #fee2e2;
-    color: #ef4444;
-    padding: 14px;
-    border-radius: 8px;
-    margin-bottom: 20px;
-    font-weight: 500;
-}
-
-.cars-loading {
-    text-align: center;
-    padding: 60px;
-    font-size: 1.1rem;
-    color: #64748b;
-}
-
-.cars-empty-box {
-    text-align: center;
-    padding: 60px;
-    background: #ffffff;
-    border-radius: 12px;
-    border: 1px solid #eef2f5;
-    color: #94a3b8;
-}
-
-    .cars-empty-box i {
-        font-size: 2.5rem;
-        margin-bottom: 12px;
-    }
-
-/* ── GRID И КАРТИ ЗА КОЛИ ── */
+/* ==========================================================================
+   3. GRID И КАРТИ ЗА КОЛИ
+   ========================================================================== */
 .cars-grid {
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
@@ -315,7 +279,9 @@
     margin: 0;
 }
 
-/* ── ПАГИНАЦИЯ ФУТЕР ── */
+/* ==========================================================================
+   4. ПАГИНАЦИЯ (ФУТЕР ДОЛУ)
+   ========================================================================== */
 .pagination-footer {
     display: flex;
     justify-content: space-between;
@@ -333,7 +299,12 @@
 .pagination-info {
     font-size: 0.92rem;
     color: #64748b;
+    font-weight: 500;
 }
+
+    .pagination-info strong {
+        color: #1e293b;
+    }
 
 .pagination-size-selector {
     display: flex;
@@ -341,19 +312,31 @@
     gap: 10px;
     font-size: 0.92rem;
     color: #64748b;
+    font-weight: 500;
 }
 
+    /* Фикс за падащото меню "Cars per page" против тъмни режими */
     .pagination-size-selector select {
         height: 36px;
         padding: 0 10px;
+        font-size: 0.9rem;
         border: 1px solid #cbd5e1;
         border-radius: 6px;
-        font-weight: 600;
+        /* ЗАКЛЮЧЕНА КОРЕКЦИЯ: Бял фон и тъмен текст */
+        background-color: #ffffff !important;
+        color: #1e293b !important;
+        outline: none;
         cursor: pointer;
+        font-weight: 600;
     }
+
+        .pagination-size-selector select:focus {
+            border-color: #3498db;
+        }
 
 .pagination-buttons {
     display: flex;
+    align-items: center;
     gap: 12px;
 }
 
@@ -364,21 +347,33 @@
     border-radius: 10px;
     background: linear-gradient(135deg, #3498db, #2980b9);
     color: white;
+    font-size: 0.9rem;
     font-weight: 700;
     cursor: pointer;
     display: flex;
     align-items: center;
     justify-content: center;
     gap: 8px;
+    transition: all 0.22s ease;
+    box-shadow: 0 4px 12px rgba(52, 152, 219, 0.2);
 }
+
+    .btn-page:hover:not(:disabled) {
+        transform: translateY(-2px);
+        box-shadow: 0 8px 18px rgba(52, 152, 219, 0.28);
+    }
 
     .btn-page:disabled {
         background: #e2e8f0;
         color: #94a3b8;
         cursor: not-allowed;
+        box-shadow: none;
+        transform: none;
     }
 
-/* ── MODAL SYSTEM (БЕЗ ГЛОБАЛЕН СКРОЛБАР) ── */
+/* ==========================================================================
+   5. MODAL SYSTEM (ПРОЗОРЕЦ ЗА ДЕТАЙЛИ)
+   ========================================================================== */
 .modal-overlay {
     position: fixed;
     top: 0;
@@ -432,14 +427,6 @@
     display: flex;
     width: 100%;
     height: 100%;
-}
-
-.modal-status {
-    padding: 100px;
-    text-align: center;
-    font-size: 1.1rem;
-    color: #64748b;
-    width: 100%;
 }
 
 /* ── ЛЯВА ЧАСТ: КАРУСЕЛ ── */
@@ -521,7 +508,7 @@
             background: #3498db;
         }
 
-/* ── ДЯСНА ЧАСТ: ИНФОРМАЦИЯ И СЪДЪРЖАНИЕ ── */
+/* ── ДЯСНА ЧАСТ: СЪДЪРЖАНИЕ И КОМПАКТНИ СПЕЦИФИКАЦИИ ── */
 .modal-info-section {
     flex: 1;
     padding: 35px;
@@ -545,17 +532,17 @@
     margin: 0 0 20px 0;
 }
 
-/* ── СТИЛИЗИРАНА И КОМПАКТНА ТАБЛИЦА СЪС СПЕЦИФИКАЦИИ ── */
+/* КОМПАКТНА РЕШЕТКА ЗА ДАННИТЕ */
 .specs-table-grid {
     display: grid;
     grid-template-columns: repeat(2, 1fr);
-    gap: 10px; /* Намален от 12px на 10px за по-прибрана мрежа */
-    margin-bottom: 18px; /* Намалено от 20px */
+    gap: 10px;
+    margin-bottom: 18px;
 }
 
 .spec-item {
     background: #f8fafc;
-    padding: 8px 12px; /* Намален padding от 10px/14px за по-компактен вид */
+    padding: 8px 12px;
     border-radius: 8px;
     display: flex;
     flex-direction: column;
@@ -564,7 +551,7 @@
 }
 
 .spec-label {
-    font-size: 0.72rem; /* Намален леко шрифт за етикета */
+    font-size: 0.72rem;
     font-weight: 700;
     color: #64748b;
     text-transform: uppercase;
@@ -572,12 +559,12 @@
 }
 
 .spec-value {
-    font-size: 0.92rem; /* Компресиран размер на текста за стойностите */
+    font-size: 0.92rem;
     color: #334155;
     font-weight: 600;
 }
 
-/* ── ЛОКАЛЕН ТЪНЪК СКРОЛБАР ЗА ОПИСАНИЕТО ── */
+/* ── ВЪТРЕШЕН ЛОКАЛЕН СКРОЛ ЗА ОПИСАНИЕТО ── */
 .modal-description-box {
     border-top: 1px solid #f1f5f9;
     padding-top: 14px;
@@ -615,10 +602,6 @@
         border-radius: 10px;
     }
 
-        .modal-description-scroll-area::-webkit-scrollbar-thumb:hover {
-            background: #94a3b8;
-        }
-
     .modal-description-scroll-area p {
         font-size: 0.92rem;
         color: #475569;
@@ -627,7 +610,6 @@
         white-space: pre-line;
     }
 
-/* Футер */
 .modal-dates-footer {
     display: flex;
     justify-content: space-between;
@@ -637,7 +619,36 @@
     padding-top: 14px;
 }
 
-/* Адаптивност */
+/* Стейтове за зареждане / системни кутии */
+.cars-loading, .modal-status {
+    text-align: center;
+    font-size: 1.1rem;
+    padding: 80px 0;
+    color: #64748b;
+    font-weight: 500;
+}
+
+.error-box {
+    background: #fde8e8;
+    color: #e74c3c;
+    padding: 20px;
+    border-radius: 8px;
+    margin: 20px 0;
+    font-weight: 500;
+}
+
+.cars-empty-box {
+    text-align: center;
+    padding: 60px 20px;
+    color: #94a3b8;
+}
+
+    .cars-empty-box i {
+        font-size: 2.5rem;
+        margin-bottom: 12px;
+    }
+
+/* Адаптивност за таблети/телефони */
 @media (max-width: 850px) {
     .modal-content {
         height: auto;

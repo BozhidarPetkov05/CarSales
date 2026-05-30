@@ -90,7 +90,9 @@
         color: #2c3e50;
         font-weight: 500;
         margin: 0;
-        word-break: break-all;
+        /* avoid breaking words in the middle; allow breaking long tokens gracefully */
+        word-break: normal;
+        overflow-wrap: anywhere;
     }
 
 /* ── БУТОНИ ЗА ДЕЙСТВИЕ ── */
@@ -319,6 +321,36 @@
     gap: 8px;
 }
 
+/* Ensure selects match inputs visually */
+.modal-form-grid .form-group select {
+    width: 100%;
+    padding: 10px 14px;
+    font-size: 0.9rem;
+    border: 1px solid #dcdde1;
+    border-radius: 6px;
+    outline: none;
+    background-color: #ffffff;
+    color: #475569;
+    box-sizing: border-box;
+    transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.modal-form-grid .form-group select:focus {
+    border-color: #3498db !important;
+    box-shadow: 0 0 0 3px rgba(52, 152, 219, 0.12);
+}
+
+/* Slightly increase spacing between form rows on small screens */
+@media (max-width: 700px) {
+    .modal-form-grid {
+        grid-template-columns: 1fr;
+        gap: 12px;
+    }
+    .settings-layout-card {
+        padding: 18px;
+    }
+}
+
 .modal-status-error {
     background: #fde8e8;
     color: #e74c3c;
@@ -365,3 +397,154 @@
     font-size: 1.1rem;
     color: #7f8c8d;
 }
+
+/* ==========================================================================
+   ── ДОПЪЛНИТЕЛЕН ДИЗАЙН ЗА МОДАЛА ЗА РЕДАКТИРАНЕ НА КОЛА (MODAL 3) ──
+   ========================================================================== */
+
+/* Предефиниране на стила за по-широк модал (заради многото полета за кола) */
+.modal-content-box[style*="max-width: 600px"] {
+    max-width: 650px !important;
+    width: 90% !important;
+    max-height: 90vh;
+    display: flex;
+    flex-direction: column;
+    padding: 24px !important;
+    border-radius: 12px !important;
+    box-shadow: 0 15px 35px rgba(0, 0, 0, 0.2) !important;
+    animation: settingsModalFadeIn 0.3s ease-out;
+}
+
+/* Анимация за плавно изскачане на модала */
+@keyframes settingsModalFadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(-20px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* Скролируема контейнерна зона за формата, за да не бяга извън екрана */
+.modal-content-box form.modal-form {
+    display: flex;
+    flex-direction: column;
+    overflow-y: auto;
+    padding-right: 5px;
+    margin-top: 10px;
+}
+
+    /* Тънък и елегантен скролбар за уебквит браузъри */
+    .modal-content-box form.modal-form::-webkit-scrollbar {
+        width: 6px;
+    }
+
+    .modal-content-box form.modal-form::-webkit-scrollbar-track {
+        background: #f1f1f1;
+        border-radius: 4px;
+    }
+
+    .modal-content-box form.modal-form::-webkit-scrollbar-thumb {
+        background: #cbd5e1;
+        border-radius: 4px;
+    }
+
+        .modal-content-box form.modal-form::-webkit-scrollbar-thumb:hover {
+            background: #94a3b8;
+        }
+
+/* Стилизиране на лейбълите в редактора */
+.modal-form-grid .form-group label {
+    display: block;
+    font-size: 0.8rem;
+    font-weight: 600;
+    color: #34495e;
+    margin-bottom: 6px;
+    text-transform: uppercase;
+    letter-spacing: 0.3px;
+}
+
+/* Унифициране на текстовите полета в Edit Car с тези от целия проект */
+.modal-form-grid .form-group input[type="text"],
+.modal-form-grid .form-group input[type="number"],
+.modal-form-grid .form-group textarea {
+    width: 100%;
+    padding: 10px 14px;
+    font-size: 0.9rem;
+    border: 1px solid #dcdde1;
+    border-radius: 6px;
+    outline: none;
+    background-color: #ffffff;
+    color: #475569;
+    box-sizing: border-box;
+    transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+    /* Ефект при фокус върху поле за въвеждане */
+    .modal-form-grid .form-group input:focus,
+    .modal-form-grid .form-group textarea:focus {
+        border-color: #3498db !important;
+        box-shadow: 0 0 0 3px rgba(52, 152, 219, 0.15);
+        color: #1e293b;
+    }
+
+/* Специфичен дизайн за текстовата област (Description) */
+.modal-form-grid .form-group textarea {
+    font-family: inherit;
+    line-height: 1.5;
+    min-height: 90px;
+}
+
+/* Долна секция с бутони (Cancel / Save Changes) */
+.modal-content-box .modal-buttons {
+    display: flex;
+    justify-content: flex-end;
+    gap: 12px;
+    margin-top: 24px;
+    padding-top: 16px;
+    border-top: 1px solid #f1f5f9;
+}
+
+/* Бутон за отказ (Cancel) */
+.modal-buttons .btn-modal-cancel {
+    background: #f1f5f9;
+    color: #64748b;
+    padding: 10px 20px;
+    font-size: 0.9rem;
+    font-weight: 600;
+    border-radius: 6px;
+    transition: all 0.2s ease;
+}
+
+    .modal-buttons .btn-modal-cancel:hover {
+        background: #e2e8f0;
+        color: #334155;
+    }
+
+/* Бутон за запазване (Save Changes) */
+.modal-buttons .btn-modal-submit {
+    background: #3498db; /* Син цвят в тон с темата на профила */
+    color: white;
+    padding: 10px 24px;
+    font-size: 0.9rem;
+    font-weight: 600;
+    border-radius: 6px;
+    transition: all 0.2s ease;
+    box-shadow: 0 2px 4px rgba(52, 152, 219, 0.2);
+}
+
+    .modal-buttons .btn-modal-submit:hover {
+        background: #2980b9;
+        box-shadow: 0 4px 6px rgba(41, 128, 185, 0.3);
+        transform: translateY(-1px);
+    }
+
+    .modal-buttons .btn-modal-submit:disabled {
+        background: #94a3b8;
+        cursor: not-allowed;
+        transform: none;
+        box-shadow: none;
+    }

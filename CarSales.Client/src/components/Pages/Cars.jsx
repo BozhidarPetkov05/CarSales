@@ -572,7 +572,7 @@ const Cars = () => {
                             <div className="add-form-actions">
                                 <button type="button" className="btn-cancel-add" onClick={() => setIsAddModalOpen(false)}>Cancel</button>
                                 <button type="submit" className="btn-submit-add" disabled={addLoading}>
-                                    {addLoading ? 'Saving...' : 'Publish Offer'}
+                                    {addLoading ? 'Saving...' : 'Publish Car'}
                                 </button>
                             </div>
                         </form>

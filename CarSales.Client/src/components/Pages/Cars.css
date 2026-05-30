@@ -15,6 +15,35 @@
     font-weight: 700;
 }
 
+/* Специфичен бутон за отваряне на Add Car в твоя оригинален стил */
+.btn-add-car-trigger {
+    background: linear-gradient(135deg, #2ecc71, #27ae60);
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 8px;
+    font-size: 0.95rem;
+    font-weight: 700;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    box-shadow: 0 4px 12px rgba(46, 204, 113, 0.2);
+    transition: all 0.2s ease;
+}
+
+    .btn-add-car-trigger:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 6px 16px rgba(46, 204, 113, 0.3);
+    }
+
+.cars-header-wrapper {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+}
+
 /* ==========================================================================
    2. ФИЛТЪР ПАНЕЛ (ГОРНА ЧАСТ)
    ========================================================================== */
@@ -139,7 +168,6 @@
         box-sizing: border-box;
         outline: none;
         text-align: center;
-        /* Твърдо форсиране на чисти цветове */
         background-color: #ffffff !important;
         color: #334155 !important;
         font-size: 0.95rem;
@@ -315,14 +343,12 @@
     font-weight: 500;
 }
 
-    /* Фикс за падащото меню "Cars per page" против тъмни режими */
     .pagination-size-selector select {
         height: 36px;
         padding: 0 10px;
         font-size: 0.9rem;
         border: 1px solid #cbd5e1;
         border-radius: 6px;
-        /* ЗАКЛЮЧЕНА КОРЕКЦИЯ: Бял фон и тъмен текст */
         background-color: #ffffff !important;
         color: #1e293b !important;
         outline: none;
@@ -662,5 +688,234 @@
 
     .modal-gallery-section {
         height: 300px;
+    }
+}
+
+
+/* ==========================================================================
+   6. СПЕЦИФИЧНИ ИЗОЛИРАНИ СТИЛИЗАЦИИ САМО ЗА "ADD CAR" МОДАЛА
+   ========================================================================== */
+
+/* Изолиран фикс за размерите и поведението на модала за добавяне */
+.modal-content.add-car-modal {
+    max-width: 680px !important;
+    height: 85vh !important;
+    display: flex !important;
+    flex-direction: column !important;
+    padding: 30px !important;
+    box-sizing: border-box !important;
+}
+
+.add-modal-header {
+    margin-bottom: 18px;
+    border-bottom: 1px solid #eef2f6;
+    padding-bottom: 12px;
+    text-align: left;
+}
+
+    .add-modal-header h2 {
+        font-size: 1.5rem;
+        color: #1e293b;
+        margin: 0 0 4px 0;
+        font-weight: 700;
+    }
+
+    .add-modal-header p {
+        font-size: 0.85rem;
+        color: #64748b;
+        margin: 0;
+    }
+
+/* Скролируемо тяло само за полетата на формата */
+.add-car-form-scrollable {
+    display: flex !important;
+    flex-direction: column !important;
+    gap: 16px !important;
+    overflow-y: auto !important;
+    flex: 1 !important;
+    padding-right: 8px !important;
+    text-align: left !important;
+}
+
+    .add-car-form-scrollable::-webkit-scrollbar {
+        width: 5px;
+    }
+
+    .add-car-form-scrollable::-webkit-scrollbar-track {
+        background: #f1f5f9;
+    }
+
+    .add-car-form-scrollable::-webkit-scrollbar-thumb {
+        background: #cbd5e1;
+        border-radius: 4px;
+    }
+
+/* Подредба в две равни колони */
+.form-grid-2cols {
+    display: grid !important;
+    grid-template-columns: 1fr 1fr !important;
+    gap: 16px !important;
+    width: 100% !important;
+}
+
+.form-field {
+    display: flex !important;
+    flex-direction: column !important;
+    gap: 6px !important;
+    align-items: flex-start !important;
+    width: 100% !important;
+}
+
+    .form-field.full-width-field {
+        grid-column: span 2 !important;
+    }
+
+    .form-field label {
+        font-size: 0.82rem !important;
+        font-weight: 700 !important;
+        color: #475569 !important;
+        text-transform: uppercase;
+    }
+
+    /* Твърдо форсиране на чист изглед за инпути против тъмни системи */
+    .form-field input[type="text"],
+    .form-field input[type="number"],
+    .form-field input[type="url"],
+    .form-field select,
+    .form-field textarea {
+        width: 100% !important;
+        height: 42px !important;
+        padding: 0 12px !important;
+        border: 1px solid #cbd5e1 !important;
+        border-radius: 8px !important;
+        font-size: 0.95rem !important;
+        background-color: #ffffff !important;
+        color: #334155 !important;
+        outline: none !important;
+        box-sizing: border-box !important;
+    }
+
+    .form-field textarea {
+        height: auto !important;
+        padding: 10px 12px !important;
+    }
+
+        .form-field input:focus,
+        .form-field select:focus,
+        .form-field textarea:focus {
+            border-color: #3498db !important;
+            box-shadow: 0 0 0 3px rgba(52, 152, 219, 0.12) !important;
+        }
+
+/* Компонент за Photo URLs */
+.photo-urls-section {
+    background: #f8fafc !important;
+    padding: 14px !important;
+    border-radius: 10px !important;
+    border: 1px solid #eef2f6 !important;
+    width: 100% !important;
+    box-sizing: border-box !important;
+}
+
+.photo-input-row {
+    display: flex !important;
+    gap: 8px !important;
+    width: 100% !important;
+}
+
+    .photo-input-row input {
+        flex: 1 !important;
+    }
+
+.btn-add-photo-url {
+    background-color: #475569 !important;
+    color: white !important;
+    border: none !important;
+    padding: 0 16px !important;
+    border-radius: 8px !important;
+    font-weight: 600 !important;
+    cursor: pointer !important;
+    height: 42px !important;
+}
+
+.added-photos-badges {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    margin-top: 10px;
+    max-height: 90px;
+    overflow-y: auto;
+    width: 100%;
+}
+
+.photo-badge {
+    background: #ffffff;
+    border: 1px solid #e2e8f0;
+    padding: 6px 12px;
+    border-radius: 6px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.badge-text {
+    font-size: 0.85rem;
+    color: #64748b;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    max-width: 85%;
+}
+
+.btn-remove-badge {
+    background: none;
+    border: none;
+    color: #ef4444;
+    font-size: 1.2rem;
+    font-weight: 700;
+    cursor: pointer;
+}
+
+/* Секция с долните екшън бутони */
+.add-form-actions {
+    margin-top: 14px !important;
+    padding-top: 14px !important;
+    border-top: 1px solid #eef2f6 !important;
+    display: flex !important;
+    justify-content: flex-end !important;
+    gap: 12px !important;
+    width: 100% !important;
+}
+
+.btn-cancel-add {
+    background: #e2e8f0 !important;
+    color: #475569 !important;
+    border: none !important;
+    padding: 0 20px !important;
+    height: 42px !important;
+    border-radius: 8px !important;
+    font-weight: 600 !important;
+    cursor: pointer !important;
+}
+
+.btn-submit-add {
+    background: linear-gradient(135deg, #3498db, #2980b9) !important;
+    color: white !important;
+    border: none !important;
+    padding: 0 24px !important;
+    height: 42px !important;
+    border-radius: 8px !important;
+    font-weight: 700 !important;
+    cursor: pointer !important;
+    box-shadow: 0 4px 12px rgba(52, 152, 219, 0.15) !important;
+}
+
+@media (max-width: 600px) {
+    .form-grid-2cols {
+        grid-template-columns: 1fr !important;
+    }
+
+    .form-field.full-width-field {
+        grid-column: span 1 !important;
     }
 }

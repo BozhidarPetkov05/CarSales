@@ -35,13 +35,78 @@ const Cars = () => {
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
 
-    // Стейтове за модал и карусел
+    // Стейтове за модал ДЕТАЙЛИ
     const [selectedCarId, setSelectedCarId] = useState(null);
     const [modalCarData, setModalCarData] = useState(null);
     const [modalLoading, setModalLoading] = useState(false);
     const [modalError, setModalError] = useState(null);
     const [currentPhotoIndex, setCurrentPhotoIndex] = useState(0);
 
+    // ── СТЙТ ЗА ДИНАМИЧНИТЕ ENUM-И ОТ БЕКЕНДА ──
+    const [carOptions, setCarOptions] = useState({
+        brands: [],
+        fuels: [],
+        transmissions: [],
+        colors: []
+    });
+
+    // Стейтове за новия модал "ADD CAR"
+    const [isAddModalOpen, setIsAddModalOpen] = useState(false);
+    const [addLoading, setAddLoading] = useState(false);
+    const [addError, setAddError] = useState(null);
+
+    // Форма съвпадаща с C# модела ти
+    const [newCar, setNewCar] = useState({
+        brand: '',
+        model: '',
+        year: new Date().getFullYear(),
+        price: '',
+        fuel: '',
+        transmission: '',
+        color: '',
+        power: '',
+        engineVolume: '',
+        description: ''
+    });
+
+    // only file uploads are supported
+    const [photoFiles, setPhotoFiles] = useState([]);
+
+    // ── 1. FETCH НА ENUM-ИТЕ ПРИ ЗАРЕЖДАНЕ ──
+    useEffect(() => {
+        const fetchEnums = async () => {
+            try {
+                const response = await fetch('https://localhost:7125/api/cars/enums/car-options');
+                if (!response.ok) throw new Error('Неуспешно зареждане на опциите за коли.');
+
+                const data = await response.json();
+
+                const normalize = (arr) => (arr || []).map(it => ({ name: it.Name ?? it.name ?? it, value: it.Value ?? it.value ?? it }));
+
+                const brands = normalize(data.Brands || data.brands);
+                const fuels = normalize(data.Fuels || data.fuels);
+                const transmissions = normalize(data.Transmissions || data.transmissions);
+                const colors = normalize(data.Colors || data.colors);
+
+                setCarOptions({ brands, fuels, transmissions, colors });
+
+                setNewCar(prev => ({
+                    ...prev,
+                    brand: brands[0] ? brands[0].value : '',
+                    fuel: fuels[0] ? fuels[0].value : '',
+                    transmission: transmissions[0] ? transmissions[0].value : '',
+                    color: colors[0] ? colors[0].value : ''
+                }));
+
+            } catch (err) {
+                console.error("Грешка при взимане на енуми:", err);
+            }
+        };
+
+        fetchEnums();
+    }, []);
+
+    // ── 2. FETCH НА СПИСЪКА С КОЛИ ──
     const fetchCars = async (filters) => {
         setLoading(true);
         setError(null);
@@ -112,17 +177,107 @@ const Cars = () => {
         fetchCars(appliedFilters);
     }, [appliedFilters]);
 
+    // Хендлъри за форма
+    const handleInputChange = (e) => {
+        const { name, value } = e.target;
+        // for enum fields sent as numeric values convert to number
+        if (['brand', 'fuel', 'transmission', 'color'].includes(name)) {
+            setNewCar(prev => ({ ...prev, [name]: value !== '' ? Number(value) : '' }));
+        } else {
+            setNewCar(prev => ({ ...prev, [name]: value }));
+        }
+    };
+
+    // removed URL-based photo inputs per user request
+
+    const handleAddCarSubmit = async (e) => {
+        e.preventDefault();
+        setAddLoading(true);
+        setAddError(null);
+
+        try {
+            const token = localStorage.getItem('token');
+            const headers = { 'Content-Type': 'application/json' };
+            if (token) headers['Authorization'] = `Bearer ${token}`;
+
+            const payload = {
+                ...newCar,
+                brand: Number(newCar.brand),
+                fuel: Number(newCar.fuel),
+                transmission: Number(newCar.transmission),
+                color: Number(newCar.color),
+                year: parseInt(newCar.year, 10),
+                price: parseFloat(newCar.price),
+                power: parseInt(newCar.power, 10),
+                engineVolume: parseInt(newCar.engineVolume, 10)
+            };
+
+            const response = await fetch('https://localhost:7125/api/cars', {
+                method: 'POST',
+                headers,
+                body: JSON.stringify(payload)
+            });
+
+            if (!response.ok) {
+                const errData = await response.json().catch(() => ({}));
+                throw new Error(errData.message || 'Неуспешно създаване на обява за кола.');
+            }
+
+            // get created car id from response body
+            const created = await response.json().catch(() => null);
+            const createdCarId = created?.id;
+
+            // upload files if any were selected
+            if (createdCarId && photoFiles && photoFiles.length > 0) {
+                try {
+                    const token = localStorage.getItem('token');
+                    for (const file of photoFiles) {
+                        const form = new FormData();
+                        form.append('File', file);
+                        form.append('CarId', createdCarId);
+
+                        const uploadHeaders = {};
+                        if (token) uploadHeaders['Authorization'] = `Bearer ${token}`;
+
+                        await fetch('https://localhost:7125/api/photos', {
+                            method: 'POST',
+                            headers: uploadHeaders,
+                            body: form
+                        });
+                    }
+                } catch (uploadErr) {
+                    console.error('Photo upload failed', uploadErr);
+                }
+            }
+
+            setIsAddModalOpen(false);
+            setNewCar({
+                brand: carOptions.brands[0] ? carOptions.brands[0].value : '',
+                model: '',
+                year: new Date().getFullYear(),
+                price: '',
+                fuel: carOptions.fuels[0] ? carOptions.fuels[0].value : '',
+                transmission: carOptions.transmissions[0] ? carOptions.transmissions[0].value : '',
+                color: carOptions.colors[0] ? carOptions.colors[0].value : '',
+                power: '',
+                engineVolume: '',
+                description: ''
+            });
+            setPhotoFiles([]);
+            fetchCars(appliedFilters);
+        } catch (err) {
+            setAddError(err.message);
+        } finally {
+            setAddLoading(false);
+        }
+    };
+
     const handleApplyFilters = (e) => {
         e.preventDefault();
         setAppliedFilters({
-            brand: searchBrand,
-            model: searchModel,
-            fuel: filterFuel,
-            transmission: filterTransmission,
-            priceMin: priceMin,
-            priceMax: priceMax,
-            page: 1,
-            pageSize: pageSize
+            brand: searchBrand, model: searchModel, fuel: filterFuel,
+            transmission: filterTransmission, priceMin: priceMin, priceMax: priceMax,
+            page: 1, pageSize: pageSize
         });
     };
 
@@ -163,9 +318,15 @@ const Cars = () => {
 
     return (
         <div className="cars-container">
-            <h1 className="cars-main-title">Vehicles Management Panel</h1>
+            {/* ГОРНА СЕКЦИЯ С ТИТЛА И БУТОН ADD CAR */}
+            <div className="cars-header-wrapper">
+                <h1 className="cars-main-title">Vehicles Management Panel</h1>
+                <button className="btn-add-car-trigger" onClick={() => setIsAddModalOpen(true)}>
+                    <i className="fa-solid fa-plus"></i> Add Car
+                </button>
+            </div>
 
-            {/* ФИЛТЪР ПАНЕЛ */}
+            {/* ФИЛТЪР ПАНЕЛ (ИЗПОЛЗВА ДИНАМИЧНИТЕ ЕНУМИ) */}
             <form className="filter-panel" onSubmit={handleApplyFilters}>
                 <div className="filter-group search-input">
                     <label>BRAND</label>
@@ -187,13 +348,7 @@ const Cars = () => {
                     <label>FUEL TYPE</label>
                     <select value={filterFuel} onChange={(e) => setFilterFuel(e.target.value)}>
                         <option value="">All Fuels</option>
-                        <option value="Diesel">Diesel</option>
-                        <option value="Electric">Electric</option>
-                        <option value="Gasoline">Gasoline</option>
-                        <option value="Hybrid">Hybrid</option>
-                        <option value="PlugInHybrid">PlugInHybrid</option>
-                        <option value="LPG">LPG</option>
-                        <option value="Hydrogen">Hydrogen</option>
+                        {carOptions.fuels.map(f => <option key={f.value} value={f.value}>{f.name}</option>)}
                     </select>
                 </div>
 
@@ -201,10 +356,7 @@ const Cars = () => {
                     <label>TRANSMISSION</label>
                     <select value={filterTransmission} onChange={(e) => setFilterTransmission(e.target.value)}>
                         <option value="">All</option>
-                        <option value="Automatic">Automatic</option>
-                        <option value="Manual">Manual</option>
-                        <option value="SemiAutomatic">SemiAutomatic</option>
-                        <option value="CVT">CVT</option>
+                        {carOptions.transmissions.map(t => <option key={t.value} value={t.value}>{t.name}</option>)}
                     </select>
                 </div>
 
@@ -291,7 +443,101 @@ const Cars = () => {
                 </>
             )}
 
-            {/* MODAL ЗА ДЕТАЙЛИ НА КОЛА */}
+            {/* ── MODAL 1: ADD NEW CAR (ИЗПОЛЗВА ДИНАМИЧНИТЕ ЕНУМИ) ── */}
+            {isAddModalOpen && (
+                <div className="modal-overlay" onClick={() => setIsAddModalOpen(false)}>
+                    <div className="modal-content add-car-modal" onClick={(e) => e.stopPropagation()}>
+                        <button className="modal-close-btn" onClick={() => setIsAddModalOpen(false)}>&times;</button>
+
+                        <div className="add-modal-header">
+                            <h2>Create New Vehicle Offer</h2>
+                            <p>Values fetched dynamically from your .NET backend backend enums</p>
+                        </div>
+
+                        {addError && <div className="error-box"><i className="fa-solid fa-circle-exclamation"></i> {addError}</div>}
+
+                        <form onSubmit={handleAddCarSubmit} className="add-car-form-scrollable">
+                            <div className="form-grid-2cols">
+                                <div className="form-field">
+                                    <label>Brand *</label>
+                                    <select name="brand" value={newCar.brand} onChange={handleInputChange} required>
+                                        {carOptions.brands.map(b => <option key={b.value} value={b.value}>{b.name}</option>)}
+                                    </select>
+                                </div>
+
+                                <div className="form-field">
+                                    <label>Model *</label>
+                                    <input type="text" name="model" placeholder="e.g. 320d" value={newCar.model} onChange={handleInputChange} required />
+                                </div>
+
+                                <div className="form-field">
+                                    <label>Year *</label>
+                                    <input type="number" name="year" value={newCar.year} onChange={handleInputChange} required />
+                                </div>
+
+                                <div className="form-field">
+                                    <label>Price (€) *</label>
+                                    <input type="number" step="any" name="price" placeholder="e.g. 15400" value={newCar.price} onChange={handleInputChange} required />
+                                </div>
+
+                                <div className="form-field">
+                                    <label>Fuel *</label>
+                                    <select name="fuel" value={newCar.fuel} onChange={handleInputChange} required>
+                                        {carOptions.fuels.map(f => <option key={f.value} value={f.value}>{f.name}</option>)}
+                                    </select>
+                                </div>
+
+                                <div className="form-field">
+                                    <label>Transmission *</label>
+                                    <select name="transmission" value={newCar.transmission} onChange={handleInputChange} required>
+                                        {carOptions.transmissions.map(t => <option key={t.value} value={t.value}>{t.name}</option>)}
+                                    </select>
+                                </div>
+
+                                <div className="form-field">
+                                    <label>Color *</label>
+                                    <select name="color" value={newCar.color} onChange={handleInputChange} required>
+                                        {carOptions.colors.map(c => <option key={c.value} value={c.value}>{c.name}</option>)}
+                                    </select>
+                                </div>
+
+                                <div className="form-field">
+                                    <label>Power (hp) *</label>
+                                    <input type="number" name="power" placeholder="e.g. 184" value={newCar.power} onChange={handleInputChange} required />
+                                </div>
+
+                                <div className="form-field full-width-field">
+                                    <label>Engine Volume (cm³) *</label>
+                                    <input type="number" name="engineVolume" placeholder="e.g. 1995" value={newCar.engineVolume} onChange={handleInputChange} required />
+                                </div>
+                            </div>
+
+                            {/* СЕКЦИЯ ЗА СНИМКИ (PHOTO URLS) */}
+                            <div className="form-field photo-urls-section">
+                                <label>Vehicle Images</label>
+                                <div className="photo-input-row file-upload-row">
+                                    <label className="file-upload-label">Select image files to upload:</label>
+                                    <input type="file" accept="image/*" multiple onChange={(e) => setPhotoFiles(Array.from(e.target.files || []))} />
+                                </div>
+                            </div>
+
+                            <div className="form-field">
+                                <label>Seller Description</label>
+                                <textarea name="description" rows="3" placeholder="Describe technical state, extras, history..." value={newCar.description} onChange={handleInputChange}></textarea>
+                            </div>
+
+                            <div className="add-form-actions">
+                                <button type="button" className="btn-cancel-add" onClick={() => setIsAddModalOpen(false)}>Cancel</button>
+                                <button type="submit" className="btn-submit-add" disabled={addLoading}>
+                                    {addLoading ? 'Saving Offer...' : 'Publish Advertisement'}
+                                </button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            )}
+
+            {/* MODAL 2: ДЕТАЙЛИ НА КОЛА */}
             {selectedCarId && (
                 <div className="modal-overlay" onClick={closeModel}>
                     <div className="modal-content" onClick={(e) => e.stopPropagation()}>
@@ -302,16 +548,10 @@ const Cars = () => {
 
                         {modalCarData && (
                             <div className="modal-body">
-
-                                {/* ЛЯВА ЧАСТ: Карусел със снимки */}
                                 <div className="modal-gallery-section">
                                     {modalCarData.photoUrls && modalCarData.photoUrls.length > 0 ? (
                                         <div className="carousel-container">
-                                            <img
-                                                src={modalCarData.photoUrls[currentPhotoIndex]}
-                                                alt="Vehicle detail view"
-                                                className="carousel-image"
-                                            />
+                                            <img src={modalCarData.photoUrls[currentPhotoIndex]} alt="Vehicle detail view" className="carousel-image" />
                                             {modalCarData.photoUrls.length > 1 && (
                                                 <>
                                                     <button type="button" className="carousel-btn prev" onClick={prevPhoto}>
@@ -322,11 +562,7 @@ const Cars = () => {
                                                     </button>
                                                     <div className="carousel-dots">
                                                         {modalCarData.photoUrls.map((_, index) => (
-                                                            <span
-                                                                key={index}
-                                                                className={`dot ${index === currentPhotoIndex ? 'active' : ''}`}
-                                                                onClick={() => setCurrentPhotoIndex(index)}
-                                                            />
+                                                            <span key={index} className={`dot ${index === currentPhotoIndex ? 'active' : ''}`} onClick={() => setCurrentPhotoIndex(index)} />
                                                         ))}
                                                     </div>
                                                 </>
@@ -340,7 +576,6 @@ const Cars = () => {
                                     )}
                                 </div>
 
-                                {/* ДЯСНА ЧАСТ: Изчерпателни Спецификации */}
                                 <div className="modal-info-section">
                                     <div className="modal-header-info">
                                         <h2>{modalCarData.brand} {modalCarData.model}</h2>
@@ -388,7 +623,6 @@ const Cars = () => {
                                         <span><strong>Modified:</strong> {formatDate(modalCarData.lastChanged)}</span>
                                     </div>
                                 </div>
-
                             </div>
                         )}
                     </div>

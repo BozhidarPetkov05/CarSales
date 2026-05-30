@@ -46,7 +46,7 @@ namespace CarSales.Controllers
                         await fs.FlushAsync();
                     }
 
-                    _photoService.AddAsync(photo);
+                    await _photoService.AddAsync(photo);
                     return Ok(new { message = "Upload done.", success = true, photo = photo });
                 }
                 else

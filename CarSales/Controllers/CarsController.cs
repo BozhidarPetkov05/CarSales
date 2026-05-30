@@ -2,6 +2,7 @@
 using CarSales.Contracts.DTOs.Response.Car;
 using CarSales.Contracts.Interfaces;
 using CarSales.Data.Entities;
+using CarSales.Data.Enums;
 using CarSales.Exceptions;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -48,10 +49,16 @@ namespace CarSales.Controllers
         [HttpPost]
         public async Task<IActionResult> Post([FromBody] CarRequest request)
         {
+            if (request is null)
+            {
+                return BadRequest(new { message = "Invalid car data provided." });
+            }
+
             Guid loggedUserId = Guid.Parse(User.FindFirstValue("loggedUserId"));
             Car car = _carService.CreateCar(request, loggedUserId);
             await _carService.AddAsync(car);
-            return Created();
+            // return 201 with created car id so the client can upload photos linked to this car
+            return CreatedAtAction(nameof(Get), new { id = car.Id }, new { id = car.Id });
         }
 
         [Authorize]
@@ -97,6 +104,26 @@ namespace CarSales.Controllers
             CarUpdatedResponse response = _carService.MapToCarUpdatedResponse(car);
             await _carService.DeleteAsync(car);
             return Ok(response);
+        }
+
+        [HttpGet("enums/car-options")]
+        public IActionResult GetCarOptions()
+        {
+            // return both name and numeric value for each enum entry so client can post numeric values
+            var brands = Enum.GetValues(typeof(BrandEnum)).Cast<BrandEnum>().Select(e => new { Name = e.ToString(), Value = (int)e }).ToArray();
+            var fuels = Enum.GetValues(typeof(FuelEnum)).Cast<FuelEnum>().Select(e => new { Name = e.ToString(), Value = (int)e }).ToArray();
+            var transmissions = Enum.GetValues(typeof(TransmissionEnum)).Cast<TransmissionEnum>().Select(e => new { Name = e.ToString(), Value = (int)e }).ToArray();
+            var colors = Enum.GetValues(typeof(ColorEnum)).Cast<ColorEnum>().Select(e => new { Name = e.ToString(), Value = (int)e }).ToArray();
+
+            var options = new
+            {
+                Brands = brands,
+                Fuels = fuels,
+                Transmissions = transmissions,
+                Colors = colors
+            };
+
+            return Ok(options);
         }
     }
 }

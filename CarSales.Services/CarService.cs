@@ -1,4 +1,5 @@
-﻿using CarSales.Contracts.DTOs.Request.Car;
+﻿using System;
+using CarSales.Contracts.DTOs.Request.Car;
 using CarSales.Contracts.DTOs.Response.Car;
 using CarSales.Contracts.Interfaces;
 using CarSales.Data.Entities;
@@ -57,7 +58,7 @@ namespace CarSales.Services
                 Price = c.Price,
                 Fuel = c.Fuel.ToString(),
                 CreatedAt = c.CreatedAt,
-                MainPhotoUrl = c.Photos.FirstOrDefault(p => p.IsMain).ImagePath,
+                MainPhotoUrl = c.Photos != null && c.Photos.Any() ? c.Photos.OrderBy(p => p.ImageOrder).FirstOrDefault()?.ImagePath : null,
             }).ToList();
         }
         
@@ -116,7 +117,7 @@ namespace CarSales.Services
                     Price = c.Price,
                     Fuel = c.Fuel.ToString(),
                     CreatedAt = c.CreatedAt,
-                    MainPhotoUrl = c.Photos.FirstOrDefault(p => p.IsMain).ImagePath
+                    MainPhotoUrl = c.Photos != null && c.Photos.Any() ? c.Photos.OrderBy(p => p.ImageOrder).Select(p => p.ImagePath).FirstOrDefault() : null
                 }).ToListAsync();
 
             return new CarPageResponse
@@ -152,12 +153,17 @@ namespace CarSales.Services
                 Description = car.Description,
                 CreatedAt = car.CreatedAt,
                 LastChanged = car.LastChange,
-                PhotoUrls = car.Photos.Select(p => p.ImagePath).ToList(),
+                PhotoUrls = car.Photos != null ? car.Photos.OrderBy(p => p.ImageOrder).Select(p => p.ImagePath).ToList() : new List<string>(),
             };
         }
 
         public Car CreateCar(CarRequest request, Guid id)
         {
+            if (request == null)
+            {
+                throw new ArgumentNullException(nameof(request));
+            }
+
             DateTime creationTime = DateTime.UtcNow;
             return new Car
             {

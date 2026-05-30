@@ -69,7 +69,7 @@ const Cars = () => {
         description: ''
     });
 
-    // only file uploads are supported
+    // Само файлови обекти за снимките
     const [photoFiles, setPhotoFiles] = useState([]);
 
     // ── 1. FETCH НА ENUM-ИТЕ ПРИ ЗАРЕЖДАНЕ ──
@@ -81,7 +81,10 @@ const Cars = () => {
 
                 const data = await response.json();
 
-                const normalize = (arr) => (arr || []).map(it => ({ name: it.Name ?? it.name ?? it, value: it.Value ?? it.value ?? it }));
+                const normalize = (arr) => (arr || []).map(it => ({
+                    name: it.Name ?? it.name ?? it,
+                    value: it.Value ?? it.value ?? it
+                }));
 
                 const brands = normalize(data.Brands || data.brands);
                 const fuels = normalize(data.Fuels || data.fuels);
@@ -90,6 +93,7 @@ const Cars = () => {
 
                 setCarOptions({ brands, fuels, transmissions, colors });
 
+                // За модала ADD CAR ни трябват числовите стойности (values) за дефолтни селекции
                 setNewCar(prev => ({
                     ...prev,
                     brand: brands[0] ? brands[0].value : '',
@@ -106,7 +110,7 @@ const Cars = () => {
         fetchEnums();
     }, []);
 
-    // ── 2. FETCH НА СПИСЪКА С КОЛИ ──
+    // ── 2. FETCH НА СПИСЪКА С КОЛИ (С ТЕКСТОВИ PARAMETERS ЗА FUEL И TRANSMISSION) ──
     const fetchCars = async (filters) => {
         setLoading(true);
         setError(null);
@@ -119,8 +123,8 @@ const Cars = () => {
 
             if (filters.brand) queryParams.append('brand', filters.brand);
             if (filters.model) queryParams.append('model', filters.model);
-            if (filters.fuel) queryParams.append('fuel', filters.fuel);
-            if (filters.transmission) queryParams.append('transmission', filters.transmission);
+            if (filters.fuel) queryParams.append('fuel', filters.fuel); // Тук вече влиза текст (напр. "Gasoline")
+            if (filters.transmission) queryParams.append('transmission', filters.transmission); // Тук също (напр. "Automatic")
             if (filters.priceMin) queryParams.append('priceMin', filters.priceMin);
             if (filters.priceMax) queryParams.append('priceMax', filters.priceMax);
 
@@ -177,18 +181,15 @@ const Cars = () => {
         fetchCars(appliedFilters);
     }, [appliedFilters]);
 
-    // Хендлъри за форма
+    // Хендлъри за формата за създаване (Запазваме конвертирането в числа за POST обекта)
     const handleInputChange = (e) => {
         const { name, value } = e.target;
-        // for enum fields sent as numeric values convert to number
         if (['brand', 'fuel', 'transmission', 'color'].includes(name)) {
             setNewCar(prev => ({ ...prev, [name]: value !== '' ? Number(value) : '' }));
         } else {
             setNewCar(prev => ({ ...prev, [name]: value }));
         }
     };
-
-    // removed URL-based photo inputs per user request
 
     const handleAddCarSubmit = async (e) => {
         e.preventDefault();
@@ -223,11 +224,9 @@ const Cars = () => {
                 throw new Error(errData.message || 'Неуспешно създаване на обява за кола.');
             }
 
-            // get created car id from response body
             const created = await response.json().catch(() => null);
             const createdCarId = created?.id;
 
-            // upload files if any were selected
             if (createdCarId && photoFiles && photoFiles.length > 0) {
                 try {
                     const token = localStorage.getItem('token');
@@ -275,9 +274,14 @@ const Cars = () => {
     const handleApplyFilters = (e) => {
         e.preventDefault();
         setAppliedFilters({
-            brand: searchBrand, model: searchModel, fuel: filterFuel,
-            transmission: filterTransmission, priceMin: priceMin, priceMax: priceMax,
-            page: 1, pageSize: pageSize
+            brand: searchBrand,
+            model: searchModel,
+            fuel: filterFuel,          // Сега тук предава текстово име
+            transmission: filterTransmission, // Тук също предава текстово име
+            priceMin: priceMin,
+            priceMax: priceMax,
+            page: 1,
+            pageSize: pageSize
         });
     };
 
@@ -318,7 +322,6 @@ const Cars = () => {
 
     return (
         <div className="cars-container">
-            {/* ГОРНА СЕКЦИЯ С ТИТЛА И БУТОН ADD CAR */}
             <div className="cars-header-wrapper">
                 <h1 className="cars-main-title">Vehicles Management Panel</h1>
                 <button className="btn-add-car-trigger" onClick={() => setIsAddModalOpen(true)}>
@@ -326,7 +329,7 @@ const Cars = () => {
                 </button>
             </div>
 
-            {/* ФИЛТЪР ПАНЕЛ (ИЗПОЛЗВА ДИНАМИЧНИТЕ ЕНУМИ) */}
+            {/* ФИЛТЪР ПАНЕЛ (ИЗПОЛЗВА f.name И t.name ЗА СТОЙНОСТИ) */}
             <form className="filter-panel" onSubmit={handleApplyFilters}>
                 <div className="filter-group search-input">
                     <label>BRAND</label>
@@ -348,7 +351,7 @@ const Cars = () => {
                     <label>FUEL TYPE</label>
                     <select value={filterFuel} onChange={(e) => setFilterFuel(e.target.value)}>
                         <option value="">All Fuels</option>
-                        {carOptions.fuels.map(f => <option key={f.value} value={f.value}>{f.name}</option>)}
+                        {carOptions.fuels.map(f => <option key={f.value} value={f.name}>{f.name}</option>)}
                     </select>
                 </div>
 
@@ -356,7 +359,7 @@ const Cars = () => {
                     <label>TRANSMISSION</label>
                     <select value={filterTransmission} onChange={(e) => setFilterTransmission(e.target.value)}>
                         <option value="">All</option>
-                        {carOptions.transmissions.map(t => <option key={t.value} value={t.value}>{t.name}</option>)}
+                        {carOptions.transmissions.map(t => <option key={t.value} value={t.name}>{t.name}</option>)}
                     </select>
                 </div>
 
@@ -443,7 +446,7 @@ const Cars = () => {
                 </>
             )}
 
-            {/* ── MODAL 1: ADD NEW CAR (ИЗПОЛЗВА ДИНАМИЧНИТЕ ЕНУМИ) ── */}
+            {/* MODAL 1: ADD NEW CAR (ИЗПОЛЗВА ЧИСЛОВИТЕ СТОЙНОСТИ - b.value, f.value) */}
             {isAddModalOpen && (
                 <div className="modal-overlay" onClick={() => setIsAddModalOpen(false)}>
                     <div className="modal-content add-car-modal" onClick={(e) => e.stopPropagation()}>
@@ -451,7 +454,7 @@ const Cars = () => {
 
                         <div className="add-modal-header">
                             <h2>Create New Vehicle Offer</h2>
-                            <p>Values fetched dynamically from your .NET backend backend enums</p>
+                            <p>Values fetched dynamically from your .NET backend enums</p>
                         </div>
 
                         {addError && <div className="error-box"><i className="fa-solid fa-circle-exclamation"></i> {addError}</div>}
@@ -467,7 +470,7 @@ const Cars = () => {
 
                                 <div className="form-field">
                                     <label>Model *</label>
-                                    <input type="text" name="model" placeholder="e.g. 320d" value={newCar.model} onChange={handleInputChange} required />
+                                    <input type="text" name="model" value={newCar.model} onChange={handleInputChange} required />
                                 </div>
 
                                 <div className="form-field">
@@ -477,7 +480,7 @@ const Cars = () => {
 
                                 <div className="form-field">
                                     <label>Price (€) *</label>
-                                    <input type="number" step="any" name="price" placeholder="e.g. 15400" value={newCar.price} onChange={handleInputChange} required />
+                                    <input type="number" step="any" name="price" value={newCar.price} onChange={handleInputChange} required />
                                 </div>
 
                                 <div className="form-field">
@@ -503,16 +506,15 @@ const Cars = () => {
 
                                 <div className="form-field">
                                     <label>Power (hp) *</label>
-                                    <input type="number" name="power" placeholder="e.g. 184" value={newCar.power} onChange={handleInputChange} required />
+                                    <input type="number" name="power" value={newCar.power} onChange={handleInputChange} required />
                                 </div>
 
                                 <div className="form-field full-width-field">
                                     <label>Engine Volume (cm³) *</label>
-                                    <input type="number" name="engineVolume" placeholder="e.g. 1995" value={newCar.engineVolume} onChange={handleInputChange} required />
+                                    <input type="number" name="engineVolume" value={newCar.engineVolume} onChange={handleInputChange} required />
                                 </div>
                             </div>
 
-                            {/* СЕКЦИЯ ЗА СНИМКИ (PHOTO URLS) */}
                             <div className="form-field photo-urls-section">
                                 <label>Vehicle Images</label>
                                 <div className="photo-input-row file-upload-row">
@@ -523,7 +525,7 @@ const Cars = () => {
 
                             <div className="form-field">
                                 <label>Seller Description</label>
-                                <textarea name="description" rows="3" placeholder="Describe technical state, extras, history..." value={newCar.description} onChange={handleInputChange}></textarea>
+                                <textarea name="description" rows="3" value={newCar.description} onChange={handleInputChange}></textarea>
                             </div>
 
                             <div className="add-form-actions">

@@ -1,8 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import './Cars.css';
+import { getAdminStatus } from '../../utils/jwtHelper';
 
 const Cars = () => {
-    // Стейтове за филтри и списък
+    // Filter and list states
     const [searchBrand, setSearchBrand] = useState('');
     const [searchModel, setSearchModel] = useState('');
     const [filterFuel, setFilterFuel] = useState('');
@@ -35,14 +36,17 @@ const Cars = () => {
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
 
-    // Стейтове за модал ДЕТАЙЛИ
+    // Details modal states
     const [selectedCarId, setSelectedCarId] = useState(null);
     const [modalCarData, setModalCarData] = useState(null);
     const [modalLoading, setModalLoading] = useState(false);
     const [modalError, setModalError] = useState(null);
     const [currentPhotoIndex, setCurrentPhotoIndex] = useState(0);
 
-    // ── СТЙТ ЗА ДИНАМИЧНИТЕ ENUM-И ОТ БЕКЕНДА ──
+    // Delete handling state
+    const [deleteLoading, setDeleteLoading] = useState(false);
+
+    // Dynamic Options (Enums) from backend
     const [carOptions, setCarOptions] = useState({
         brands: [],
         fuels: [],
@@ -50,12 +54,12 @@ const Cars = () => {
         colors: []
     });
 
-    // Стейтове за новия модал "ADD CAR"
+    // Add Car modal states
     const [isAddModalOpen, setIsAddModalOpen] = useState(false);
     const [addLoading, setAddLoading] = useState(false);
     const [addError, setAddError] = useState(null);
 
-    // Форма съвпадаща с C# модела ти
+    // Form state
     const [newCar, setNewCar] = useState({
         brand: '',
         model: '',
@@ -69,15 +73,15 @@ const Cars = () => {
         description: ''
     });
 
-    // Само файлови обекти за снимките
+    // Photo files upload state
     const [photoFiles, setPhotoFiles] = useState([]);
 
-    // ── 1. FETCH НА ENUM-ИТЕ ПРИ ЗАРЕЖДАНЕ ──
+    // ── 1. FETCH ENUMS ON LOAD ──
     useEffect(() => {
         const fetchEnums = async () => {
             try {
                 const response = await fetch('https://localhost:7125/api/cars/enums/car-options');
-                if (!response.ok) throw new Error('Неуспешно зареждане на опциите за коли.');
+                if (!response.ok) throw new Error('Failed to load vehicle options.');
 
                 const data = await response.json();
 
@@ -93,24 +97,15 @@ const Cars = () => {
 
                 setCarOptions({ brands, fuels, transmissions, colors });
 
-                // За модала ADD CAR ни трябват числовите стойности (values) за дефолтни селекции
-                setNewCar(prev => ({
-                    ...prev,
-                    brand: brands[0] ? brands[0].value : '',
-                    fuel: fuels[0] ? fuels[0].value : '',
-                    transmission: transmissions[0] ? transmissions[0].value : '',
-                    color: colors[0] ? colors[0].value : ''
-                }));
-
             } catch (err) {
-                console.error("Грешка при взимане на енуми:", err);
+                console.error("Error fetching options:", err);
             }
         };
 
         fetchEnums();
     }, []);
 
-    // ── 2. FETCH НА СПИСЪКА С КОЛИ (С ТЕКСТОВИ PARAMETERS ЗА FUEL И TRANSMISSION) ──
+    // ── 2. FETCH VEHICLE LIST ──
     const fetchCars = async (filters) => {
         setLoading(true);
         setError(null);
@@ -123,8 +118,8 @@ const Cars = () => {
 
             if (filters.brand) queryParams.append('brand', filters.brand);
             if (filters.model) queryParams.append('model', filters.model);
-            if (filters.fuel) queryParams.append('fuel', filters.fuel); // Тук вече влиза текст (напр. "Gasoline")
-            if (filters.transmission) queryParams.append('transmission', filters.transmission); // Тук също (напр. "Automatic")
+            if (filters.fuel) queryParams.append('fuel', filters.fuel);
+            if (filters.transmission) queryParams.append('transmission', filters.transmission);
             if (filters.priceMin) queryParams.append('priceMin', filters.priceMin);
             if (filters.priceMax) queryParams.append('priceMax', filters.priceMax);
 
@@ -132,7 +127,7 @@ const Cars = () => {
             if (token) headers['Authorization'] = `Bearer ${token}`;
 
             const response = await fetch(`https://localhost:7125/api/cars?${queryParams.toString()}`, { headers });
-            if (response.status === 401) throw new Error('Сесията изтече. Моля, логнете се отново.');
+            if (response.status === 401) throw new Error('Session expired. Please log in again.');
             if (!response.ok) throw new Error('Failed to fetch cars database.');
 
             const data = await response.json();
@@ -165,8 +160,8 @@ const Cars = () => {
             if (token) headers['Authorization'] = `Bearer ${token}`;
 
             const response = await fetch(`https://localhost:7125/api/cars/${id}`, { method: 'GET', headers });
-            if (response.status === 401) throw new Error('Сесията изтече. Логнете се отново.');
-            if (!response.ok) throw new Error('Неуспешно зареждане на детайлите за колата.');
+            if (response.status === 401) throw new Error('Session expired. Please log in again.');
+            if (!response.ok) throw new Error('Failed to load car details.');
 
             const data = await response.json();
             setModalCarData(data);
@@ -177,11 +172,46 @@ const Cars = () => {
         }
     };
 
+    // ── 3. DELETE CAR OFFER ──
+    const handleDeleteCar = async (id) => {
+        if (!window.confirm("Are you sure you want to permanently delete this car?")) {
+            return;
+        }
+
+        setDeleteLoading(true);
+        setModalError(null);
+
+        try {
+            const token = localStorage.getItem('token');
+            const headers = { 'Content-Type': 'application/json' };
+            if (token) headers['Authorization'] = `Bearer ${token}`;
+
+            const response = await fetch(`https://localhost:7125/api/cars/${id}`, {
+                method: 'DELETE',
+                headers
+            });
+
+            if (!response.ok) {
+                const errData = await response.json().catch(() => ({}));
+                throw new Error(errData.message || 'Failed to delete the listing.');
+            }
+
+            closeModel();
+            fetchCars(appliedFilters);
+            alert('The car listing has been successfully deleted.');
+
+        } catch (err) {
+            alert(err.message);
+        } finally {
+            setDeleteLoading(false);
+        }
+    };
+
     useEffect(() => {
         fetchCars(appliedFilters);
     }, [appliedFilters]);
 
-    // Хендлъри за формата за създаване (Запазваме конвертирането в числа за POST обекта)
+    // Form inputs change handlers
     const handleInputChange = (e) => {
         const { name, value } = e.target;
         if (['brand', 'fuel', 'transmission', 'color'].includes(name)) {
@@ -221,7 +251,13 @@ const Cars = () => {
 
             if (!response.ok) {
                 const errData = await response.json().catch(() => ({}));
-                throw new Error(errData.message || 'Неуспешно създаване на обява за кола.');
+
+                if (errData.errors) {
+                    const validationMessages = Object.values(errData.errors).flat().join(' | ');
+                    throw new Error(validationMessages);
+                }
+
+                throw new Error(errData.message || 'Failed to create car listing.');
             }
 
             const created = await response.json().catch(() => null);
@@ -251,13 +287,13 @@ const Cars = () => {
 
             setIsAddModalOpen(false);
             setNewCar({
-                brand: carOptions.brands[0] ? carOptions.brands[0].value : '',
+                brand: '',
                 model: '',
                 year: new Date().getFullYear(),
                 price: '',
-                fuel: carOptions.fuels[0] ? carOptions.fuels[0].value : '',
-                transmission: carOptions.transmissions[0] ? carOptions.transmissions[0].value : '',
-                color: carOptions.colors[0] ? carOptions.colors[0].value : '',
+                fuel: '',
+                transmission: '',
+                color: '',
                 power: '',
                 engineVolume: '',
                 description: ''
@@ -276,8 +312,8 @@ const Cars = () => {
         setAppliedFilters({
             brand: searchBrand,
             model: searchModel,
-            fuel: filterFuel,          // Сега тук предава текстово име
-            transmission: filterTransmission, // Тук също предава текстово име
+            fuel: filterFuel,
+            transmission: filterTransmission,
             priceMin: priceMin,
             priceMax: priceMax,
             page: 1,
@@ -329,7 +365,7 @@ const Cars = () => {
                 </button>
             </div>
 
-            {/* ФИЛТЪР ПАНЕЛ (ИЗПОЛЗВА f.name И t.name ЗА СТОЙНОСТИ) */}
+            {/* FILTER PANEL */}
             <form className="filter-panel" onSubmit={handleApplyFilters}>
                 <div className="filter-group search-input">
                     <label>BRAND</label>
@@ -377,7 +413,7 @@ const Cars = () => {
                 </button>
             </form>
 
-            {/* ГЛАВНИ РЕЗУЛТАТИ */}
+            {/* RESULTS GRID */}
             {error && <div className="error-box"><i className="fa-solid fa-triangle-exclamation"></i> Error: {error}</div>}
 
             {loading ? (
@@ -405,20 +441,22 @@ const Cars = () => {
 
                                 <div className="car-card-details">
                                     <h3 className="car-card-title">{car.brand} {car.model}</h3>
-                                    <div className="car-card-bottom-section">
+                                    <div className="car-card-bottom-section" style={{ display: 'flex', justifyContent: 'space-between', width: '100%' }}>
                                         <div className="car-card-specs-left">
                                             <p className="car-info-row"><i className="fa-solid fa-gas-pump"></i> {car.fuel}</p>
                                             <p className="car-info-row"><i className="fa-solid fa-calendar-days"></i> {car.year}</p>
                                             <span className="car-card-created-at"><i className="fa-solid fa-clock"></i> {formatDate(car.createdAt)}</span>
                                         </div>
-                                        <p className="car-card-price">{car.price.toLocaleString('de-DE')} €</p>
+                                        <div className="car-card-actions-right" style={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-end', justifyContent: 'center', minWidth: '100px' }}>
+                                            <p className="car-card-price" style={{ margin: 0, fontWeight: 'bold' }}>{car.price.toLocaleString('de-DE')} €</p>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
                         ))}
                     </div>
 
-                    {/* ПАГИНАЦИЯ */}
+                    {/* PAGINATION */}
                     <div className="pagination-footer">
                         <span className="pagination-info">
                             Total: <strong>{carsData.totalCount}</strong> cars | Page <strong>{carsData.page}</strong> of <strong>{carsData.totalPages}</strong>
@@ -446,7 +484,7 @@ const Cars = () => {
                 </>
             )}
 
-            {/* MODAL 1: ADD NEW CAR (ИЗПОЛЗВА ЧИСЛОВИТЕ СТОЙНОСТИ - b.value, f.value) */}
+            {/* MODAL 1: ADD NEW CAR */}
             {isAddModalOpen && (
                 <div className="modal-overlay" onClick={() => setIsAddModalOpen(false)}>
                     <div className="modal-content add-car-modal" onClick={(e) => e.stopPropagation()}>
@@ -454,7 +492,6 @@ const Cars = () => {
 
                         <div className="add-modal-header">
                             <h2>Create New Vehicle Offer</h2>
-                            <p>Values fetched dynamically from your .NET backend enums</p>
                         </div>
 
                         {addError && <div className="error-box"><i className="fa-solid fa-circle-exclamation"></i> {addError}</div>}
@@ -464,28 +501,30 @@ const Cars = () => {
                                 <div className="form-field">
                                     <label>Brand *</label>
                                     <select name="brand" value={newCar.brand} onChange={handleInputChange} required>
+                                        <option value="">-- Select Brand --</option>
                                         {carOptions.brands.map(b => <option key={b.value} value={b.value}>{b.name}</option>)}
                                     </select>
                                 </div>
 
                                 <div className="form-field">
                                     <label>Model *</label>
-                                    <input type="text" name="model" value={newCar.model} onChange={handleInputChange} required />
+                                    <input type="text" name="model" value={newCar.model} onChange={handleInputChange} minLength={2} maxLength={30} required />
                                 </div>
 
                                 <div className="form-field">
                                     <label>Year *</label>
-                                    <input type="number" name="year" value={newCar.year} onChange={handleInputChange} required />
+                                    <input type="number" name="year" value={newCar.year} onChange={handleInputChange} min={1800} max={2026} required />
                                 </div>
 
                                 <div className="form-field">
                                     <label>Price (€) *</label>
-                                    <input type="number" step="any" name="price" value={newCar.price} onChange={handleInputChange} required />
+                                    <input type="number" step="any" name="price" value={newCar.price} onChange={handleInputChange} min={1} max={50000000} required />
                                 </div>
 
                                 <div className="form-field">
                                     <label>Fuel *</label>
                                     <select name="fuel" value={newCar.fuel} onChange={handleInputChange} required>
+                                        <option value="">-- Select Fuel --</option>
                                         {carOptions.fuels.map(f => <option key={f.value} value={f.value}>{f.name}</option>)}
                                     </select>
                                 </div>
@@ -493,6 +532,7 @@ const Cars = () => {
                                 <div className="form-field">
                                     <label>Transmission *</label>
                                     <select name="transmission" value={newCar.transmission} onChange={handleInputChange} required>
+                                        <option value="">-- Select Transmission --</option>
                                         {carOptions.transmissions.map(t => <option key={t.value} value={t.value}>{t.name}</option>)}
                                     </select>
                                 </div>
@@ -500,18 +540,19 @@ const Cars = () => {
                                 <div className="form-field">
                                     <label>Color *</label>
                                     <select name="color" value={newCar.color} onChange={handleInputChange} required>
+                                        <option value="">-- Select Color --</option>
                                         {carOptions.colors.map(c => <option key={c.value} value={c.value}>{c.name}</option>)}
                                     </select>
                                 </div>
 
                                 <div className="form-field">
                                     <label>Power (hp) *</label>
-                                    <input type="number" name="power" value={newCar.power} onChange={handleInputChange} required />
+                                    <input type="number" name="power" value={newCar.power} onChange={handleInputChange} min={1} required />
                                 </div>
 
                                 <div className="form-field full-width-field">
                                     <label>Engine Volume (cm³) *</label>
-                                    <input type="number" name="engineVolume" value={newCar.engineVolume} onChange={handleInputChange} required />
+                                    <input type="number" name="engineVolume" value={newCar.engineVolume} onChange={handleInputChange} min={1} required />
                                 </div>
                             </div>
 
@@ -524,14 +565,14 @@ const Cars = () => {
                             </div>
 
                             <div className="form-field">
-                                <label>Seller Description</label>
+                                <label>Description</label>
                                 <textarea name="description" rows="3" value={newCar.description} onChange={handleInputChange}></textarea>
                             </div>
 
                             <div className="add-form-actions">
                                 <button type="button" className="btn-cancel-add" onClick={() => setIsAddModalOpen(false)}>Cancel</button>
                                 <button type="submit" className="btn-submit-add" disabled={addLoading}>
-                                    {addLoading ? 'Saving Offer...' : 'Publish Advertisement'}
+                                    {addLoading ? 'Saving...' : 'Publish Offer'}
                                 </button>
                             </div>
                         </form>
@@ -539,7 +580,7 @@ const Cars = () => {
                 </div>
             )}
 
-            {/* MODAL 2: ДЕТАЙЛИ НА КОЛА */}
+            {/* MODAL 2: CAR DETAILS */}
             {selectedCarId && (
                 <div className="modal-overlay" onClick={closeModel}>
                     <div className="modal-content" onClick={(e) => e.stopPropagation()}>
@@ -613,7 +654,7 @@ const Cars = () => {
 
                                     {modalCarData.description && (
                                         <div className="modal-description-box">
-                                            <h3>Seller Description</h3>
+                                            <h3>Description</h3>
                                             <div className="modal-description-scroll-area">
                                                 <p>{modalCarData.description}</p>
                                             </div>
@@ -624,6 +665,38 @@ const Cars = () => {
                                         <span><strong>Published:</strong> {formatDate(modalCarData.createdAt)}</span>
                                         <span><strong>Modified:</strong> {formatDate(modalCarData.lastChanged)}</span>
                                     </div>
+
+                                    {/* CLEAN DESIGN FOR THE DELETE BUTTON INSIDE THE MODAL */}
+                                    {getAdminStatus() && (
+                                        <div className="admin-actions-wrapper" style={{ marginTop: '25px', paddingTop: '15px', borderTop: '1px solid #eee' }}>
+                                            <button
+                                                type="button"
+                                                className="btn-delete-car"
+                                                disabled={deleteLoading}
+                                                onClick={() => handleDeleteCar(modalCarData.id)}
+                                                style={{
+                                                    backgroundColor: '#dc3545',
+                                                    color: 'white',
+                                                    border: 'none',
+                                                    padding: '12px 20px',
+                                                    borderRadius: '6px',
+                                                    cursor: 'pointer',
+                                                    fontWeight: '600',
+                                                    fontSize: '14px',
+                                                    width: '100%',
+                                                    display: 'flex',
+                                                    justifyContent: 'center',
+                                                    alignItems: 'center',
+                                                    gap: '8px',
+                                                    boxShadow: '0 2px 4px rgba(220, 53, 69, 0.2)',
+                                                    transition: 'background-color 0.2s'
+                                                }}
+                                            >
+                                                <i className="fa-solid fa-trash-can"></i>
+                                                {deleteLoading ? 'Deleting...' : 'Delete'}
+                                            </button>
+                                        </div>
+                                    )}
                                 </div>
                             </div>
                         )}
